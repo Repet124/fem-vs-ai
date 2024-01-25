@@ -1,9 +1,10 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('node:path');
+const mathjs = require('mathjs')
 
 const createWindow = () => {
 	const win = new BrowserWindow({
-		width: 1000,
+		width: 1400,
 		height: 800,
 		webPreferences: {
 			preload: path.join(__dirname, 'preload.js'),
@@ -13,7 +14,12 @@ const createWindow = () => {
 	win.loadFile('index.html')
 }
 
+function handleSendSchema(e, schema) {
+	console.log(schema)
+	return {test: 123};
+}
+
 app.whenReady().then(() => {
-	ipcMain.handle('ping', () => 'pong')
+	ipcMain.handle('send', handleSendSchema)
 	createWindow()
 })

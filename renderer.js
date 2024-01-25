@@ -1,5 +1,6 @@
 import { getScale, drawBar } from './common.js'
-import {nodes, bars} from './schema.js';
+import { nodes, bars } from './schema.js';
+import schema from './schema.js';
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
@@ -15,3 +16,5 @@ bars.forEach(bar => {
 	drawBar(ctx, nodes[bar[0]], nodes[bar[1]]);
 });
 
+window.api.send(schema)
+	.then(responce => console.log(responce))

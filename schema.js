@@ -17,3 +17,9 @@ export const forces = [
 	[2,0],
 	[0,0],
 ];
+
+export default {
+	nodes,
+	bars,
+	forces,
+}
