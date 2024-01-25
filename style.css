@@ -1,6 +1,17 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	background-color: #31332b;
+}
+
 h1 {
 	color: red;
 }
+
 canvas {
 	border:1px solid #000;
 }
