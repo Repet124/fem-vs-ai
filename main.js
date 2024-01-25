@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('node:path');
-const mathjs = require('mathjs')
+const fem = require('./fem');
 
 const createWindow = () => {
 	const win = new BrowserWindow({
@@ -14,12 +14,11 @@ const createWindow = () => {
 	win.loadFile('index.html')
 }
 
-function handleSendSchema(e, schema) {
-	console.log(schema)
-	return {test: 123};
+function calcSchema(e, schema) {
+	return fem.calc(schema);
 }
 
 app.whenReady().then(() => {
-	ipcMain.handle('send', handleSendSchema)
+	ipcMain.handle('send', calcSchema)
 	createWindow()
 })
