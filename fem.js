@@ -13,12 +13,12 @@ module.exports.calc = (schema) => {
 	// преобразование стержней от массивов к объектам (а зачем тогда сначала массивы...)
 	const bars = schema.bars.map(bar => {
 		let start = {
-			x: schema.nodes[bar[0]][0]/1000,
-			y: schema.nodes[bar[0]][1]/1000,
+			x: schema.nodes[bar[0]][0],
+			y: schema.nodes[bar[0]][1],
 		};
 		let end = {
-			x: schema.nodes[bar[1]][0]/1000,
-			y: schema.nodes[bar[1]][1]/1000,
+			x: schema.nodes[bar[1]][0],
+			y: schema.nodes[bar[1]][1],
 		};
 		return {
 			l: Math.sqrt(((end.x - start.x) ** 2) + ((end.y - start.y) ** 2)),
@@ -92,7 +92,33 @@ module.exports.calc = (schema) => {
 
 	// матрица жёсткости
 
-	const _K = mathjs.multiply(mathjs.multiply(transH, K), H);
+	var _K = mathjs.multiply(mathjs.multiply(transH, K), H);
 
-	return _K;
+	// определение неизвестных перемещений (те, что не запрещают опоры)
+	var freeU = schema.nodes
+		.map(node => [node[2], node[3]])
+		.flat()
+		.map((u,i) => [u,i])
+		.filter(ui => ui[0] === undefined)
+		.map(ui => ui[1]);
+
+	_K = _K.subset(mathjs.index(freeU, freeU));
+	const inv_K = mathjs.inv(_K);
+
+	const _R = R.subset(mathjs.index(freeU, 0))
+	const _q_temp = mathjs.multiply(inv_K, _R);
+
+	// матрица перемещений
+
+	const _q = mathjs.zeros(R.size()[0], 1);
+	freeU.forEach((ui,i) => {
+		_q.set([ui, 0], _q_temp.get([i, 0]))
+	});
+
+	schema.nodes.forEach((node, i) => {
+		node[2] = _q.get([i*2, 0]);
+		node[3] = _q.get([i*2+1, 0]);
+	});
+
+	return schema.nodes;
 }
