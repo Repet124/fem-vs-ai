@@ -15,18 +15,33 @@ function getMaxDeform(nodes) {
 	return Math.max(...deforms);
 }
 
-function getDeformScale(deform, width, height, scalePercent) {
-	let maxSize = Math.max(width, height);
-	console.log((maxSize/100*scalePercent)/deform)
-	return (maxSize/100*scalePercent)/(deform*1000);
+function getDeformScale(scalePercent, nodes) {
+	let maxSize = nodes.reduce((max, node) => Math.max(max, node[0], node[1]), 0);
+	console.log((maxSize/100*scalePercent)/getMaxDeform(nodes))
+	return (maxSize/100*scalePercent)/getMaxDeform(nodes);
 }
 
-function drowDeformSchema(ctx, bars, nodes, scale=1) {
+function drowDeformSchema(ctx, bars, nodes, scale) {
+	scale = scale
+		? getDeformScale(scale, nodes)
+		: 1;
 	nodes = nodes.map(node => [
 		node[0] + node[2] * scale,
 		node[1] + node[3] * scale,
 	]);
 	drawSchema(ctx, bars, nodes, .3);
+}
+
+function animateDeform(painter, ctx, from, to, step=.1) {
+	var interval = setInterval(() => {
+		clearCanvas()
+		if (from >= to) {
+			from = to;
+			clearInterval(interval);
+		}
+		painter(from);
+		from += step;
+	}, 30);
 }
 
 const canvas = document.getElementById('canvas');
@@ -38,11 +53,16 @@ let scale = getScale(canvas.width, canvas.height, nodes, offset);
 ctx.translate(offset, (canvas.height-offset));
 ctx.scale(scale, -scale);
 ctx.save();
+var clearCanvas = function() {
+	ctx.clearRect(-offset/scale,-offset/scale, canvas.width/scale, canvas.height/scale);
+}
 
 drawSchema(ctx, bars, nodes);
 
 window.api.send(schema)
 	.then(nodes => {
-		let scale = getDeformScale(getMaxDeform(nodes), canvas.width, canvas.height, 100);
-		drowDeformSchema(ctx, schema.bars, nodes, scale);
+		animateDeform((scale) => {
+			drawSchema(ctx, schema.bars, nodes)
+			drowDeformSchema(ctx, schema.bars, nodes, scale);
+		}, ctx, 0, 10, .3)
 	})
