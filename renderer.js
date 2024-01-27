@@ -17,14 +17,11 @@ function getMaxDeform(nodes) {
 
 function getDeformScale(scalePercent, nodes) {
 	let maxSize = nodes.reduce((max, node) => Math.max(max, node[0], node[1]), 0);
-	console.log((maxSize/100*scalePercent)/getMaxDeform(nodes))
 	return (maxSize/100*scalePercent)/getMaxDeform(nodes);
 }
 
-function drowDeformSchema(ctx, bars, nodes, scale) {
-	scale = scale
-		? getDeformScale(scale, nodes)
-		: 1;
+function drowDeformSchema(ctx, bars, nodes, scale=0) {
+	scale = getDeformScale(scale, nodes);
 	nodes = nodes.map(node => [
 		node[0] + node[2] * scale,
 		node[1] + node[3] * scale,
@@ -59,10 +56,14 @@ var clearCanvas = function() {
 
 drawSchema(ctx, bars, nodes);
 
+// document.getElementById('calc').addEventListener('click', e => {
+
 window.api.send(schema)
-	.then(nodes => {
+	.then(schema => {
 		animateDeform((scale) => {
-			drawSchema(ctx, schema.bars, nodes)
-			drowDeformSchema(ctx, schema.bars, nodes, scale);
+			drawSchema(ctx, schema.bars, schema.nodes)
+			drowDeformSchema(ctx, schema.bars, schema.nodes, scale);
 		}, ctx, 0, 10, .3)
 	})
+// })
+

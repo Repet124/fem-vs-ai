@@ -12,16 +12,10 @@ module.exports.calc = (schema) => {
 
 	// преобразование стержней от массивов к объектам (а зачем тогда сначала массивы...)
 	const bars = schema.bars.map(bar => {
-		let start = {
-			x: schema.nodes[bar[0]][0],
-			y: schema.nodes[bar[0]][1],
-		};
-		let end = {
-			x: schema.nodes[bar[1]][0],
-			y: schema.nodes[bar[1]][1],
-		};
+		let start = schema.nodes[bar[0]];
+		let end = schema.nodes[bar[1]];
 		return {
-			l: Math.sqrt(((end.x - start.x) ** 2) + ((end.y - start.y) ** 2)),
+			l: Math.sqrt(((end[0] - start[0]) ** 2) + ((end[1] - start[1]) ** 2)),
 			// на косарь - это приведение к метрам
 			EA: bar[2],
 			start,
@@ -35,8 +29,8 @@ module.exports.calc = (schema) => {
 
 	// Матрицы направляющих косинусов
 	const C = bars.map(bar => {
-		let cosXx = (bar.end.x - bar.start.x)/bar.l,
-			cosYx = (bar.end.y - bar.start.y)/bar.l,
+		let cosXx = (bar.end[0] - bar.start[0])/bar.l,
+			cosYx = (bar.end[1] - bar.start[1])/bar.l,
 			cosXy = -cosYx,
 			cosYy = cosXx;
 		return mathjs.matrix([
@@ -120,5 +114,25 @@ module.exports.calc = (schema) => {
 		node[3] = _q.get([i*2+1, 0]);
 	});
 
-	return schema.nodes;
+	// вычисление ВСФ
+
+	const q = bars.map(bar => mathjs.matrix([
+		[bar.start[2]],
+		[bar.start[3]],
+		[bar.end[2]],
+		[bar.end[3]],
+	]));
+
+	// вектора узловых перемещений в местных системах координат
+
+	const qm = q.map((q, i) => mathjs.multiply(C[i], q));
+
+	// узловые усилия
+
+	const F = qm.map((qm, i) => mathjs.multiply(Km[i], qm));
+	schema.bars.forEach((bar, i) => {
+		bar[3] = F[i].get([2,0])
+	})
+
+	return schema;
 }
