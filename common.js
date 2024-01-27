@@ -14,13 +14,14 @@ export function getScale(width, height, nodes, offset) {
 	return Math.min(scaleX, scaleY);
 }
 
-export function drawLine(ctx, start, end, color, opacity) {
+export function drawLine(ctx, start, end, color, opacity, weight) {
 	ctx.beginPath();
 	ctx.strokeStyle = color;
 	ctx.globalAlpha = opacity;
-	ctx.lineWidth = 20;
+	ctx.lineWidth = weight || 20;
 	ctx.moveTo(start[0]*1000, start[1]*1000);
 	ctx.lineTo(end[0]*1000, end[1]*1000);
 	ctx.stroke();
 	ctx.closePath();
+	ctx.strokeStyle = '#fff';
 }
