@@ -12,9 +12,27 @@ function drawSchema(ctx, bars, nodes, opacity, color) {
 
 function drawSchemaWithTensors(ctx, bars, nodes, scale) {
 	let max = bars.reduce((max,bar) => Math.max(max, Math.abs(bar[3])), 1);
+
 	bars.forEach(bar => {
 		drawLine(ctx, nodes[bar[0]], nodes[bar[1]], getTensorColor(bar[3]*scale/max), 1, 80*scale)
 	});
+
+	bars.forEach(bar => {
+		drawText(
+			bar[3].toFixed(2),
+			ctx,
+			(nodes[bar[0]][0]+(nodes[bar[1]][0] - nodes[bar[0]][0])/2)*1000,
+			(nodes[bar[0]][1]+(nodes[bar[1]][1] - nodes[bar[0]][1])/2)*1000,
+		)
+	});
+}
+
+function drawText(text, ctx, x, y) {
+	ctx.font = '200px sans-serif'
+	ctx.fillStyle = '#fff'
+	ctx.scale(1, -1)
+	ctx.fillText(text, x, -y);
+	ctx.scale(1, -1)
 }
 
 function getDeformNodes(nodes, scale=0) {
@@ -62,12 +80,14 @@ function getTensorColor(pow) {
 		[0x06,0xb0,0xfc],
 		[0x00,0x27,0xff],
 	];
-	if(pow >= 1) {return '#'+steps[4].reduce((res,chanel) => res+numToChanel(chanel),'')};
-	if(pow <= -1) {return '#'+steps[0].reduce((res,chanel) => res+numToChanel(chanel),'')};
 
 	pow = pow*2+2;
 	let index = Math.trunc(pow);
 	let percent = (pow-index)*100;
+
+	if(index >= 4) {return '#'+steps[4].reduce((res,chanel) => res+numToChanel(chanel),'')};
+	if(index <= 0) {return '#'+steps[0].reduce((res,chanel) => res+numToChanel(chanel),'')};
+
 	let colors = Array(3);
 	for (var i = 0; i < 3; i++) {
 		colors[i] = Math.round((steps[index+1][i] - steps[index][i])*0.01*percent + steps[index][i]);

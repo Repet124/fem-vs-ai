@@ -1,7 +1,7 @@
 const E = 206000e4; // сталь
 const A = 12e-4; // двутавр 10
-// const EA = E*A;
-const EA = 1;
+const EA = E*A;
+// const EA = 1;
 
 export const nodes = [
 	// x, y, ux, uy
@@ -20,7 +20,7 @@ export const bars = [
 export const forces = [
 	[0,0],
 	[0,-8],
-	[2,0],
+	[-3,0],
 	[0,0],
 ];
 
