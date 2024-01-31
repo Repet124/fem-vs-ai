@@ -56,7 +56,7 @@ function getDeformScale(scalePercent, nodes) {
 function animate(painter, ctx, step=.01) {
 	var from = 0;
 	var interval = setInterval(() => {
-		clearCanvas()
+		ctx.clear();
 		if (from >= 1) {
 			from = 1;
 			clearInterval(interval);
@@ -64,6 +64,12 @@ function animate(painter, ctx, step=.01) {
 		painter(from);
 		from += step;
 	}, 30);
+}
+
+function drawCalsSchema(schema, scale) {
+	let nodes = getDeformNodes(schema.nodes, 10*scale);
+	drawSchema(ctx, schema.bars, schema.nodes, .3); // init schema
+	drawSchemaWithTensors(ctx, schema.bars, nodes, scale)
 }
 
 function numToChanel(num) {
@@ -95,30 +101,35 @@ function getTensorColor(pow) {
 	return '#'+colors.reduce((res,chanel) => res+numToChanel(chanel),'');
 }
 
+const calcFemBtn = document.getElementById('calcFem');
+const calcNeyroBtn = document.getElementById('calcNeyro');
+
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
-const offset = 100;
 
-let scale = getScale(canvas.width, canvas.height, nodes, offset);
+const offset = 100;
+const scale = getScale(canvas.width, canvas.height, nodes, offset);
+ctx.clear = function() {this.clearRect(-offset/scale,-offset/scale, canvas.width/scale, canvas.height/scale)};
 
 ctx.translate(offset, (canvas.height-offset));
 ctx.scale(scale, -scale);
 ctx.lineCap = 'round';
 ctx.save();
-var clearCanvas = function() {
-	ctx.clearRect(-offset/scale,-offset/scale, canvas.width/scale, canvas.height/scale);
-}
 
 drawSchema(ctx, bars, nodes);
-document.getElementById('calc').addEventListener('click', e => {
 
-window.api.send(schema)
-	.then(schema => {
-		animate((scale) => {
-			let nodes = getDeformNodes(schema.nodes, 10*scale);
-			drawSchema(ctx, schema.bars, schema.nodes, .3); // init schema
-			drawSchemaWithTensors(ctx, schema.bars, nodes, scale)
-		}, ctx, .03)
-	})
-})
+calcFemBtn.onclick = () => {
 
+	window.api.fem(schema).then(schema => {
+		animate(scale => drawCalsSchema(schema, scale), ctx, .03);
+	});
+
+}
+
+calcNeyroBtn.onclick = () => {
+
+	window.api.neyro(schema).then(schema => {
+		animate(scale => drawCalsSchema(schema, scale), ctx, .03);
+	});
+
+}

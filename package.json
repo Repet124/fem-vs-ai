@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dataset": "node ./datasetBuilder.js"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +15,8 @@
     "electron": "^28.2.0"
   },
   "dependencies": {
+    "brain.js": "^2.0.0-beta.23",
+    "brainjs": "^0.7.4",
     "mathjs": "^12.3.0"
   }
 }
