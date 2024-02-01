@@ -1,8 +1,8 @@
 const brain = require('brainjs');
 const fs = require('fs');
 const {calc} = require('./fem');
-const {nodes, bars, forces} = require('./commonSchema');
-const iterations = 1;
+var {nodes, bars, forces} = require('./commonSchema');
+const iterations = 20;
 const forceMax = 20;
 
 function log(txt) {
@@ -10,15 +10,17 @@ function log(txt) {
 }
 
 function rand(maxPercent) {
-	return (Maht.random()*2-1)*(maxPercent/100);
+	var res = (Math.random()*2-1)*(maxPercent/100);
+	return res;
 }
 
 function randSwitch(first, second) {
-	return Math.random() > 0.5 ? first : second;
+	var res = Math.random() > 0.5 ? first : second;
+	return res;
 }
 
-function getSource(schema) {
-	var input = schema.bars.map(bar => [
+function getInput(schema) {
+	return schema.bars.map(bar => [
 		schema.nodes[bar[0]][0],
 		schema.nodes[bar[0]][1],
 		schema.nodes[bar[1]][0],
@@ -32,33 +34,37 @@ function getSource(schema) {
 		schema.nodes[bar[1]][2] ?? 1,
 		schema.nodes[bar[1]][3] ?? 1,
 	]);
-	var output = schema.bars.map(bar => bar[3]);
 	return {input, output};
+}
+
+function getOutput(schema) {
+	return schema.bars.map(bar => Number(bar[3].toFixed(3)));
 }
 
 var dataset = Array(iterations);
 log('Подготовка данных для метода конечных элементов');
 for (var i = 0; i < iterations; i++) {
-	// nodes = nodes.map(node => [
-	// 	node[0]*rand(20),
-	// 	node[1]*rand(20),
-	// 	randSwitch(0, undefined),
-	// 	randSwitch(0, undefined),
-	// ]);
-	// forces = forces.map(force => [
-	// 	randSwitch(Math.round(forceMax*rand(100)),0),
-	// 	randSwitch(Math.round(forceMax*rand(100)),0),
-	// ]);
+	nodes = nodes.map(node => [
+		Number((node[0]+node[0]*rand(20)).toFixed(3)),
+		Number((node[1]+node[1]*rand(20)).toFixed(3)),
+		randSwitch(0, undefined),
+		randSwitch(0, undefined),
+	]);
+	forces = forces.map(force => [
+		randSwitch(Math.round(forceMax*rand(100)),0),
+		randSwitch(Math.round(forceMax*rand(100)),0),
+	]);
 	dataset[i] = {nodes, bars, forces};
 }
 log('Данныe сформированны');
 
 log('Расчёт методом конечных элементов');
-// dataset = dataset.map(schema => calc(schema));
 log('Расчёт завершён');
 
-log('Обработка датасета');
-dataset = dataset.map(schema => getSource(schema));
+dataset = dataset.map(schema => ({
+	input: getInput(schema),
+	output: getOutput(calc(schema))
+}));
 log('Датасет сформирован');
 
 log('Запись');
