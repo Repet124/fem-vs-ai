@@ -1,6 +1,6 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('api', {
-	fem: (schema) => ipcRenderer.invoke('fem', schema)
-	// we can also expose variables, not just functions
-})
+	fem: (schema) => ipcRenderer.invoke('fem', schema),
+	neyro: (schema) => ipcRenderer.invoke('neyro', schema)
+});

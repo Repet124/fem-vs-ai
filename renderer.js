@@ -66,7 +66,7 @@ function animate(painter, ctx, step=.01) {
 	}, 30);
 }
 
-function drawCalsSchema(schema, scale) {
+function drawCalcsSchema(schema, scale) {
 	let nodes = getDeformNodes(schema.nodes, 10*scale);
 	drawSchema(ctx, schema.bars, schema.nodes, .3); // init schema
 	drawSchemaWithTensors(ctx, schema.bars, nodes, scale)
@@ -121,7 +121,8 @@ drawSchema(ctx, bars, nodes);
 calcFemBtn.onclick = () => {
 
 	window.api.fem(schema).then(schema => {
-		animate(scale => drawCalsSchema(schema, scale), ctx, .03);
+		console.log('fem', schema.bars)
+		animate(scale => drawCalcsSchema(schema, scale), ctx, .03);
 	});
 
 }
@@ -129,7 +130,8 @@ calcFemBtn.onclick = () => {
 calcNeyroBtn.onclick = () => {
 
 	window.api.neyro(schema).then(schema => {
-		animate(scale => drawCalsSchema(schema, scale), ctx, .03);
+		console.log('ai', schema)
+		animate(scale => drawCalcsSchema(schema, scale), ctx, .03);
 	});
 
 }
