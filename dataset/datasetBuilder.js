@@ -2,10 +2,10 @@ var fs = require('fs');
 var Logger = require('../services/logger');
 var InputBuilder = require('./inputBuilder');
 var OutputBuilder = require('./outputBuilder');
-var ShemesBuilder = require('./shcemesBuilder');
+var SchemesBuilder = require('./schemesBuilder');
 var {calc} = require('../resolvers/fem');
 
-class DatasetBuilder {
+module.exports = class DatasetBuilder {
 
 	constructor(shBuilder) {
 		this.schemesBuilder = shBuilder || new SchemesBuilder();
@@ -23,8 +23,8 @@ class DatasetBuilder {
 			this.sourcesCheck();
 			this.logger.info('Формирования датасета для усилий');
 			this.dataset.tensors = this.sources.map(source => ({
-				input: input.getBarsInput(),
-				output: output.getForces()
+				input: source.input.getBarsInput(),
+				output: source.output.getForces()
 			}));
 			this.logger.info('Формирования датасета для усилий завершено');
 		}
@@ -36,8 +36,8 @@ class DatasetBuilder {
 			this.sourcesCheck();
 			this.logger.info('Запуск формирования датасета для перемещений');
 			this.dataset.translations = this.sources.map(source => ({
-				input: input.getNodesInput(),
-				output: output.getTranslations()
+				input: source.input.getNodesInput(),
+				output: source.output.getTranslations()
 			}));
 			this.logger.info('Формирования датасета для перемещений завершено');
 		}
@@ -61,9 +61,9 @@ class DatasetBuilder {
 		this.logger.success('Начато формирования данных для датасета');
 		this.logger.bench('data');
 
-		this.sources = this.schemesBuilder.getSchemes(count).forEach(schema => ({
-			inputs: new InputBuilder(schema),
-			outputs: new OutputBuilder(calc(schema))
+		this.sources = this.schemesBuilder.getSchemes(count).map(schema => ({
+			input: new InputBuilder(schema),
+			output: new OutputBuilder(calc(schema))
 		}));
 
 		this.logger.success('Данные для датасета сформированы');

@@ -22,7 +22,7 @@ module.exports = class InputBuilder {
 	}
 	getBarsInput() {
 		if (!this.barsDataset) {
-			this.barsDataset = mathjs.transpose(this.getNodesDataset());
+			this.barsDataset = mathjs.transpose(this.getNodesInput());
 		}
 		return this.barsDataset;
 	}
@@ -44,7 +44,7 @@ module.exports = class InputBuilder {
 		Первый столбец составляющие по оси X, второй по Y.
 	*/
 	buildDataset() {
-		var rows = this.schema.bars * 6;
+		var rows = this.schema.bars.length * 6;
 		var columns = this.schema.nodes.length * 2;
 		var dataset = Array(rows);
 

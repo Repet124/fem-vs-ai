@@ -1,3 +1,4 @@
+const EA = 1;
 const nodes = [
 	// x, y, ux, uy
 	[0,	0,	undefined,	0],

@@ -6,8 +6,7 @@
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dataset": "node ./dataset/index.js",
-    "qwe": "node --env-file .env test.js"
+    "dataset": "node --env-file .env ./dataset/index.js"
   },
   "author": "",
   "license": "ISC",
