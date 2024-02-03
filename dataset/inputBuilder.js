@@ -1,18 +1,18 @@
 var mathjs = require('mathjs');
 
-class Builder {
+module.exports = class InputBuilder {
 	constructor(schema) {
 		this.schema = schema;
 		this.nodesDataset = null;
 		this.barsDataset = null;
 	}
-	getNodesDataset() {
+	getNodesInput() {
 		if (!this.nodesDataset) {
 			this.nodesDataset = this.buildDataset(this.schema);
 		}
 		return this.nodesDataset;
 	}
-	getBarsDataset() {
+	getBarsInput() {
 		if (!this.barsDataset) {
 			this.barsDataset = mathjs.transpose(this.getNodesDataset());
 		}
@@ -60,5 +60,3 @@ class Builder {
 		return dataset;
 	}
 }
-
-module.exports = Builder;

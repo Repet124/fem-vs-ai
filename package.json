@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dataset": "node ./datasetBuilder.js"
+    "dataset": "node ./dataset/index.js",
   },
   "author": "",
   "license": "ISC",
