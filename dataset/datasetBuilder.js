@@ -18,7 +18,7 @@ class DatasetBuilder {
 		this.logger = new Logger('DatasetBuilder');
 	}
 
-	getTensorsDataset() {
+	buildTensorsDataset() {
 		if (!this.dataset.tensors) {
 			this.sourcesCheck();
 			this.logger.info('Формирования датасета для усилий');
@@ -31,7 +31,7 @@ class DatasetBuilder {
 		return this.dataset.tensors;
 	}
 
-	getTranslatioinsDataset() {
+	buildTranslatioinsDataset() {
 		if (!this.dataset.translations) {
 			this.sourcesCheck();
 			this.logger.info('Запуск формирования датасета для перемещений');
@@ -70,15 +70,15 @@ class DatasetBuilder {
 		this.logger.bench('data');
 	}
 
-	saveTensorsDataset(fileName='./tensors-dataset.json') {
+	saveTensors(fileName='./tensors-dataset.json') {
 		this.#save('tensors', fileName);
 	}
 
-	saveTranslationsDataset(fileName='./translations-dataset.json') {
+	saveTranslations(fileName='./translations-dataset.json') {
 		this.#save('translations', fileName);
 	}
 
-	save() {
+	saveAll() {
 		this.logger.info('Сохранение датасетов');
 		this.saveTensorsDataset();
 		this.saveTranslationsDataset();
