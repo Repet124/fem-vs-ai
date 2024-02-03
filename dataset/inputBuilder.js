@@ -1,14 +1,22 @@
 var mathjs = require('mathjs');
+var Logger = require('../services/logger');
 
 module.exports = class InputBuilder {
 	constructor(schema) {
 		this.schema = schema;
 		this.nodesDataset = null;
 		this.barsDataset = null;
+		this.logger = new Logger('InputBuilder');
 	}
 	getNodesInput() {
 		if (!this.nodesDataset) {
+			this.logger.info('Формирование матрицы исходных данных для датасета')
+			this.logger.bench('form');
+
 			this.nodesDataset = this.buildDataset(this.schema);
+
+			this.logger.success('Формирование матрицы исходных данных для датасета звершено')
+			this.logger.bench('form');
 		}
 		return this.nodesDataset;
 	}
