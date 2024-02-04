@@ -7,17 +7,9 @@ module.exports = class InputBuilder {
 		this.nodesDataset = null;
 		this.barsDataset = null;
 		this.logger = new Logger('InputBuilder');
+		this.buildDataset(schema);
 	}
 	getNodesInput() {
-		if (!this.nodesDataset) {
-			this.logger.info('Формирование матрицы исходных данных для датасета')
-			this.logger.bench('form');
-
-			this.nodesDataset = this.buildDataset(this.schema);
-
-			this.logger.success('Формирование матрицы исходных данных для датасета звершено')
-			this.logger.bench('form');
-		}
 		return this.nodesDataset;
 	}
 	getBarsInput() {
@@ -44,27 +36,31 @@ module.exports = class InputBuilder {
 		Первый столбец составляющие по оси X, второй по Y.
 	*/
 	buildDataset() {
+		this.logger.info('Формирование матрицы исходных данных для датасета')
+		this.logger.bench('form');
+
 		var rows = this.schema.bars.length * 6;
 		var columns = this.schema.nodes.length * 2;
-		var dataset = Array(rows);
+		this.nodesDataset = Array(rows);
 
 		for (var i = 0; i < rows; i++) {
-			dataset[i] = Array(columns);
-			dataset[i].fill(0);
+			this.nodesDataset[i] = Array(columns);
+			this.nodesDataset[i].fill(0);
 		}
 
 		this.schema.bars.forEach((bar,i) => {
 			i*=6;
 			for (var node = 0; node < 2; node++) { // номер узла (начала и конец стержня)
 				for (var point = 0; point < 2; point++) { // номер координаты узла (0 -x, 1 - y)
-					dataset[i][bar[node]*2+point] = this.schema.nodes[bar[node]][point];
-					dataset[i+1][bar[node]*2+point] = this.schema.nodes[bar[node]][point+2] ?? 1;
-					dataset[i+2][bar[node]*2+point] = this.schema.forces[bar[node]][point];
+					this.nodesDataset[i][bar[node]*2+point] = this.schema.nodes[bar[node]][point];
+					this.nodesDataset[i+1][bar[node]*2+point] = this.schema.nodes[bar[node]][point+2] ?? 1;
+					this.nodesDataset[i+2][bar[node]*2+point] = this.schema.forces[bar[node]][point];
 				}
 				i+=3;
 			}
 		});
 
-		return dataset;
+		this.logger.success('Формирование матрицы исходных данных для датасета звершено')
+		this.logger.bench('form');
 	}
 }

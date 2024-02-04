@@ -7,7 +7,7 @@ var args = getArgs();
 var logger = new Logger();
 
 var startMessage = 'Запуск команды формирования ';
-var countDatasets = args.count || 1;
+var countDatasets = args.count || 10;
 var builder = new DatasetBuilder();
 
 // дублирование - ну и ладно :Р

@@ -131,7 +131,7 @@ module.exports.calc = (schema) => {
 
 	const F = qm.map((qm, i) => mathjs.multiply(Km[i], qm));
 	schema.bars.forEach((bar, i) => {
-		bar[3] = F[i].get([2,0])
+		bar[3] = +(F[i].get([2,0])).toFixed(3);
 	})
 
 	return schema;

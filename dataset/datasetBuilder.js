@@ -31,7 +31,7 @@ module.exports = class DatasetBuilder {
 		return this.dataset.tensors;
 	}
 
-	buildTranslatioinsDataset() {
+	buildTranslationsDataset() {
 		if (!this.dataset.translations) {
 			this.sourcesCheck();
 			this.logger.info('Запуск формирования датасета для перемещений');
