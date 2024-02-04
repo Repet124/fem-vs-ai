@@ -1,6 +1,10 @@
 const mathjs = require('mathjs');
+var Logger = require('../services/logger');
+var logger = new Logger('Fem');
 
 module.exports.calc = (schema) => {
+	logger.info('Старт расчёта МКЭ');
+	logger.bench('fem');
 	// Матрица узловых нагрузок
 	const R = mathjs.matrix(schema.forces.flat().map(a => [a]));
 	var matrixForBar = mathjs.matrix([
@@ -133,6 +137,8 @@ module.exports.calc = (schema) => {
 	schema.bars.forEach((bar, i) => {
 		bar[3] = +(F[i].get([2,0])).toFixed(3);
 	})
+	logger.success('Расчёт завершён');
+	logger.bench('fem');
 
 	return schema;
 }

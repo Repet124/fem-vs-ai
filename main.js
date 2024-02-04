@@ -2,6 +2,8 @@ const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('node:path');
 const fem = require('./resolvers/fem');
 const neyro = require('./resolvers/neyro');
+const dotenv = require('dotenv');
+dotenv.config()
 
 const createWindow = () => {
 	const win = new BrowserWindow({

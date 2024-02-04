@@ -1,10 +1,15 @@
 var InputBuilder = require('../dataset/inputBuilder');
 var tensorsNet = require('../tensors-trained.js');
 var translationsNet = require('../translations-trained.js');
+var Logger = require('../services/logger');
+var logger = new Logger('Neyro');
+
 
 module.exports.calc = (schema) => {
 	var builder = new InputBuilder(schema);
 
+	logger.info('Старт расчёта ИИ');
+	logger.bench('ai');
 	var tensors = tensorsNet(builder.getBarsInput());
 	var translations = translationsNet(builder.getNodesInput());
 
@@ -16,5 +21,7 @@ module.exports.calc = (schema) => {
 		node[2] = translations[i];
 		node[3] = translations[i+1];
 	});
+	logger.success('Расчёт завершён');
+	logger.bench('ai');
 	return schema;
 }
