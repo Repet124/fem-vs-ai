@@ -4,7 +4,7 @@ module.exports = class SchemesBuilder {
 
 	constructor(forceMax=20, maxPercentTranslations=20) {
 		this.forceMax = 20;
-		this.maxDistanceChange = .5;
+		this.maxDistanceChange = 1;
 	}
 
 	getSchemes(count) {
@@ -13,11 +13,10 @@ module.exports = class SchemesBuilder {
 		for (var i = 0; i < count; i++) {
 			data[i] = {
 				nodes: nodes.map(node => [
-					// TODO: нужно добавить изменения в Y, они занулены умножением на значения в шаблоне
-					(node[0]+Number(node[0]*rand(this.maxDistanceChange).toFixed(3))),
-					(node[1]+Number(node[1]*rand(this.maxDistanceChange).toFixed(3))),
-					randSwitch(0, undefined),
-					randSwitch(0, undefined),
+					Number((node[0]+this.maxDistanceChange*rand(100)).toFixed(3)),
+					Number((node[1]+this.maxDistanceChange*rand(100)).toFixed(3)),
+					node[2], // сохраняется положение опор
+					node[3]
 				]),
 				forces: forces.map(force => [
 					randSwitch(Math.round(this.forceMax*rand(100)),0),
@@ -26,7 +25,6 @@ module.exports = class SchemesBuilder {
 				bars: bars
 			}
 		}
-		console.log(data[0])
 		return data;
 	}
 }
