@@ -7,7 +7,7 @@ var args = getArgs();
 var logger = new Logger();
 
 var startMessage = 'Запуск команды формирования ';
-var countDatasets = args.count || 10;
+var countDatasets = args.count || 20;
 var builder = new DatasetBuilder();
 
 // дублирование - ну и ладно :Р
@@ -21,7 +21,7 @@ try {
 	} else if ('tensors' in args) {
 		logger.success(startMessage + 'датасетов для усилий');
 		builder.buildSources(countDatasets);
-		builder.buildTensorsDataset();
+		builder.buildTensors();
 		builder.saveTensors();
 	} else if ('translations' in args) {
 		logger.success(startMessage + 'датасетов для перемещений');

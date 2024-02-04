@@ -16,7 +16,7 @@ module.exports = class OutputBuilder {
 		return this.forces;
 	}
 
-	gerTranslations() {
+	getTranslations() {
 		return this.translations;
 	}
 }

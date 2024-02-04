@@ -130,3 +130,5 @@ dist
 .pnp.*
 tensors-dataset.json
 translations-dataset.json
+tensors-trained.js
+translations-trained.js

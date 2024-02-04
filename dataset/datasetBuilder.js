@@ -80,8 +80,8 @@ module.exports = class DatasetBuilder {
 
 	saveAll() {
 		this.logger.info('Сохранение датасетов');
-		this.saveTensorsDataset();
-		this.saveTranslationsDataset();
+		this.saveTensors();
+		this.saveTranslations();
 	}
 
 	#save(datasetName, fileName) {
