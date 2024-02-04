@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('node:path');
-const fem = require('./fem');
-const neyro = require('./neyro');
+const fem = require('./resolvers/fem');
+const neyro = require('./resolvers/neyro');
 
 const createWindow = () => {
 	const win = new BrowserWindow({
@@ -12,7 +12,7 @@ const createWindow = () => {
 		}
 	})
 
-	win.loadFile('index.html')
+	win.loadFile('./public/index.html')
 }
 
 function calcFem(e, schema) {
