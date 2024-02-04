@@ -128,4 +128,5 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-test.js
+tensors-dataset.json
+translations-dataset.json

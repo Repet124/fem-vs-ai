@@ -18,10 +18,15 @@ module.exports = class SchemesBuilder {
 					node[2], // сохраняется положение опор
 					node[3]
 				]),
-				forces: forces.map(force => [
-					randSwitch(Math.round(this.forceMax*rand(100)),0),
-					randSwitch(Math.round(this.forceMax*rand(100)),0),
-				]),
+				forces: forces.map((force,i) => {
+					if ([1,2].includes(i)) { // задаются усилия только для двух свободных узлов - второй и третий 
+					return [
+							randSwitch(Math.round(this.forceMax*rand(100)),0),
+							randSwitch(Math.round(this.forceMax*rand(100)),0),
+						]
+					}
+					return force;
+				}),
 				bars: bars
 			}
 		}
