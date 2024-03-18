@@ -3,20 +3,6 @@ var fs = require('fs');
 var Logger = require('../services/logger');
 var logger = new Logger('Train');
 
-module.exports.trainTranslations = train.bind(
-	undefined,
-	'./translations-dataset.json',
-	'./translations-trained.js',
-	'Модель расчёта перемещений'
-);
-
-module.exports.trainTensors = train.bind(
-	undefined,
-	'./tensors-dataset.json',
-	'./tensors-trained.js',
-	'Модель расчёт усилий'
-);
-
 function train(datasetFile, modelFile, modelName) {
 	const jsonDataset = fs.readFileSync(datasetFile)
 	if (!jsonDataset) {
@@ -24,9 +10,9 @@ function train(datasetFile, modelFile, modelName) {
 		return;
 	}
 	const dataset = JSON.parse(jsonDataset);
-	const net = new brain.recurrent.LSTMTimeStep({
+	const net = new brain.NeuralNetwork({
 		inputSize: dataset[0].input[0].length,
-		hiddenLayers: [10],
+		hiddenLayers: [5],
 		outputSize: dataset[0].output.length,
 		log: true,
 		logPeriod: 10
@@ -46,3 +32,4 @@ function train(datasetFile, modelFile, modelName) {
 	logger.success('Модель сохранена ' + modelFile);
 }
 
+module.exports = train;
