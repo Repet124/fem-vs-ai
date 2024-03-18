@@ -10,17 +10,19 @@ function train(datasetFile, modelFile, modelName) {
 		return;
 	}
 	const dataset = JSON.parse(jsonDataset);
-	const net = new brain.NeuralNetwork({
-		inputSize: dataset[0].input[0].length,
-		hiddenLayers: [5],
-		outputSize: dataset[0].output.length,
-		log: true,
-		logPeriod: 10
-	});
+	const config = {
+		binaryThresh: 0.5,
+		hiddenLayers: [3], // array of ints for the sizes of the hidden layers in the network
+		activation: 'sigmoid', // supported activation types: ['sigmoid', 'relu', 'leaky-relu', 'tanh'],
+		leakyReluAlpha: 0.01, // supported for activation type 'leaky-relu'
+	};
+
+	const net = new brain.NeuralNetwork(config);
+
 	logger.info('Старт обучения. ' + modelName);
 	logger.bench('train');
 
-	net.train(dataset.map(obj => [...obj.input, obj.output]));
+	net.train(dataset);
 
 	logger.success('Обучение завершено');
 	logger.bench('train');

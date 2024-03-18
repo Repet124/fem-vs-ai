@@ -1,4 +1,4 @@
-var InputBuilder = require('../dataset/oneRankInputBuilder');
+var InputBuilder = require('../dataset/rankOneInputBuilder');
 var net = require('../trained.js');
 var Logger = require('../services/logger');
 var logger = new Logger('Neyro');
@@ -20,11 +20,11 @@ module.exports.calc = (schema) => {
 	});
 
 	schema.nodes.forEach(node => {
-		node[2] *= (result.shift() ? (-1) : 1);
-		node[3] *= (result.shift() ? (-1) : 1);
+		node[2] *= (Math.round(result.shift()) ? (-1) : 1);
+		node[3] *= (Math.round(result.shift()) ? (-1) : 1);
 	});
 	schema.bars.forEach(bar => {
-		bar[3] *= (result.shift() ? (-1) : 1);
+		bar[3] *= (Math.round(result.shift()) ? (-1) : 1);
 	});
 
 	logger.success('Расчёт завершён');
