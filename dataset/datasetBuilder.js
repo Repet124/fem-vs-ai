@@ -16,7 +16,7 @@ module.exports = class DatasetBuilder {
 	}
 
 	buildDataset() {
-		if (!this.dataset.common) {
+		if (!this.dataset) {
 			this.sourcesCheck();
 			this.logger.info('Запуск формирования общего датасета');
 			this.dataset = this.sources.map(source => ({

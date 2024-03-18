@@ -128,8 +128,10 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+dataset.json
 tensors-dataset.json
 translations-dataset.json
+trained.js
 tensors-trained.js
 translations-trained.js
 package-lock.json

@@ -14,10 +14,11 @@ module.exports = class OutputBuilder {
 		let negativeForces = forces.map(f => Number(f<0));
 
 		// умножение на 2 для добавления выходных узлов указывающих на знак + или - для каждого перемещения и усилия
-		this.dataset = Array(translations.length*2 + forces.length*2);
-
-		this.dataset.push(...(normalize(translations.concat(forces))));
-		this.dataset.push(...negativeTranslations, ...negativeForces);
+		this.dataset = [
+			...(normalize(translations.concat(forces))),
+			...negativeTranslations,
+			...negativeForces,
+		];
 	}
 
 	getDataset() {

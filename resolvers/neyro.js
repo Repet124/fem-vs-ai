@@ -1,6 +1,5 @@
-var InputBuilder = require('../dataset/inputBuilder');
-var tensorsNet = require('../tensors-trained.js');
-var translationsNet = require('../translations-trained.js');
+var InputBuilder = require('../dataset/oneRankInputBuilder');
+var net = require('../trained.js');
 var Logger = require('../services/logger');
 var logger = new Logger('Neyro');
 
@@ -10,17 +9,24 @@ module.exports.calc = (schema) => {
 
 	logger.info('Старт расчёта ИИ');
 	logger.bench('ai');
-	var tensors = tensorsNet(builder.getBarsInput());
-	var translations = translationsNet(builder.getNodesInput());
+	var result = net(builder.getDataset());
 
-	schema.bars.forEach((bar, i) => {
-		bar[3] = tensors[i*6];
+	schema.nodes.forEach(node => {
+		node[2] = result.shift();
+		node[3] = result.shift();
 	});
-	schema.nodes.forEach((node,i)=> {
-		i*=2;
-		node[2] = translations[i];
-		node[3] = translations[i+1];
+	schema.bars.forEach(bar => {
+		bar[3] = result.shift();
 	});
+
+	schema.nodes.forEach(node => {
+		node[2] *= (result.shift() ? (-1) : 1);
+		node[3] *= (result.shift() ? (-1) : 1);
+	});
+	schema.bars.forEach(bar => {
+		bar[3] *= (result.shift() ? (-1) : 1);
+	});
+
 	logger.success('Расчёт завершён');
 	logger.bench('ai');
 	return schema;
