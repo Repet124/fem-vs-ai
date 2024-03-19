@@ -1,3 +1,5 @@
+require('../services/separateNegative');
+
 var { normalize } = require('../services/func');
 
 module.exports = class OutputBuilder {
@@ -7,18 +9,11 @@ module.exports = class OutputBuilder {
 	}
 
 	buildDataset(schema) {
-		let translations = schema.nodes.map(node => [node[2], node[3]]).flat();
-		let forces = schema.bars.map(bar => bar[3]);
-
-		let negativeTranslations = translations.map(t => Number(t<0));
-		let negativeForces = forces.map(f => Number(f<0));
+		let translations = schema.nodes.map(node => [node[2], node[3]]).flat().separateNegative();
+		let forces = schema.bars.map(bar => bar[3]).separateNegative();
 
 		// умножение на 2 для добавления выходных узлов указывающих на знак + или - для каждого перемещения и усилия
-		this.dataset = [
-			...(normalize(translations.concat(forces))),
-			...negativeTranslations,
-			...negativeForces,
-		];
+		this.dataset = normalize(translations.concat(forces));
 	}
 
 	getDataset() {
