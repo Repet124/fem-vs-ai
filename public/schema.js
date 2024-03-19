@@ -19,8 +19,8 @@ export const bars = [
 ];
 export const forces = [
 	[0,0],
-	[0,-8],
-	[-3,0],
+	[1,1],
+	[1,1],
 	[0,0],
 ];
 

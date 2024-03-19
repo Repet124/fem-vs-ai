@@ -1,5 +1,6 @@
 const mathjs = require('mathjs');
 var Logger = require('../services/logger');
+var outputBuilder = require('../dataset/rankOneOutputBuilder')
 var logger = new Logger('Fem');
 
 module.exports.calc = (schema) => {
@@ -139,6 +140,10 @@ module.exports.calc = (schema) => {
 	})
 	logger.success('Расчёт завершён');
 	logger.bench('fem');
+
+	console.log(schema.nodes)
+	// var builder = new outputBuilder(schema);
+	// console.log(builder.getDataset());
 
 	return schema;
 }

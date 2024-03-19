@@ -6,7 +6,7 @@ var args = getArgs();
 
 var logger = new Logger();
 
-var countDatasets = args.count || 20;
+var countDatasets = args.count || 100;
 var builder = new DatasetBuilder();
 
 try {

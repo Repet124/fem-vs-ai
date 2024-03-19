@@ -1,11 +1,13 @@
-function normalize (arr) {
-	let min = Math.min(...arr);
-	arr = arr.map(item => item - min)
-	let max = Math.max(...arr);
-	arr = arr.map(item => item / max);
-	return arr;
+
+
+function getMaxBarLength(schema) {
+	return schema.bars.map(bar => {
+		let start = schema.nodes[bar[0]];
+		let end = schema.nodes[bar[1]];
+		return Math.sqrt(((end[0] - start[0]) ** 2) + ((end[1] - start[1]) ** 2));
+	}).reduce((max, curr) => (curr > max ? curr : max), 0);
 }
 
 module.exports = {
-	normalize,
+	getMaxBarLength
 }

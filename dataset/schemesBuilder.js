@@ -30,6 +30,7 @@ module.exports = class SchemesBuilder {
 				bars: bars
 			}
 		}
+		console.log(data[0])
 		return data;
 	}
 }
