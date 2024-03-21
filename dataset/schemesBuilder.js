@@ -3,7 +3,7 @@ var {nodes, bars, forces} = require('./template');
 module.exports = class SchemesBuilder {
 
 	constructor(forceMax=20, maxPercentTranslations=20) {
-		this.forceMax = 20;
+		this.forceMax = 10;
 		this.maxDistanceChange = 1;
 	}
 
@@ -20,9 +20,9 @@ module.exports = class SchemesBuilder {
 				]),
 				forces: forces.map((force,i) => {
 					if ([1,2].includes(i)) { // задаются усилия только для двух свободных узлов - второй и третий 
-					return [
-							randSwitch(Math.round(this.forceMax*rand(100)),0),
-							randSwitch(Math.round(this.forceMax*rand(100)),0),
+						return [
+							Number((this.forceMax*rand(100)).toFixed(1)),
+							Number((this.forceMax*rand(100)).toFixed(1)),
 						]
 					}
 					return force;
@@ -30,7 +30,6 @@ module.exports = class SchemesBuilder {
 				bars: bars
 			}
 		}
-		console.log(data[0])
 		return data;
 	}
 }

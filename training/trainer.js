@@ -11,8 +11,12 @@ function train(datasetFile, modelFile, modelName) {
 	}
 	const dataset = JSON.parse(jsonDataset);
 	const config = {
+		// iterations: 10000,
 		binaryThresh: 0.5,
-		hiddenLayers: [3], // array of ints for the sizes of the hidden layers in the network
+		hiddenLayers: [
+			dataset[0].input.length,
+			dataset[0].input.length,
+		], // array of ints for the sizes of the hidden layers in the network
 		activation: 'sigmoid', // supported activation types: ['sigmoid', 'relu', 'leaky-relu', 'tanh'],
 		leakyReluAlpha: 0.01, // supported for activation type 'leaky-relu'
 		log: true
@@ -30,7 +34,8 @@ function train(datasetFile, modelFile, modelName) {
 
 	logger.info('Сохранение модели');
 
-	fs.writeFileSync(modelFile, 'module.exports = ' + net.toFunction().toString(), 'utf8');
+	// fs.writeFileSync(modelFile, 'module.exports = ' + net.toFunction().toString(), 'utf8');
+	fs.writeFileSync(modelFile, JSON.stringify(net.toJSON()), 'utf8');
 
 	logger.success('Модель сохранена ' + modelFile);
 }

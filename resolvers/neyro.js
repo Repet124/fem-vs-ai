@@ -1,7 +1,8 @@
 require('../services/neyroArr');
 
+var brain = require('brain.js')
+var trainedModel = fs.readFileSync('../trained.json');
 var InputBuilder = require('../dataset/rankOneInputBuilder');
-var net = require('../trained.js');
 var Logger = require('../services/logger');
 var logger = new Logger('Neyro');
 
@@ -11,6 +12,7 @@ module.exports.calc = (schema) => {
 
 	logger.info('Старт расчёта ИИ');
 	logger.bench('ai');
+	var net = (new brain.NeuralNetwork()).fromJSON(JSON.parse(trainedModel));
 	var result = net(builder.getDataset());
 
 	schema.nodes.forEach(node => {

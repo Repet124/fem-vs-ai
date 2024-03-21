@@ -132,6 +132,7 @@ dataset.json
 tensors-dataset.json
 translations-dataset.json
 trained.js
+trained.json
 tensors-trained.js
 translations-trained.js
 package-lock.json
