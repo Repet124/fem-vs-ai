@@ -14,8 +14,7 @@ function train(datasetFile, modelFile, modelName) {
 		// iterations: 10000,
 		binaryThresh: 0.5,
 		hiddenLayers: [
-			dataset[0].input.length,
-			dataset[0].input.length,
+			Math.round(dataset[0].output.length*2),
 		], // array of ints for the sizes of the hidden layers in the network
 		activation: 'sigmoid', // supported activation types: ['sigmoid', 'relu', 'leaky-relu', 'tanh'],
 		leakyReluAlpha: 0.01, // supported for activation type 'leaky-relu'
@@ -23,6 +22,7 @@ function train(datasetFile, modelFile, modelName) {
 	};
 
 	const net = new brain.NeuralNetwork(config);
+	// const net = new brain.NeuralNetworkGPU(config);
 
 	logger.info('Старт обучения. ' + modelName);
 	logger.bench('train');
