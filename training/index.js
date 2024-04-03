@@ -7,7 +7,8 @@ var logger = new Logger();
 
 try {
 	logger.success('Запуск команды обучения.');
-	train('./dataset.json', './trained.json', 'Модель расчёт ферм');
+	// train('./dataset.json', './trained.json', 'Модель расчёт ферм');
+	train('./dataset.json', './trained.js', 'Модель расчёт ферм');
 } catch (err) {
 	logger.err(err.message);
 	throw err;

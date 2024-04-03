@@ -34,8 +34,8 @@ function train(datasetFile, modelFile, modelName) {
 
 	logger.info('Сохранение модели');
 
-	// fs.writeFileSync(modelFile, 'module.exports = ' + net.toFunction().toString(), 'utf8');
-	fs.writeFileSync(modelFile, JSON.stringify(net.toJSON()), 'utf8');
+	fs.writeFileSync(modelFile, 'module.exports = ' + net.toFunction().toString(), 'utf8');
+	// fs.writeFileSync(modelFile, JSON.stringify(net.toJSON()), 'utf8');
 
 	logger.success('Модель сохранена ' + modelFile);
 }

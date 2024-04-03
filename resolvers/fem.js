@@ -141,7 +141,6 @@ module.exports.calc = (schema) => {
 	logger.success('Расчёт завершён');
 	logger.bench('fem');
 
-	console.log(schema.nodes)
 	// var builder = new outputBuilder(schema);
 	// console.log(builder.getDataset());
 
