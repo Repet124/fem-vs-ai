@@ -20,14 +20,16 @@ module.exports = class InputBuilder {
 		this.logger.bench('form');
 
 		// назначение separateNegative:
-		// положительное и отрицательное значение нагрузок и координат идут в разные входные нейроны
+		// положительное и отрицательное значение нагрузок идут в разные входные нейроны
 		// пример: в узле с нагрузками по x,y [-1, 2], входные нейроны будут [0,1,2,0], до нормализации
-		const cords = this.schema.nodes.map(node => [node[0], node[1]]).flat();
+
+		// const cords = this.schema.nodes.map(node => [node[0], node[1]]).flat();
 		const forces = this.schema.forces.flat();
 		const reactions = this.schema.nodes.map(node => [node[2], node[3]]).flat().map(R => R === 0 ? 1 : 0);
 
 		this.dataset = [
-			...(cords.concat(forces).separateNegative().normalize()),
+			// ...(cords.concat(forces).separateNegative().normalize()),
+			...(forces.separateNegative().normalize()),
 			...reactions,
 		];
 

@@ -12,12 +12,13 @@ module.exports = class SchemesBuilder {
 
 		for (var i = 0; i < count; i++) {
 			data[i] = {
-				nodes: nodes.map(node => [
-					Number((node[0]+this.maxDistanceChange*rand(100)).toFixed(3)),
-					Number((node[1]+this.maxDistanceChange*rand(100)).toFixed(3)),
-					node[2], // сохраняется положение опор
-					node[3]
-				]),
+				// nodes: nodes.map(node => [
+				// 	Number((node[0]+this.maxDistanceChange*rand(100)).toFixed(3)),
+				// 	Number((node[1]+this.maxDistanceChange*rand(100)).toFixed(3)),
+				// 	node[2], // сохраняется положение опор
+				// 	node[3]
+				// ]),
+				nodes: nodes.map(node => [...node]),
 				forces: forces.map((force,i) => {
 					if ([1,2].includes(i)) { // задаются усилия только для двух свободных узлов - второй и третий 
 						return [
