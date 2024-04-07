@@ -1,8 +1,15 @@
+import schema from '#editor-control/Schema';
+import statusEnum from '#editor-control/StatucEnum';
+
 export default class Bar {
 	constructor(start, end) {
 		this.start = start;
 		this.end = end;
 		this.selected = false;
+		this.tempLink = null;
+		this.status = statusEnum.new;
+		this.unlink = null;
+		this.delete = null;
 		buildElem();
 	}
 

@@ -9,6 +9,10 @@
     "dataset": "node --env-file .env ./dataset/index.js",
     "train": "node --env-file .env ./training/index.js"
   },
+  "imports": {
+      "#editor-elems": "./public/editor/elements/*",
+      "#editor-control": "./public/editor/control/*"
+  },
   "author": "",
   "license": "ISC",
   "devDependencies": {

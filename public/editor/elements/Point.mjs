@@ -1,11 +1,21 @@
 import schema from '#editor-control/Schema';
+import statusEnum from '#editor-control/StatucEnum';
 
 export default class Point {
 	constructor(x, y) {
 		this.x = x;
 		this.y = y;
 		this.selected = false;
+		this.tempLink = null;
+		this.status = statusEnum.new;
+		this.unlink = null;
+		this.delete = null;
 		buildElem();
+	}
+
+	move(x, y) {
+		this.x = x;
+		this.y = y;
 	}
 
 	toggleSelection() {
