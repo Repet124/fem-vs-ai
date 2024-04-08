@@ -78,9 +78,10 @@ export default class Schema {
 					}
 				})
 				// добавление новых элементов
-				.concat(this.#temp[entityKey].filter(tempEntity => tempEntity.status === statusEnum.new))
-				// обновление статуса всех элементов
-				.forEach(entity => entity.status = statusEnum.static);
+				.concat(this.#temp[entityKey].filter(tempEntity => tempEntity.status === statusEnum.new));
+
+			// обновление статуса всех элементов
+			this.#static[entityKey].forEach(entity => entity.status = statusEnum.static);
 			// очищение временной схемы
 			this.#temp[entityKey] = [];
 		}
