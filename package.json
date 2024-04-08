@@ -10,8 +10,7 @@
     "train": "node --env-file .env ./training/index.js"
   },
   "imports": {
-      "#editor-elems": "./public/editor/elements/*",
-      "#editor-control": "./public/editor/control/*"
+    "#": "./public/*"
   },
   "author": "",
   "license": "ISC",

@@ -1,5 +1,5 @@
-import schema from '#editor-control/Schema';
-import statusEnum from '#editor-control/StatucEnum';
+import { schema } from '../init.js';
+import statusEnum from '../editor/control/StatucEnum.js';
 
 export default class Bar {
 	constructor(start, end) {

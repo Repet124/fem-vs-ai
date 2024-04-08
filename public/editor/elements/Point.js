@@ -1,6 +1,6 @@
-import schema from '#editor-control/Schema';
-import statusEnum from '#editor-control/StatucEnum';
-import SchemaElement from '#editor-control/SchemaElement';
+import { schema } from '../init.js';
+import statusEnum from '../control/StatucEnum.js';
+import SchemaElement from '../control/SchemaElement.js';
 
 export default class Point {
 	constructor(x, y) {

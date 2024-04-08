@@ -1,4 +1,5 @@
-import statusEnum from '#editor-control/control/StatucEnum';
+import statusEnum from './control/StatusEnum.js';
+import { schema } from './init.js';
 
 function offActions() {
 	schema.decline();
@@ -30,4 +31,9 @@ function addPoints() {
 function select() {
 	offActions();
 	schema.selectModeOn();
+}
+
+export {
+	addPoints,
+	select,
 }
