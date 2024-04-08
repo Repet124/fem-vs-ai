@@ -19,13 +19,19 @@ class Schema {
 		x = cords.x;
 		y = cords.y;
 		let point = new Point(x,y);
+		point.unlink = () => {
+			this.#temp.points = this.#temp.points.filter(p => p !== point);
+		}
 		this.#temp.points.push(point);
 		return point;
 	}
 
-	createBar(start, end) {
+	createBar(start, end, parent=null) {
 		let bar = new Bar(start, end);
-		this.#temp.bars.push(point);
+		bar.unlink = () => {
+			this.#temp.bars = this.#temp.bars.filter(b => b !== bar);
+		}
+		this.#temp.bars.push(bar);
 		return bar;
 	}
 
@@ -45,6 +51,7 @@ class Schema {
 	#buildChild(parent, child) {
 		child.status = statusEnum.modified;
 		parent.tempLink = child;
+		child.delete = () => {child.status = statusEnum.deleted;}
 		return child;
 	}
 
@@ -90,7 +97,9 @@ class Schema {
 	}
 
 	clearListeners() {
-		this.#forEach(elem => elem.clearListeners());
+		for (let entityKey in this.#static) {
+			this.#static[entityKey].forEach(entity => entity.elem.clearListeners());
+		}
 	}
 
 }
