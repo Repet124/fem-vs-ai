@@ -16,6 +16,7 @@ function addPoints() {
 			point = schema.createPoint(e.clientX, e.clientY)
 		}
 		var cords = schema.toSchemaCords(e.clientX, e.clientY);
+
 		point.move(cords.x, cords.y);
 		schema.draw();
 	});

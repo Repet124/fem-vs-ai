@@ -1,5 +1,5 @@
 import { schema } from '../init.js';
-import statusEnum from '../control/StatucEnum.js';
+import statusEnum from '../control/StatusEnum.js';
 import SchemaElement from '../control/SchemaElement.js';
 
 export default class Point {
@@ -11,7 +11,7 @@ export default class Point {
 		this.status = statusEnum.new;
 		this.unlink = null;
 		this.delete = null;
-		buildElem();
+		this.buildElem();
 		this.schemaElem = new SchemaElement(this.elem);
 	}
 
