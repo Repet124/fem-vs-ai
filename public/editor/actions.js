@@ -11,7 +11,7 @@ function addPoints() {
 	offActions();
 	var point = null;
 
-	schema.canvas.setListener('mousemove', e => {
+	schema.canvas.addListener('mousemove', e => {
 		if (!point) {
 			point = schema.createPoint(e.clientX, e.clientY)
 		}
@@ -21,14 +21,14 @@ function addPoints() {
 		schema.draw();
 	});
 
-	schema.canvas.setListener('click', e => {
+	schema.canvas.addListener('click', e => {
 		point.status = statusEnum.new;
 		point = null;
 		schema.commit();
 		schema.draw();
 	});
 
-	schema.canvas.setListener('mouseout', e => {
+	schema.canvas.addListener('mouseout', e => {
 		if(point) {
 			point.unlink();
 			point = null;

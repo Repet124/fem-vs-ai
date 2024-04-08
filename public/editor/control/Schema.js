@@ -96,6 +96,7 @@ export default class Schema {
 			this.#static[entityKey].forEach(entity => {
 				entity.schemaElem.addListener('click', () => {
 					entity.toggleSelection();
+					this.draw();
 				})
 			});
 		}

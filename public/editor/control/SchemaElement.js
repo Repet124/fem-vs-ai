@@ -5,7 +5,7 @@ export default class SchemaElement {
 		this.htmlNode = htmlElem;
 	}
 
-	setListener(event, handler) {
+	addListener(event, handler) {
 		this.#listeners.push({
 			event,
 			handler,
