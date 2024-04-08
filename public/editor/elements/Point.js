@@ -51,8 +51,8 @@ export default class Point {
 		}
 		ctx.fill();
 		if (this.elem) {
-			this.#buildElemPosiotion();
 			document.body.append(this.elem);
+			this.#buildElemPosiotion();
 		}
 	}
 }

@@ -81,7 +81,7 @@ body {
 .barElemJS {
 	position: absolute;
 	min-height: 20px;
-	transform-origin: center;
-	top: 0;
+	transform-origin: center center;
+	top: -10px;
 	left: 0;
 }

@@ -3,6 +3,8 @@ import SchemaElement from './SchemaElement.js';
 import Point from '../elements/Point.js';
 import Bar from '../elements/Bar.js';
 
+
+
 export default class Schema {
 	#temp = {
 		bars: [],

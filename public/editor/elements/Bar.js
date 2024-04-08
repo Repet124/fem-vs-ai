@@ -31,15 +31,15 @@ export default class Bar {
 	}
 
 	getRotation() {
-		return Math.atan(this.proectionY / this.proectionX)
+		return Math.atan(this.proectionY / this.proectionX)*(-1);
 	}
 
 	#buildElemPosiotion() {
 		let {x,y} = schema.toPageCords(
-			this.start.x,
+			this.start.x + this.proectionX/2,
 			this.start.y + this.proectionY/2,
 		);
-		this.elem.style.transform = `translate(${x}px, ${y}px) rotate(-${this.getRotation()}rad)`;
+		this.elem.style.transform = `translate(${x - this.getLength()/2}px, ${y}px) rotate(${this.getRotation()}rad)`;
 	}
 
 	buildElem() {
