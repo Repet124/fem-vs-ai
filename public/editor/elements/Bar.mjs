@@ -11,6 +11,7 @@ export default class Bar {
 		this.unlink = null;
 		this.delete = null;
 		buildElem();
+		this.schemaElem = new SchemaElement(this.elem);
 	}
 
 	toggleSelection() {
@@ -51,8 +52,9 @@ export default class Bar {
 		ctx.beginPath();
 		ctx.strokeStyle = this.selected ? 'orange' : 'white';
 		ctx.stroke();
-
-		this.#buildElemPosiotion();
-		document.body.append(this.elem);
+		if (this.elem) {
+			this.#buildElemPosiotion();
+			document.body.append(this.elem);
+		}
 	}
 }

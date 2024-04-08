@@ -1,5 +1,6 @@
 import schema from '#editor-control/Schema';
 import statusEnum from '#editor-control/StatucEnum';
+import SchemaElement from '#editor-control/SchemaElement';
 
 export default class Point {
 	constructor(x, y) {
@@ -11,6 +12,7 @@ export default class Point {
 		this.unlink = null;
 		this.delete = null;
 		buildElem();
+		this.schemaElem = new SchemaElement(this.elem);
 	}
 
 	move(x, y) {
@@ -39,7 +41,9 @@ export default class Point {
 		ctx.fillStyle = this.selected ? 'orange' : 'white';
 		ctx.fill();
 		ctx.stroke();
-		this.#buildElemPosiotion();
-		document.body.append(this.elem);
+		if (this.elem) {
+			this.#buildElemPosiotion();
+			document.body.append(this.elem);
+		}
 	}
 }

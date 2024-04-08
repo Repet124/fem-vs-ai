@@ -52,6 +52,10 @@ class Schema {
 		child.status = statusEnum.modified;
 		parent.tempLink = child;
 		child.delete = () => {child.status = statusEnum.deleted;}
+		if (child.elem) {
+			document.body.remove(child.elem);
+			child.elem = null;
+		}
 		return child;
 	}
 
@@ -80,6 +84,16 @@ class Schema {
 		this.#temp[entityKey] = [];
 	}
 
+	selectModeOn() {
+		for (let entityKey in this.#static) {
+			this.#static[entityKey].forEach(entity => {
+				entity.schemaElem.addListener('click', () => {
+					entity.toggleSelection();
+				})
+			});
+		}
+	}
+
 	toPageCords(x, y) {
 		let {canvasX: x, canvasY: y, canvasHeight: height} = this.canvas.htmlNode.getBoundingClientRect();
 		return {
@@ -98,7 +112,7 @@ class Schema {
 
 	clearListeners() {
 		for (let entityKey in this.#static) {
-			this.#static[entityKey].forEach(entity => entity.elem.clearListeners());
+			this.#static[entityKey].forEach(entity => entity.schemaElem.clearListeners());
 		}
 	}
 
