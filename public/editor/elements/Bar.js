@@ -11,8 +11,6 @@ export default class Bar {
 		this.status = statusEnum.new;
 		this.unlink = null;
 		this.delete = null;
-		this.buildElem();
-		this.schemaElem = new SchemaElement(this.elem);
 	}
 
 	toggleSelection() {
@@ -44,9 +42,13 @@ export default class Bar {
 	}
 
 	buildElem() {
+		if (this.elem) {
+			this.elem.remove();
+		}
 		this.elem = document.createElement('div');
 		this.elem.className = 'barElemJS';
 		this.elem.style.width = this.getLength();
+		this.schemaElem = new SchemaElement(this.elem);
 	}
 
 	draw(ctx) {

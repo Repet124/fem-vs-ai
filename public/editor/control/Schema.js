@@ -25,9 +25,7 @@ export default class Schema {
 		x = cords.x;
 		y = cords.y;
 		let point = new Point(x,y);
-		point.unlink = () => {
-			this.#temp.points = this.#temp.points.filter(p => p !== point);
-		}
+		point.unlink = () => this.#temp.points = this.#temp.points.filter(p => p !== point);
 		this.#temp.points.push(point);
 		return point;
 	}
@@ -57,11 +55,7 @@ export default class Schema {
 	#buildChild(parent, child) {
 		child.status = statusEnum.modified;
 		parent.tempLink = child;
-		child.delete = () => {child.status = statusEnum.deleted;}
-		if (child.elem) {
-			document.body.remove(child.elem);
-			child.elem = null;
-		}
+		child.delete = () => child.status = statusEnum.deleted;
 		return child;
 	}
 
@@ -81,7 +75,10 @@ export default class Schema {
 				.concat(this.#temp[entityKey].filter(tempEntity => tempEntity.status === statusEnum.new));
 
 			// обновление статуса всех элементов
-			this.#static[entityKey].forEach(entity => entity.status = statusEnum.static);
+			this.#static[entityKey].forEach(entity => {
+				entity.buildElem();
+				entity.status = statusEnum.static
+			});
 			// очищение временной схемы
 			this.#temp[entityKey] = [];
 		}
@@ -89,6 +86,7 @@ export default class Schema {
 
 	decline() {
 		for (let entityKey in this.#temp) {
+			this.#temp[entityKey].forEach(entity => entity.unlink());
 			this.#temp[entityKey] = [];
 		}
 	}

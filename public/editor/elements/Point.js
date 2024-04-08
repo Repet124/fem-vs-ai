@@ -11,8 +11,6 @@ export default class Point {
 		this.status = statusEnum.new;
 		this.unlink = null;
 		this.delete = null;
-		this.buildElem();
-		this.schemaElem = new SchemaElement(this.elem);
 	}
 
 	move(x, y) {
@@ -25,14 +23,18 @@ export default class Point {
 	}
 
 	#buildElemPosiotion() {
-		let {x,y} = schema.toPageCords(this.x-this.elem.clientWidth, this.y-this.elem.clientWidth);
-		this.elem.style.left = x;
-		this.elem.style.top = y;
+		let {x,y} = schema.toPageCords(this.x, this.y);
+		this.elem.style.left = x-this.elem.clientWidth/2+'px';
+		this.elem.style.top = y-this.elem.clientWidth/2+'px';
 	}
 
 	buildElem() {
+		if (this.elem) {
+			this.elem.remove();
+		}
 		this.elem = document.createElement('div');
 		this.elem.className = 'pointElemJS';
+		this.schemaElem = new SchemaElement(this.elem);
 	}
 
 	draw(ctx) {
