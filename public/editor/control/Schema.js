@@ -120,8 +120,10 @@ export default class Schema {
 	}
 
 	clearListeners() {
+		this.canvas.clearListeners();
 		for (let entityKey in this.#static) {
 			this.#static[entityKey].forEach(entity => entity.schemaElem.clearListeners());
+			this.#temp[entityKey].forEach(entity => entity.schemaElem.clearListeners());
 		}
 	}
 

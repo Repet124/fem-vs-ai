@@ -9,3 +9,9 @@ controls.forEach(btn => {
 		}
 	})
 })
+
+document.addEventListener('keydown', function(event) {
+	if (event.code === 'Escape') {
+		actions.off();
+	}
+});

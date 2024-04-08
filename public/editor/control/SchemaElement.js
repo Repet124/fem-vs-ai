@@ -13,7 +13,7 @@ export default class SchemaElement {
 		this.htmlNode.addEventListener(event, handler);
 	}
 
-	clearHanders() {
+	clearListeners() {
 		this.#listeners.forEach(listener => {
 			this.htmlNode.removeEventListener(listener.event, listener.handler)
 		});

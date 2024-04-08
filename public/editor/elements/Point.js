@@ -37,7 +37,7 @@ export default class Point {
 
 	draw(ctx) {
 		ctx.beginPath();
-		ctx.arc(this.x, this.y, 5, 0, 2 * Math.PI);
+		ctx.arc(this.x, this.y, 10, 0, 2 * Math.PI);
 		ctx.fillStyle = this.selected ? 'orange' : 'white';
 		ctx.fill();
 		ctx.stroke();

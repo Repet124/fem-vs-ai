@@ -27,6 +27,15 @@ function addPoints() {
 		schema.commit();
 		schema.draw();
 	});
+
+	schema.canvas.setListener('mouseout', e => {
+		if(point) {
+			point.unlink();
+			point = null;
+			schema.draw();
+		}
+		
+	});
 }
 
 function select() {
@@ -37,4 +46,5 @@ function select() {
 export default {
 	addPoints,
 	select,
+	off: offActions
 }
