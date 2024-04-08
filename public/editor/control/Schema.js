@@ -5,11 +5,11 @@ import Bar from '../elements/Bar.js';
 
 export default class Schema {
 	#temp = {
-		points: [],
 		bars: [],
+		points: [],
 	}
 	#static  = {
-		points: [],
+		bars: [],
 		points: [],
 	}
 
@@ -21,39 +21,40 @@ export default class Schema {
 	}
 
 	createPoint(x, y) {
-		let cords = this.toSchemaCords(x, y);
-		x = cords.x;
-		y = cords.y;
-		let point = new Point(x,y);
-		point.unlink = () => this.#temp.points = this.#temp.points.filter(p => p !== point);
-		this.#temp.points.push(point);
-		return point;
+		return this.#createEntity(Point, [x, y], 'points');
 	}
 
-	createBar(start, end, parent=null) {
-		let bar = new Bar(start, end);
-		bar.unlink = () => {
-			this.#temp.bars = this.#temp.bars.filter(b => b !== bar);
+	createBar(start, end) {
+		return this.#createEntity(Bar, [start, end], 'bars');
+	}
+
+	#createEntity(constructFunc, constructArgs, entityArrIdent) {
+		var entity = new constructFunc(...constructArgs);
+		entity.unlink = () => {
+			if (entity.parent) {entity.parent.tempLink = null;}
+			this.#temp[entityArrIdent] = this.#temp[entityArrIdent].filter(e => e !== entity);
 		}
-		this.#temp.bars.push(bar);
-		return bar;
+		this.#temp[entityArrIdent].push(entity);
+		return entity;
 	}
 
 	getSelection() {
 		var result = {
 			points: this.#static.points.filter(point => point.selected).map(point => this.#buildChild(
 				point,
-				createPoint(point.x, point.y)
+				this.createPoint(point.x, point.y)
 			)),
 			bars: this.#static.bars.filter(bar => bar.selected).map(bar => this.#buildChild(
 				bar,
-				createBar(bar.start, bar.end)
+				this.createBar(bar.start, bar.end)
 			)),
 		}
+		return result
 	}
 
 	#buildChild(parent, child) {
 		child.status = statusEnum.modified;
+		child.parent = parent;
 		parent.tempLink = child;
 		child.delete = () => child.status = statusEnum.deleted;
 		return child;

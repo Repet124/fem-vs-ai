@@ -8,6 +8,7 @@ export default class Point {
 		this.y = y;
 		this.selected = false;
 		this.tempLink = null;
+		this.parent = null;
 		this.status = statusEnum.new;
 		this.unlink = null;
 		this.delete = null;
@@ -40,6 +41,8 @@ export default class Point {
 	draw(ctx) {
 		ctx.beginPath();
 		ctx.arc(this.x, this.y, 10, 0, 2 * Math.PI);
+		ctx.lineWidth = 1;
+		ctx.strokeStyle = '#000';
 		ctx.fillStyle = this.selected ? 'orange' : 'white';
 		if (this.status === statusEnum.new) {
 			ctx.fillStyle = 'rgba(21,140,209,.5)';

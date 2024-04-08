@@ -41,6 +41,14 @@ body {
 }
 #info {
 	grid-area: info;
+	padding: 20px;
+	color: #fff;
+	&.err {
+		background-color: red;
+	}
+	&.info {
+		background-color: blue;
+	}
 }
 
 .pallete {
@@ -69,4 +77,11 @@ body {
 	position: absolute;
 	min-width: 20px;
 	min-height: 20px;
+}
+.barElemJS {
+	position: absolute;
+	min-height: 20px;
+	transform-origin: center;
+	top: 0;
+	left: 0;
 }

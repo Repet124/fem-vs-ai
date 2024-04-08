@@ -1,5 +1,5 @@
 import statusEnum from './control/StatusEnum.js';
-import { schema } from './init.js';
+import { schema, info } from './init.js';
 
 function offActions() {
 	schema.unselect();
@@ -8,17 +8,29 @@ function offActions() {
 	schema.draw();
 }
 
+function addBar() {
+	var {points} = schema.getSelection();
+	if (points.length === 2) {
+		schema.createBar(points[0], points[1]);
+		schema.commit();
+		schema.draw();
+	} else {
+		info.err('Необходимо выделить 2 узла');
+	}
+	offActions();
+}
+
 function addPoints() {
 	offActions();
 	var point = null;
 
 	schema.canvas.addListener('mousemove', e => {
+		var {x,y} = schema.toSchemaCords(e.clientX, e.clientY);
 		if (!point) {
-			point = schema.createPoint(e.clientX, e.clientY)
+			point = schema.createPoint(x, y);
+		} else {
+			point.move(x, y);
 		}
-		var cords = schema.toSchemaCords(e.clientX, e.clientY);
-
-		point.move(cords.x, cords.y);
 		schema.draw();
 	});
 
@@ -46,6 +58,7 @@ function select() {
 
 export default {
 	addPoints,
+	addBar,
 	select,
 	off: offActions
 }
