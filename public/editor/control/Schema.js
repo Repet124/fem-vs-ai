@@ -102,6 +102,14 @@ export default class Schema {
 		}
 	}
 
+	unselect() {
+		for (let entityKey in this.#static) {
+			this.#static[entityKey].forEach(entity => {
+				entity.selected = false;
+			});
+		}
+	}
+
 	toPageCords(x, y) {
 		var canvas = this.canvas.htmlNode.getBoundingClientRect();
 		return {

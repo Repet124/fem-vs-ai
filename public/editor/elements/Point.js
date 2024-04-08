@@ -41,8 +41,12 @@ export default class Point {
 		ctx.beginPath();
 		ctx.arc(this.x, this.y, 10, 0, 2 * Math.PI);
 		ctx.fillStyle = this.selected ? 'orange' : 'white';
+		if (this.status === statusEnum.new) {
+			ctx.fillStyle = 'rgba(21,140,209,.5)';
+		} else {
+			ctx.stroke();
+		}
 		ctx.fill();
-		ctx.stroke();
 		if (this.elem) {
 			this.#buildElemPosiotion();
 			document.body.append(this.elem);

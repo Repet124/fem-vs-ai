@@ -54,6 +54,9 @@ export default class Bar {
 	draw(ctx) {
 		ctx.beginPath();
 		ctx.strokeStyle = this.selected ? 'orange' : 'white';
+		if (this.status === statusEnum.new) {
+			ctx.strokeStyle = 'rgba(0,0,255,.5)';
+		}
 		ctx.stroke();
 		if (this.elem) {
 			this.#buildElemPosiotion();

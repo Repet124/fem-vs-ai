@@ -2,6 +2,7 @@ import statusEnum from './control/StatusEnum.js';
 import { schema } from './init.js';
 
 function offActions() {
+	schema.unselect();
 	schema.decline();
 	schema.clearListeners();
 	schema.draw();

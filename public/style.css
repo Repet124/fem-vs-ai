@@ -60,6 +60,9 @@ body {
 			cursor: pointer;
 		};
 	}
+	.activeCommand {
+		background-color: orange;
+	}
 }
 
 .pointElemJS {
