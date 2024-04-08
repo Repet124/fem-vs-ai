@@ -1,5 +1,6 @@
 import { schema } from '../init.js';
 import statusEnum from '../editor/control/StatucEnum.js';
+import SchemaElement from '../control/SchemaElement.js';
 
 export default class Bar {
 	constructor(start, end) {

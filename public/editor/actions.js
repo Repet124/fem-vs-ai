@@ -33,7 +33,7 @@ function select() {
 	schema.selectModeOn();
 }
 
-export {
+export default {
 	addPoints,
 	select,
 }

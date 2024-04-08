@@ -1,16 +1,18 @@
-import statusEnum from '/editor/control/StatusEnum.js';
+import statusEnum from './StatusEnum.js';
+import SchemaElement from './SchemaElement.js';
 
 export default class Schema {
+	#temp = {
+		points: [],
+		bars: [],
+	}
+	#static  = {
+		points: [],
+		points: [],
+	}
+
 	constructor(canvas) {
 		this.canvas = new SchemaElement(canvas);
-		this.#temp = {
-			points: [],
-			bars: [],
-		}
-		this.#static  = {
-			points: [],
-			points: [],
-		}
 	}
 
 	createPoint(x, y) {
@@ -94,18 +96,18 @@ export default class Schema {
 	}
 
 	toPageCords(x, y) {
-		let {canvasX: x, canvasY: y, canvasHeight: height} = this.canvas.htmlNode.getBoundingClientRect();
+		var canvas = this.canvas.htmlNode.getBoundingClientRect();
 		return {
-			x: x + canvasX,
-			y: canvasHeight - y + canvasY,
+			x: x + canvas.x,
+			y: canvas.height - y + canvas.y,
 		}
 	}
 
 	toSchemaCords(x, y) {
-		let {canvasX: x, canvasY: y, canvasHeight: height} = this.canvas.htmlNode.getBoundingClientRect();
+		var canvas = this.canvas.htmlNode.getBoundingClientRect();
 		return {
-			x: x - canvasX,
-			y: canvasHeight - (y - canvasY),
+			x: x - canvas.x,
+			y: canvas.height - (y - canvas.y),
 		}
 	}
 
