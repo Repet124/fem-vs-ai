@@ -3,7 +3,6 @@ import { schema, info } from './init.js';
 
 function offActions() {
 	schema.unselect();
-	schema.decline();
 	schema.clearListeners();
 	schema.draw();
 }
@@ -65,10 +64,64 @@ function deleteSelected() {
 	offActions();
 }
 
+function divideBar(bar, num) {
+	var points = Array(num+1)
+		.fill()
+		.map((_, i) => {
+			if (i === 0) {return bar.start;}
+			if (i === num) {return bar.end;}
+			return schema.createPoint(
+				bar.start.x + (bar.proectionX / num)*i,
+				bar.start.y + (bar.proectionY / num)*i
+			);
+		});
+
+	var bars = Array(num)
+		.fill()
+		.map((_, i) => schema.createBar(points[i], points[i+1]));
+	bar.delete();
+	return () => {
+		bars.forEach(bar => bar.decline());
+		points.forEach(point => point.decline());
+	};
+}
+
+function divideSelectedBars() {
+	var {bars} = schema.getSelection();
+	offActions();
+
+	if (bars.length === 0) {
+		info.err('Необходимо выделить хотя бы один стержень');
+		return;
+	}
+
+	var barsCount = 3; // default value
+	var declineFuncs = bars.map(bar => divideBar(bar, barsCount));
+	schema.draw();
+
+	schema.document.addListener('keydown', e => {
+		if (e.code.match(/^Digit[0-9]/)) {
+			declineFuncs.forEach(func => func());
+			barsCount = +e.key;
+			declineFuncs = bars.map(bar => divideBar(bar, barsCount));
+			schema.draw();
+		}
+	});
+
+	schema.document.addListener('keydown', e => {
+		if (e.code === 'Enter') {
+			schema.commit();
+			offActions();
+		}
+	});
+}
+
+
 export default {
 	addPoints,
 	addBar,
 	select,
 	deleteSelected,
-	off: offActions
+	divide: divideSelectedBars,
+	off: offActions,
 }

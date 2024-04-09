@@ -43,7 +43,10 @@ export default class Bar {
 	}
 
 	getRotation() {
-		return Math.atan(this.proectionY / this.proectionX)*(-1);
+		var sin = this.proectionY;
+		var cos = this.proectionX;
+		if (!sin || !cos) {return 0}
+		return Math.atan(sin / cos)*(-1);
 	}
 
 	#buildElemPosiotion() {
@@ -75,8 +78,8 @@ export default class Bar {
 		ctx.lineTo(this.end.x, this.end.y);
 		ctx.stroke();
 		if (this.elem) {
-			this.#buildElemPosiotion();
 			document.body.append(this.elem);
+			this.#buildElemPosiotion();
 		}
 	}
 }

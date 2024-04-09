@@ -16,7 +16,9 @@ export default class Schema {
 	}
 
 	constructor(canvas) {
+		this.document = new SchemaElement(document);
 		this.canvas = new SchemaElement(canvas);
+
 		this.ctx = canvas.getContext('2d');
 		this.ctx.translate(0, canvas.height);
 		this.ctx.scale(1,-1);
@@ -129,10 +131,11 @@ export default class Schema {
 	}
 
 	clearListeners() {
+		this.document.clearListeners();
 		this.canvas.clearListeners();
 		for (let entityKey in this.#static) {
-			this.#static[entityKey].forEach(entity => entity.schemaElem.clearListeners());
-			this.#temp[entityKey].forEach(entity => entity.schemaElem.clearListeners());
+			this.#static[entityKey].forEach(entity => entity.schemaElem?.clearListeners());
+			this.#temp[entityKey].forEach(entity => entity.schemaElem?.clearListeners());
 		}
 	}
 
