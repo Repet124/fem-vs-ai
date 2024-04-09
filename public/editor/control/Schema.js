@@ -23,16 +23,15 @@ export default class Schema {
 	}
 
 	createPoint(x, y) {
-		return this.#createEntity(Point, [x, y], 'points');
+		return this.#installEntity(new Point(x, y), 'points');
 	}
 
 	createBar(start, end) {
-		return this.#createEntity(Bar, [start, end], 'bars');
+		return this.#installEntity(new Bar(start, end), 'bars');
 	}
 
-	#createEntity(constructFunc, constructArgs, entityArrIdent) {
-		var entity = new constructFunc(...constructArgs);
-		entity.unlink = () => {
+	#installEntity(entity, entityArrIdent) {
+		entity.decline = () => {
 			if (entity.parent) {entity.parent.tempLink = null;}
 			this.#temp[entityArrIdent] = this.#temp[entityArrIdent].filter(e => e !== entity);
 		}
@@ -41,15 +40,14 @@ export default class Schema {
 	}
 
 	getSelection() {
-		var result = {
-			points: this.#static.points.filter(point => point.selected).map(point => this.#buildChild(
-				point,
-				this.createPoint(point.x, point.y)
-			)),
-			bars: this.#static.bars.filter(bar => bar.selected).map(bar => this.#buildChild(
-				bar,
-				this.createBar(bar.start, bar.end)
-			)),
+		var result = {};
+		for (let entityKey in this.#static) {
+			result[entityKey] = this.#static[entityKey]
+				.filter(entity => entity.selected)
+				.map(entity => this.#buildChild(
+					entity,
+					this.#installEntity(entity.getCopy())
+				);
 		}
 		return result
 	}
@@ -58,7 +56,6 @@ export default class Schema {
 		child.status = statusEnum.modified;
 		child.parent = parent;
 		parent.tempLink = child;
-		child.delete = () => child.status = statusEnum.deleted;
 		return child;
 	}
 
@@ -89,7 +86,7 @@ export default class Schema {
 
 	decline() {
 		for (let entityKey in this.#temp) {
-			this.#temp[entityKey].forEach(entity => entity.unlink());
+			this.#temp[entityKey].forEach(entity => entity.decline());
 			this.#temp[entityKey] = [];
 		}
 	}
