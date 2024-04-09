@@ -6,12 +6,24 @@ export default class Bar {
 	constructor(start, end) {
 		this.start = start;
 		this.end = end;
+
+		this.start.link(this);
+		this.end.link(this);
+
 		this.selected = false;
+		this.status = statusEnum.new;
+
 		this.tempLink = null;
 		this.parent = null;
-		this.status = statusEnum.new;
-		this.unlink = null;
-		this.delete = null;
+		this.decline = null;
+	}
+
+	getCopy() {
+		return new Bar(this.start, this.end);
+	}
+
+	delete() {
+		this.status = statusEnum.deleted;
 	}
 
 	toggleSelection() {

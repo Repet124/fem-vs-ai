@@ -6,12 +6,35 @@ export default class Point {
 	constructor(x, y) {
 		this.x = x;
 		this.y = y;
+
+		this.links = new Set();
+		this.status = statusEnum.new;
 		this.selected = false;
+
 		this.tempLink = null;
 		this.parent = null;
-		this.status = statusEnum.new;
-		this.unlink = null;
-		this.delete = null;
+		this.decline = null;
+	}
+
+	getCopy() {
+		var copy = new Point(this.x, this.y);
+		copy.links = this.links;
+		return copy;
+	}
+
+	link(entity) {
+		this.links.add(entity);
+	}
+
+	unlink(entity) {
+		this.links.delete(entity)
+	}
+
+	delete() {
+		this.status = statusEnum.deleted;
+		this.links.forEach(link => {
+			link.delete()
+		});
 	}
 
 	move(x, y) {

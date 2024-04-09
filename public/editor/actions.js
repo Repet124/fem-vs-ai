@@ -43,7 +43,7 @@ function addPoints() {
 
 	schema.canvas.addListener('mouseout', e => {
 		if(point) {
-			point.unlink();
+			point.decline();
 			point = null;
 			schema.draw();
 		}
@@ -56,9 +56,19 @@ function select() {
 	schema.selectModeOn();
 }
 
+function deleteSelected() {
+	var selection = schema.getSelection();
+	for (let entityKey in selection) {
+		selection[entityKey].forEach(entity => entity.delete());
+	}
+	schema.commit();
+	offActions();
+}
+
 export default {
 	addPoints,
 	addBar,
 	select,
+	deleteSelected,
 	off: offActions
 }

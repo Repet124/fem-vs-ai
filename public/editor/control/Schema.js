@@ -45,8 +45,9 @@ export default class Schema {
 			result[entityKey] = this.#static[entityKey]
 				.filter(entity => entity.selected)
 				.map(entity => this.#buildChild(
-					entity,
-					this.#installEntity(entity.getCopy())
+						entity,
+						this.#installEntity(entity.getCopy(), entityKey)
+					)
 				);
 		}
 		return result
@@ -63,7 +64,9 @@ export default class Schema {
 		for (let entityKey in this.#static) {
 			this.#static[entityKey] = this.#static[entityKey]
 				// удаляем отмеченные как deleted
-				.filter(entity => !entity.tempLink || entity.tempLink.status !== statusEnum.deleted)
+				.filter(entity => 
+					(!entity.tempLink || entity.tempLink.status !== statusEnum.deleted) && entity.status !== statusEnum.deleted
+				)
 				// замещение существующих изменёнными
 				.map(entity => {
 					if (!entity.tempLink) {return entity;}
@@ -73,7 +76,6 @@ export default class Schema {
 				})
 				// добавление новых элементов
 				.concat(this.#temp[entityKey].filter(tempEntity => tempEntity.status === statusEnum.new));
-
 			// обновление статуса всех элементов
 			this.#static[entityKey].forEach(entity => {
 				entity.buildElem();
