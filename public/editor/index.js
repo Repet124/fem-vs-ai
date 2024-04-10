@@ -19,3 +19,12 @@ document.addEventListener('keydown', function(event) {
 		controls.forEach(btn => {btn.classList.remove('activeCommand')})
 	}
 });
+
+window.addEventListener('wheel', function(event) {
+	if(event.deltaY > 0) {
+		schema.scale *= 1.01;
+	} else {
+		schema.scale /= 1.01;
+	}
+	schema.draw();
+});
