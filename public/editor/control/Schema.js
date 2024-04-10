@@ -2,6 +2,7 @@ import statusEnum from './StatusEnum.js';
 import SchemaElement from './SchemaElement.js';
 import Point from '../elements/Point.js';
 import Bar from '../elements/Bar.js';
+import Grid from '../elements/Grid.js';
 
 
 
@@ -15,13 +16,18 @@ export default class Schema {
 		points: [],
 	}
 
-	constructor(canvas) {
+	constructor(canvas, scale=0.1) {
 		this.document = new SchemaElement(document);
 		this.canvas = new SchemaElement(canvas);
 
 		this.ctx = canvas.getContext('2d');
 		this.ctx.translate(0, canvas.height);
 		this.ctx.scale(1,-1);
+
+		this.grid = new Grid();
+		this.scale = scale;
+		this.translateX = 500;
+		this.translateY = 500;
 	}
 
 	createPoint(x, y) {
@@ -145,6 +151,7 @@ export default class Schema {
 			this.#static[entityKey].forEach(entity => !entity.tempLink && entity.draw(this.ctx));
 			this.#temp[entityKey].forEach(entity => entity.draw(this.ctx));
 		}
+		this.grid.draw(this.ctx);
 	}
 
 }

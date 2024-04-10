@@ -16,6 +16,14 @@ export default class Point {
 		this.decline = null;
 	}
 
+	get drawX() {
+		return this.x * schema.scale;
+	}
+
+	get drawY() {
+		return this.y * schema.scale;
+	}
+
 	getCopy() {
 		var copy = new Point(this.x, this.y);
 		copy.links = this.links;
