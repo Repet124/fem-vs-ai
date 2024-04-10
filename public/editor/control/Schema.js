@@ -15,6 +15,7 @@ export default class Schema {
 		bars: [],
 		points: [],
 	}
+	#scale = 1;
 
 	constructor(canvas, scale=0.1) {
 		this.document = new SchemaElement(document);
@@ -25,9 +26,18 @@ export default class Schema {
 		this.ctx.scale(1,-1);
 
 		this.grid = new Grid();
-		this.scale = scale;
+		this.#scale = scale;
 		this.translateX = 500;
 		this.translateY = 500;
+	}
+
+	get scale() {
+		return this.#scale;
+	}
+
+	set scale(val) {
+		if (val < 0.02 || val > .2) {return}
+		this.#scale = val;
 	}
 
 	createPoint(x, y) {

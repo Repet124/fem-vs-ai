@@ -12,19 +12,30 @@ controls.forEach(btn => {
 	})
 })
 
-document.addEventListener('keydown', function(event) {
-	if (event.code === 'Escape') {
+document.addEventListener('keydown', function(e) {
+	if (e.code === 'Escape') {
 		schema.decline();
 		actions.off();
 		controls.forEach(btn => {btn.classList.remove('activeCommand')})
 	}
 });
 
-window.addEventListener('wheel', function(event) {
-	if(event.deltaY > 0) {
-		schema.scale *= 1.01;
-	} else {
-		schema.scale /= 1.01;
+function zoomHandler(argument) {
+	var delta = 0;
+	var canvPos = schema.canvas.htmlNode.getBoundingClientRect();
+	return (e) => {
+		if (e.clientX < canvPos.x || e.clientY < canvPos.y || e.clientX > canvPos.right || e.clientY > canvPos.bottom) {return}
+		delta++;
+		// числа подобраны имперически
+		if (delta < 5) {return}
+		delta = 0;
+		if(e.deltaY > 0) {
+			schema.scale *= 1.2;
+		} else {
+			schema.scale /= 1.2;
+		}
+		schema.draw();
 	}
-	schema.draw();
-});
+}
+
+window.addEventListener('wheel', zoomHandler());
