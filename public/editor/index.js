@@ -21,19 +21,24 @@ document.addEventListener('keydown', function(e) {
 });
 
 function zoomHandler(argument) {
-	var delta = 0;
 	var canvPos = schema.canvas.htmlNode.getBoundingClientRect();
 	return (e) => {
 		if (e.clientX < canvPos.x || e.clientY < canvPos.y || e.clientX > canvPos.right || e.clientY > canvPos.bottom) {return}
-		delta++;
-		// числа подобраны имперически
-		if (delta < 5) {return}
-		delta = 0;
-		if(e.deltaY > 0) {
-			schema.scale *= 1.2;
-		} else {
-			schema.scale /= 1.2;
+
+		const scaleOld = schema.scale;
+		const scaleNew = schema.scale * (e.deltaY > 0 ? 1.2 : 0.8);
+
+		if(!schema.setScale(scaleNew)){return};
+
+		const cursor = {
+			x: e.clientX - canvPos.x,
+			y: canvPos.height - (e.clientY - canvPos.y),
 		}
+
+		const coff = (scaleNew - scaleOld) / (scaleNew * scaleOld);
+
+		schema.translateX -= cursor.x * coff;
+		schema.translateY -= cursor.y * coff;
 		schema.draw();
 	}
 }

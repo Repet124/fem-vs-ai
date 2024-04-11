@@ -17,11 +17,11 @@ export default class Point {
 	}
 
 	get drawX() {
-		return this.x * schema.scale;
+		return (this.x  + schema.translateX)* schema.scale;
 	}
 
 	get drawY() {
-		return this.y * schema.scale;
+		return (this.y + schema.translateY) * schema.scale ;
 	}
 
 	getCopy() {
@@ -71,7 +71,7 @@ export default class Point {
 
 	draw(ctx) {
 		ctx.beginPath();
-		ctx.arc(this.x, this.y, 10, 0, 2 * Math.PI);
+		ctx.arc(this.drawX, this.drawY, 10, 0, 2 * Math.PI);
 		ctx.lineWidth = 1;
 		ctx.strokeStyle = '#000';
 		ctx.fillStyle = this.selected ? 'orange' : 'white';

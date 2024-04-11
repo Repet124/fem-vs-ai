@@ -31,7 +31,7 @@ export default class Bar {
 	}
 
 	getLength() {
-		return Math.sqrt(((this.end.x - this.start.x) ** 2) + ((this.end.y - this.start.y) ** 2));
+		return Math.sqrt(((this.end.x - this.start.x) ** 2) + ((this.end.y - this.start.y) ** 2)) * schema.scale;
 	}
 
 	get proectionX() {
@@ -74,8 +74,8 @@ export default class Bar {
 		if (this.status === statusEnum.new) {
 			ctx.strokeStyle = 'rgba(0,0,255,.5)';
 		}
-		ctx.moveTo(this.start.x, this.start.y);
-		ctx.lineTo(this.end.x, this.end.y);
+		ctx.moveTo(this.start.drawX, this.start.drawY);
+		ctx.lineTo(this.end.drawX, this.end.drawY);
 		ctx.stroke();
 		if (this.elem) {
 			document.body.append(this.elem);

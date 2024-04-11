@@ -12,7 +12,7 @@ export default class Grid {
 
 	#drawLine(ctx, direction, num, isDrawCord) {
 		var perpendicularDirect = direction === 'x' ? 'y' : 'x';
-		var translate = schema['translate' + direction.toUpperCase()];
+		var translate = schema['translate' + perpendicularDirect.toUpperCase()];
 		var start = {}, end = {};
 
 		start[direction] = 0;

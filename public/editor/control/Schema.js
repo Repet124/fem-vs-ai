@@ -27,7 +27,7 @@ export default class Schema {
 
 		this.grid = new Grid();
 		this.#scale = scale;
-		this.translateX = 500;
+		this.translateX = 0;
 		this.translateY = 500;
 	}
 
@@ -35,9 +35,10 @@ export default class Schema {
 		return this.#scale;
 	}
 
-	set scale(val) {
-		if (val < 0.02 || val > .2) {return}
+	setScale(val) {
+		if (val < 0.02 || val > .2) {return false}
 		this.#scale = val;
+		return true;
 	}
 
 	createPoint(x, y) {
@@ -133,16 +134,16 @@ export default class Schema {
 	toPageCords(x, y) {
 		var canvas = this.canvas.htmlNode.getBoundingClientRect();
 		return {
-			x: x + canvas.x,
-			y: canvas.height - y + canvas.y,
+			x: (x + this.translateX) * this.scale + canvas.x,
+			y: canvas.height - (y + this.translateY) * this.scale + canvas.y,
 		}
 	}
 
 	toSchemaCords(x, y) {
 		var canvas = this.canvas.htmlNode.getBoundingClientRect();
 		return {
-			x: x - canvas.x,
-			y: canvas.height - (y - canvas.y),
+			x: (x - canvas.x) / this.scale - this.translateX,
+			y: (canvas.height - (y - canvas.y)) / this.scale - this.translateY,
 		}
 	}
 
@@ -157,11 +158,11 @@ export default class Schema {
 
 	draw() {
 		this.ctx.clearRect(0,0,this.canvas.htmlNode.width, this.canvas.htmlNode.height);
+		this.grid.draw(this.ctx);
 		for (let entityKey in this.#static) {
 			this.#static[entityKey].forEach(entity => !entity.tempLink && entity.draw(this.ctx));
 			this.#temp[entityKey].forEach(entity => entity.draw(this.ctx));
 		}
-		this.grid.draw(this.ctx);
 	}
 
 }
