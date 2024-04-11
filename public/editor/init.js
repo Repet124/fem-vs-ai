@@ -1,9 +1,12 @@
 import Schema from './control/Schema.js';
 import Info from './control/Info.js';
 
-var schema = new Schema(document.getElementById('canvas'));
-var info = new Info(document.getElementById('info'));
+const canvas = document.getElementById('canvas');
+// canvas.width = document.documentElement.clientWidth  - 30;
+// canvas.height = document.documentElement.clientHeight - 30;
 
+var schema = new Schema(canvas);
+var info = new Info(document.getElementById('info'));
 schema.draw();
 
 export {
