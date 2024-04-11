@@ -27,7 +27,7 @@ export default class Schema {
 
 		this.grid = new Grid();
 		this.#scale = scale;
-		this.translateX = 0;
+		this.translateX = 500;
 		this.translateY = 500;
 	}
 

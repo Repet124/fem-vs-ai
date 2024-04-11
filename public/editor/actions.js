@@ -1,7 +1,9 @@
 import statusEnum from './control/StatusEnum.js';
 import { schema, info } from './init.js';
+import cordsPallet from './control/CordsPallet.js';
 
 function offActions() {
+	cordsPallet.off();
 	schema.unselect();
 	schema.clearListeners();
 	schema.draw();
@@ -116,6 +118,17 @@ function divideSelectedBars() {
 	});
 }
 
+function pointReplace() {
+	var {points} = schema.getSelection();
+	offActions();
+
+	if (points.length !== 1) {
+		info.err('Необходимо выделить один узел');
+		return;
+	}
+
+	cordsPallet.active(points[0]);
+}
 
 export default {
 	addPoints,

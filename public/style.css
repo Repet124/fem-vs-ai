@@ -18,12 +18,11 @@ body {
 
 #editor {
 	display: grid;
-	grid-template-columns: repeat(4, 1fr);
+	grid-template-columns: 1fr 400px;
 	gap: 15px;
 	grid-template-areas:
-		"canvas canvas canvas canvas"
-		"command command calc calc"
-		"info info info info";
+		"canvas pallete"
+		"info pallete";
 	padding: 15px;
 	color: #fff;
 }
@@ -31,15 +30,22 @@ body {
 #canvas {
 	grid-area: canvas;
 	cursor: crosshair;
+	width: 100%;
 	place-self: center;
 	background-color: var(--gray);
 }
-#pallete-command {
-	grid-area: command;
+
+#pallete {
+	grid-area: pallete;
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
 }
-#pallete-calc {
-	grid-area: calc;
+
+#pallete-cords {
+	display: none;
 }
+
 #info {
 	grid-area: info;
 	padding: 20px;

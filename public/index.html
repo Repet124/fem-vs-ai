@@ -17,26 +17,32 @@
 	<body>
 		<div id="editor">
 			<canvas id="canvas" width="800" height="500"></canvas>
-			<section id="pallete-command" class="pallete">
-				<h2>Commands</h2>
-				<ul>
-					<li data-command="select">select</li>
-					<li data-command="addPoints">addPoints</li>
-					<li data-command="addBar">addBar</li>
-					<li data-command="deleteSelected">delete</li>
-					<li data-command="divide">divide</li>
-				</ul>
+			<section id="pallete">
+				<div id="pallete-cords" class="pallete">
+					<h2>Cords</h2>
+				</div>
+				<div id="pallete-command" class="pallete">
+					<h2>Commands</h2>
+					<ul>
+						<li data-command="select">select</li>
+						<li data-command="addPoints">addPoints</li>
+						<li data-command="addBar">addBar</li>
+						<li data-command="deleteSelected">delete</li>
+						<li data-command="divide">divide</li>
+					</ul>
+				</div>
+				<div id="pallete-calc" class="pallete">
+					<h2>Calc</h2>
+					<ul>
+						<li data-command="ai">AI</li>
+						<li data-command="fem">FEM</li>
+					</ul>
+				</div>
+				
 			</section>
-			<section id="pallete-calc" class="pallete">
-				<h2>Calc</h2>
-				<ul>
-					<li data-command="ai">AI</li>
-					<li data-command="fem">FEM</li>
-				</ul>
-			</section>
-			<div id="info">
+			<section id="info">
 				info
-			</div>
+			</section>
 		</div>
 		<script type="module" src="./editor/index.js"></script>
 		<!-- <script type="module" src="./renderer.js"></script> -->
