@@ -64,6 +64,7 @@ body {
 	gap: 15px;
 	ul {
 		display: flex;
+		flex-wrap: wrap;
 		gap: 15px;
 	}
 	li {

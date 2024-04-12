@@ -118,7 +118,7 @@ function divideSelectedBars() {
 	});
 }
 
-function pointReplace() {
+function movePoint() {
 	var {points} = schema.getSelection();
 	offActions();
 
@@ -127,12 +127,16 @@ function pointReplace() {
 		return;
 	}
 
-	cordsPallet.active(points[0]);
+	cordsPallet.active(points[0], () => {
+		schema.commit();
+		offActions();
+	});
 }
 
 export default {
 	addPoints,
 	addBar,
+	movePoint,
 	select,
 	deleteSelected,
 	divide: divideSelectedBars,
