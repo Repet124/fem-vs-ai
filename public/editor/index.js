@@ -77,6 +77,7 @@ document.addEventListener('keydown', function(e) {
 controls.forEach(btn => {
 	btn.addEventListener('click', e => {
 		if (actions[btn.dataset.command]) {
+			controls.forEach(btn => {btn.classList.remove('activeCommand')})
 			e.target.classList.add('activeCommand')
 			actions[btn.dataset.command]();
 		}

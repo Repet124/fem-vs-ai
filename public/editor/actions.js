@@ -14,11 +14,12 @@ function addBar() {
 	if (points.length === 2) {
 		schema.createBar(points[0], points[1]);
 		schema.commit();
+		select();
+		points[1].selected = true;
 		schema.draw();
 	} else {
 		info.err('Необходимо выделить 2 узла');
 	}
-	offActions();
 }
 
 function addPoints() {
