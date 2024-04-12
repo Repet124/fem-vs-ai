@@ -1,23 +1,29 @@
 export default class Info {
 	constructor(container) {
 		this.container = container;
+		this.messageContainer = container.querySelector('.info-messageJS');
+		this.commandContainer = container.querySelector('.info-commandJS');
 	}
 
 	#message(text) {
-		this.container.innerText = text;
+		this.messageContainer.innerText = text;
 		setTimeout(() => {
-			this.container.className = '';
-			this.container.innerText = '';
+			this.messageContainer.className = '';
+			this.messageContainer.innerText = '';
 		}, 2000);
 	}
 
+	setCommand(commandName) {
+		this.commandContainer.innerText = 'Активная команда: ' + commandName;
+	}
+
 	err(message) {
-		this.container.classList.add('err');
+		this.messageContainer.classList.add('err');
 		this.#message(message);
 	}
 
 	info(message) {
-		this.container.classList.add('info');
+		this.messageContainer.classList.add('info');
 		this.#message(message);
 	}
 }

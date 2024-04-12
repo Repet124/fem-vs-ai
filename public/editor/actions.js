@@ -2,12 +2,14 @@ import statusEnum from './control/StatusEnum.js';
 import { schema, info } from './init.js';
 import cordsPallet from './control/CordsPallet.js';
 
-function offActions() {
+function offActions(afterSelect=true) {
 	cordsPallet.off();
 	schema.unselect();
 	schema.clearListeners();
 	schema.draw();
-	select();
+	if (afterSelect) {
+		select();
+	}
 }
 
 function addBar() {
@@ -24,7 +26,8 @@ function addBar() {
 }
 
 function addPoints() {
-	offActions();
+	offActions(false);
+	info.setCommand('Добавление узлов');
 	var point = null;
 
 	schema.canvas.addListener('mousemove', e => {
@@ -56,6 +59,7 @@ function addPoints() {
 
 function select() {
 	schema.selectModeOn();
+	info.setCommand('Выделение');
 }
 
 function deleteSelected() {
@@ -68,6 +72,7 @@ function deleteSelected() {
 }
 
 function divideBar(bar, num) {
+	info.setCommand('Разделение стержней');
 	var points = Array(num+1)
 		.fill()
 		.map((_, i) => {
@@ -91,7 +96,7 @@ function divideBar(bar, num) {
 
 function divideSelectedBars() {
 	var {bars} = schema.getSelection();
-	offActions();
+	offActions(false);
 
 	if (bars.length === 0) {
 		info.err('Необходимо выделить хотя бы один стержень');
@@ -121,13 +126,15 @@ function divideSelectedBars() {
 
 function movePoint() {
 	var {points} = schema.getSelection();
-	offActions();
+	offActions(false);
 
 	if (points.length !== 1) {
 		info.err('Необходимо выделить один узел');
 		return;
 	}
-
+	info.setCommand('Редактирование координат узла');
+	points[0].selected = true;
+	schema.draw();
 	cordsPallet.active(points[0], () => {
 		schema.commit();
 		offActions();

@@ -76,7 +76,6 @@ canvas.addEventListener('mousedown', e => {
 
 window.addEventListener('wheel', getZoomHandler());
 
-// document.addEventListener('keydown', );
 var keySuit = new Map();
 
 keySuit.set(['Escape'], () => {schema.decline();actions.off();});
@@ -87,3 +86,4 @@ keySuit.set(['KeyD'], actions.divide);
 keySuit.set(['KeyR'], actions.deleteSelected);
 
 assignCommandToKeys(keySuit);
+actions.select();

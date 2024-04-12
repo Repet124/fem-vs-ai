@@ -33,7 +33,7 @@ class CordsPallet {
 		}
 
 		var header = document.createElement('h2');
-		header.innerText = 'Cords';
+		header.innerText = 'Координаты';
 		this.container.prepend(header);
 	}
 

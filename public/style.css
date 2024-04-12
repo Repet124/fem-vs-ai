@@ -9,6 +9,7 @@
 	--main: #31332b;
 	--gray: #4d4f46;
 	--gray-light: #63665c;
+	--red: #e54c4c;
 }
 
 body {
@@ -48,14 +49,18 @@ body {
 
 #info {
 	grid-area: info;
-	padding: 20px;
 	color: #fff;
-	&.err {
-		background-color: red;
+	.err {
+		background-color: var(--red);
+		padding: 10px;
 	}
-	&.info {
+	.info {
 		background-color: blue;
 	}
+}
+
+.info-command {
+	margin-bottom: 15px;
 }
 
 .pallete {
