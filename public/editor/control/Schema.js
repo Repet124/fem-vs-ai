@@ -63,19 +63,19 @@ export default class Schema {
 		for (let entityKey in this.#static) {
 			result[entityKey] = this.#static[entityKey]
 				.filter(entity => entity.selected)
-				.map(entity => this.#buildChild(
-						entity,
-						this.#installEntity(entity.getCopy(), entityKey)
-					)
-				);
+				.map(entity => this.#buildChild(entity, entityKey));
 		}
 		return result
 	}
 
-	#buildChild(parent, child) {
+	#buildChild(parent, entityKey) {
+		const child = this.#installEntity(parent.getCopy(), entityKey)
 		child.status = statusEnum.modified;
 		child.parent = parent;
 		parent.tempLink = child;
+		if (parent.links && parent.links.size) {
+			parent.links.forEach(link => link.toTempDependencies());
+		}
 		return child;
 	}
 

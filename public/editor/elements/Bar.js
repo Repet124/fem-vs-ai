@@ -18,6 +18,11 @@ export default class Bar {
 		this.decline = null;
 	}
 
+	toTempDependencies() {
+		if (this.start.tempLink) {this.start = this.start.tempLink;}
+		if (this.end.tempLink) {this.end = this.end.tempLink;}
+	}
+
 	getCopy() {
 		return new Bar(this.start, this.end);
 	}
