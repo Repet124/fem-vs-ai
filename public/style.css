@@ -64,22 +64,54 @@ body {
 	gap: 15px;
 	ul {
 		display: flex;
-		flex-wrap: wrap;
-		gap: 15px;
+		flex-direction: column;
+		gap: 10px;
 	}
 	li {
-		padding: 10px;
-		background-color: var(--gray);
+		display: flex;
+		gap: 5px;
 		list-style-type: none;
-		&:hover {
-			background-color: var(--gray-light);
-			cursor: pointer;
-		};
 	}
 	.activeCommand {
 		background-color: orange;
 	}
 }
+
+.command-name {
+	order: 1;
+	text-transform: uppercase;
+	font-weight: bold;
+}
+
+li:has(.command-keyword) {
+	&::before {
+		order: 2;
+		content: '("';
+	}
+
+	&::after {
+		order: 2;
+		content: '")';
+	}
+}
+
+.command-keyword {
+	margin: 0 -5px;
+	order: 2;
+	font-style: italic;
+	&:first-letter {
+		color: red;
+		text-transform: uppercase;
+	}
+}
+.command-description {
+	order: 3;
+
+	&::before {
+		content: '- ';
+	}
+}
+
 
 label:has(.pallete-field) {
 	display: flex;
@@ -110,4 +142,16 @@ label:has(.pallete-field) {
 	transform-origin: center center;
 	top: -10px;
 	left: 0;
+}
+
+.btn {
+	padding:  5px;
+	color: #fff;
+	font-size: 16px;
+	background-color: var(--gray);
+	border: none;
+	&:hover {
+		background-color: var(--gray-light);
+		cursor: pointer;
+	}
 }

@@ -7,6 +7,7 @@ function offActions() {
 	schema.unselect();
 	schema.clearListeners();
 	schema.draw();
+	select();
 }
 
 function addBar() {
@@ -54,7 +55,6 @@ function addPoints() {
 }
 
 function select() {
-	offActions();
 	schema.selectModeOn();
 }
 

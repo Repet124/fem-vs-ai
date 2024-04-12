@@ -20,22 +20,43 @@
 			<section id="pallete">
 				<div id="pallete-cords" class="pallete"></div>
 				<div id="pallete-command" class="pallete">
-					<h2>Commands</h2>
+					<h2>Команды</h2>
 					<ul>
-						<li data-command="select">select</li>
-						<li data-command="addPoints">addPoints</li>
-						<li data-command="addBar">addBar</li>
-						<li data-command="movePoint">movePoint</li>
-						<li data-command="deleteSelected">delete</li>
-						<li data-command="divide">divide</li>
+						<li>
+							<div class="command-name">Esc</div>
+							<div class="command-description">Отмена</div>
+						</li>
+						<li>
+							<div class="command-name">N</div>
+							<div class="command-keyword">node</div>
+							<div class="command-description">Создать узел</div>
+						</li>
+						<li>
+							<div class="command-name">B</div>
+							<div class="command-keyword">bar</div>
+							<div class="command-description">Создать стержень</div>
+						</li>
+						<li>
+							<div class="command-name">E</div>
+							<div class="command-keyword">edit</div>
+							<div class="command-description">Редактировать координаты узла</div>
+						</li>
+						<li>
+							<div class="command-name">D</div>
+							<div class="command-keyword">divide</div>
+							<div class="command-description">Разделить стержень</div>
+						</li>
+						<li>
+							<div class="command-name">R</div>
+							<div class="command-keyword">remove</div>
+							<div class="command-description">Удалить выделенное</div>
+						</li>
 					</ul>
 				</div>
 				<div id="pallete-calc" class="pallete">
-					<h2>Calc</h2>
-					<ul>
-						<li data-command="ai">AI</li>
-						<li data-command="fem">FEM</li>
-					</ul>
+					<h2>Расчёт</h2>
+					<button class="btn" data-command="ai">AI</button>
+					<button class="btn" data-command="fem">FEM</button>
 				</div>
 				
 			</section>

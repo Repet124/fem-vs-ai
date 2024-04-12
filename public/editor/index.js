@@ -43,6 +43,16 @@ function getTranslationHandler() {
 	}
 }
 
+function assignCommandToKeys(commandToKeySuit) {
+	document.addEventListener('keydown', e => {
+		commandToKeySuit.forEach((command, keyCodes) => {
+			if (keyCodes.includes(e.code)) {
+				command();
+			}
+		});
+	});
+}
+
 function isCrodsOverElem(clientX, clientY, boundingClientRect) {
 	return !(clientX < boundingClientRect.x || clientY < boundingClientRect.y || clientX > boundingClientRect.right || clientY > boundingClientRect.bottom);
 }
@@ -66,20 +76,14 @@ canvas.addEventListener('mousedown', e => {
 
 window.addEventListener('wheel', getZoomHandler());
 
-document.addEventListener('keydown', function(e) {
-	if (e.code === 'Escape') {
-		schema.decline();
-		actions.off();
-		controls.forEach(btn => {btn.classList.remove('activeCommand')})
-	}
-});
+// document.addEventListener('keydown', );
+var keySuit = new Map();
 
-controls.forEach(btn => {
-	btn.addEventListener('click', e => {
-		if (actions[btn.dataset.command]) {
-			controls.forEach(btn => {btn.classList.remove('activeCommand')})
-			e.target.classList.add('activeCommand')
-			actions[btn.dataset.command]();
-		}
-	})
-});
+keySuit.set(['Escape'], () => {schema.decline();actions.off();});
+keySuit.set(['KeyN'], actions.addPoints);
+keySuit.set(['KeyB'], actions.addBar);
+keySuit.set(['KeyE'], actions.movePoint);
+keySuit.set(['KeyD'], actions.divide);
+keySuit.set(['KeyR'], actions.deleteSelected);
+
+assignCommandToKeys(keySuit);
