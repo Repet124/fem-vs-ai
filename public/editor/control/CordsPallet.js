@@ -26,11 +26,15 @@ class CordsPallet {
 					this.off();
 				}
 			});
+			const label = document.createElement('label');
+			label.prepend();
+			label.append(axis.toUpperCase()+':', fields[axis], 'mm');
+			this.container.append(label);
 		}
 
 		var header = document.createElement('h2');
 		header.innerText = 'Cords';
-		this.container.append(header, fields.x, fields.y);
+		this.container.prepend(header);
 	}
 
 	active(point, commitAction) {

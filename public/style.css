@@ -81,6 +81,24 @@ body {
 	}
 }
 
+label:has(.pallete-field) {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	font-size:  1.1em;
+}
+
+.pallete-field {
+	padding: 3px 5px;
+	background-color: var(--gray-light);
+	color: #fff;
+	border: none;
+	border-radius: 2px;
+	max-width: 100px;
+	text-align: right;
+	font-size:  1.1em;
+}
+
 .pointElemJS {
 	position: absolute;
 	min-width: 20px;
