@@ -107,7 +107,12 @@ export default class Schema {
 
 	decline() {
 		for (let entityKey in this.#temp) {
-			this.#temp[entityKey].forEach(entity => entity.decline());
+			this.#temp[entityKey].forEach(entity => {
+				if (entity.links && entity.links.size) {
+					entity.links.forEach(link => link.toStaticDependencies());
+				}
+				entity.decline()
+			});
 			this.#temp[entityKey] = [];
 		}
 	}

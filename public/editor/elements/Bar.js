@@ -18,6 +18,11 @@ export default class Bar {
 		this.decline = null;
 	}
 
+	toStaticDependencies() {
+		if (this.start.parent) {this.start = this.start.parent;}
+		if (this.end.parent) {this.end = this.end.parent;}
+	}
+
 	toTempDependencies() {
 		if (this.start.tempLink) {this.start = this.start.tempLink;}
 		if (this.end.tempLink) {this.end = this.end.tempLink;}
