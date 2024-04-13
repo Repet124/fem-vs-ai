@@ -141,6 +141,10 @@ function movePoint() {
 	});
 }
 
+function exportSchema() {
+	var json = schema.toJson();
+}
+
 export default {
 	addPoints,
 	addBar,
@@ -148,5 +152,6 @@ export default {
 	select,
 	deleteSelected,
 	divide: divideSelectedBars,
+	exportSchema,
 	off: offActions,
 }
