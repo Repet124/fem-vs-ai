@@ -84,6 +84,7 @@ keySuit.set(['KeyB'], actions.addBar);
 keySuit.set(['KeyE'], actions.movePoint);
 keySuit.set(['KeyD'], actions.divide);
 keySuit.set(['KeyR'], actions.deleteSelected);
+keySuit.set(['KeyS'], actions.toggleSupport);
 
 assignCommandToKeys(keySuit);
 actions.select();

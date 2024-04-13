@@ -141,6 +141,28 @@ function movePoint() {
 	});
 }
 
+function toggleSupport() {
+	var {points} = schema.getSelection();
+
+	points.forEach(point => {
+		switch (point.support.x + point.support.y) {
+			case 0:
+				point.support.y = true;
+				break;
+			case 1:
+				point.support.x = point.support.y = true;
+				break;
+			case 2:
+				point.support.x = point.support.y = false;
+				break;
+		}
+		point.selected = true;
+	});
+	schema.commit();
+	select();
+	schema.draw();
+}
+
 export default {
 	addPoints,
 	addBar,
@@ -148,5 +170,6 @@ export default {
 	select,
 	deleteSelected,
 	divide: divideSelectedBars,
+	toggleSupport,
 	off: offActions,
 }

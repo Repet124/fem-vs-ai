@@ -7,6 +7,7 @@ canvas.height = document.documentElement.clientHeight - 200;
 
 var schema = new Schema(canvas);
 var info = new Info(document.getElementById('info'));
+
 schema.commit();
 schema.draw();
 
