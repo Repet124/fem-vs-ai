@@ -2,20 +2,22 @@ import statusEnum from './StatusEnum.js';
 import SchemaElement from './SchemaElement.js';
 import Point from '../elements/Point.js';
 import Bar from '../elements/Bar.js';
+import Force from '../elements/Force.js';
 import Grid from '../elements/Grid.js';
-
-
 
 export default class Schema {
 	#temp = {
 		bars: [],
 		points: [],
+		forces: [],
 	}
 	#static  = {
 		bars: [],
 		points: [],
+		forces: [],
 	}
 	#scale = 1;
+	#forceCoff = 0;
 
 	constructor(canvas, scale=0.1) {
 		this.document = new SchemaElement(document);
@@ -41,12 +43,16 @@ export default class Schema {
 		return true;
 	}
 
-	createPoint(x, y) {
-		return this.#installEntity(new Point(x, y), 'points');
+	createPoint(...construcArgs) {
+		return this.#installEntity(new Point(...construcArgs), 'points');
 	}
 
-	createBar(start, end) {
-		return this.#installEntity(new Bar(start, end), 'bars');
+	createBar(...construcArgs) {
+		return this.#installEntity(new Bar(...construcArgs), 'bars');
+	}
+
+	createForce(...construcArgs) {
+		return this.#installEntity(new Force(...construcArgs), 'forces');
 	}
 
 	#installEntity(entity, entityArrIdent) {
@@ -161,12 +167,33 @@ export default class Schema {
 		}
 	}
 
+	get forceCoff() {
+
+		if (!this.#forceCoff) {
+			var max = this.#static.forces[0];
+			this.#static.forces.concat(this.#temp.forces).forEach(force => {
+				if(max.absValue < force.absValue) {
+					max = force;
+				}
+			});
+
+			// 50 - размер наибольшей силы в пикселях
+			this.#forceCoff = max.absValue / 50;
+		}
+		return this.#forceCoff;
+	}
+
 	draw() {
 		this.ctx.clearRect(0,0,this.canvas.htmlNode.width, this.canvas.htmlNode.height);
 		this.grid.draw(this.ctx);
+
+		this.#forceCoff = 0;
+
 		for (let entityKey in this.#static) {
-			this.#static[entityKey].forEach(entity => !entity.tempLink && entity.draw(this.ctx));
-			this.#temp[entityKey].forEach(entity => entity.draw(this.ctx));
+			this.#static[entityKey]
+				.map(entity => entity.tempLink || entity)
+				.concat(this.#temp[entityKey])
+				.forEach(entity => entity.draw(this.ctx));
 		}
 	}
 
