@@ -7,14 +7,14 @@ import Grid from '../elements/Grid.js';
 
 export default class Schema {
 	#temp = {
+		forces: [],
 		bars: [],
 		points: [],
-		forces: [],
 	}
 	#static  = {
+		forces: [],
 		bars: [],
 		points: [],
-		forces: [],
 	}
 	#scale = 1;
 	#forceCoff = 0;

@@ -69,16 +69,16 @@ export default class Force {
 	getRotation() {
 		var sin = -this.#components.y;
 		var cos = this.#components.x;
-		if (!sin || !cos) {return 0}
+		if (!cos) {return -Math.PI / 2;}
 		return Math.atan(sin / cos)*(-1);
 	}
 
 	#buildElemPosiotion() {
 		let {x,y} = schema.toPageCords(
-			this.point.x + this.#components.x / 2 *schema.forceCoff,
-			this.point.y + this.#components.y / 2 *schema.forceCoff,
+			this.point.x,
+			this.point.y,
 		);
-		this.elem.style.transform = `translate(${x - this.absValue*schema.forceCoff/2}px, ${y}px) rotate(${this.getRotation()}rad)`;
+		this.elem.style.transform = `translate(${x-this.#components.x/schema.forceCoff}px, ${y+this.#components.y/schema.forceCoff}px) rotate(${-this.getRotation()}rad)`;
 	}
 
 
@@ -88,7 +88,7 @@ export default class Force {
 		}
 		this.elem = document.createElement('div');
 		this.elem.className = 'forceElemJS';
-		this.elem.style.width = this.absValue*schema.forceCoff+'px';
+		this.elem.style.width = this.absValue/schema.forceCoff+'px';
 		this.schemaElem = new SchemaElement(this.elem);
 	}
 
@@ -99,6 +99,7 @@ export default class Force {
 		ctx.beginPath();
 		ctx.translate(this.start.x, this.start.y);
 		ctx.rotate(rotation);
+		ctx.translate(0, schema.pointSize);
 
 		ctx.moveTo(0,0);
 		ctx.lineTo(10,20);
@@ -108,6 +109,7 @@ export default class Force {
 
 		ctx.closePath();
 
+		ctx.translate(0, -schema.pointSize);
 		ctx.rotate(-rotation);
 		ctx.translate(this.end.x-this.start.x-20, this.end.y-this.start.y+10);
 		ctx.scale(1,-1);
@@ -116,7 +118,7 @@ export default class Force {
 		ctx.fillText(forceText, 0, 0);
 
 		ctx.scale(1,-1);
-		ctx.translate(-this.end.x, -this.end.y-10);
+		ctx.translate(-this.end.x+20, -this.end.y-10);
 	}
 
 	draw(ctx) {

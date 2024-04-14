@@ -149,6 +149,14 @@ label:has(.pallete-field) {
 	left: 0;
 }
 
+.forceElemJS {
+	position: absolute;
+	min-height: 20px;
+	transform-origin: center left;
+	top: -10px;
+	left: 0;
+}
+
 .btn {
 	padding:  5px;
 	color: #fff;
