@@ -153,6 +153,23 @@ function movePoint() {
 	});
 }
 
+function changeForce() {
+	var {forces} = schema.getSelection();
+	offActions(false);
+
+	if (forces.length !== 1) {
+		info.err('Необходимо выделить одну силу');
+		return;
+	}
+	info.setCommand('Редактирование компонент силы');
+	forces[0].selected = true;
+	schema.draw();
+	// cordsPallet.active(points[0], () => {
+	// 	schema.commit();
+	// 	offActions();
+	// });
+}
+
 function toggleSupport() {
 	var {points} = schema.getSelection();
 
@@ -180,8 +197,9 @@ export default {
 	addBar,
 	addForce,
 	movePoint,
-	select,
+	changeForce,
 	deleteSelected,
+	select,
 	divide: divideSelectedBars,
 	toggleSupport,
 	off: offActions,
