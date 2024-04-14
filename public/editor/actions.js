@@ -25,6 +25,18 @@ function addBar() {
 	}
 }
 
+function addForce() {
+	var {points} = schema.getSelection();
+	if (points.length === 0) {
+		info.err('Необходимо хотя бы 1 узел');
+	}
+
+	points.forEach(point => schema.createForce(point))
+	schema.commit();
+	select();
+	schema.draw();
+}
+
 function addPoints() {
 	offActions(false);
 	info.setCommand('Добавление узлов');
@@ -166,6 +178,7 @@ function toggleSupport() {
 export default {
 	addPoints,
 	addBar,
+	addForce,
 	movePoint,
 	select,
 	deleteSelected,

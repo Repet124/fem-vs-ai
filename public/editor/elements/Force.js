@@ -81,7 +81,6 @@ export default class Force {
 		this.elem.style.transform = `translate(${x-this.#components.x/schema.forceCoff}px, ${y+this.#components.y/schema.forceCoff}px) rotate(${-this.getRotation()}rad)`;
 	}
 
-
 	buildElem() {
 		if (this.elem) {
 			this.elem.remove();

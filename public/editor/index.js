@@ -81,6 +81,7 @@ var keySuit = new Map();
 keySuit.set(['Escape'], () => {schema.decline();actions.off();});
 keySuit.set(['KeyN'], actions.addPoints);
 keySuit.set(['KeyB'], actions.addBar);
+keySuit.set(['KeyF'], actions.addForce);
 keySuit.set(['KeyE'], actions.movePoint);
 keySuit.set(['KeyD'], actions.divide);
 keySuit.set(['KeyR'], actions.deleteSelected);

@@ -29,6 +29,7 @@ export default class Point {
 	}
 
 	getCopy() {
+		this.elem.remove();
 		var copy = new Point(this.x, this.y);
 		copy.support.x = this.support.x;
 		copy.support.y = this.support.y;
