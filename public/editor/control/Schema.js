@@ -26,11 +26,15 @@ export default class Schema {
 		this.ctx = canvas.getContext('2d');
 		this.ctx.translate(0, canvas.height);
 		this.ctx.scale(1,-1);
+		this.ctx.save();
 
 		this.grid = new Grid();
 		this.#scale = scale;
 		this.translateX = 500;
 		this.translateY = 500;
+
+		this.pointSize = 9;
+		this.forceSize = 70;
 	}
 
 	get scale() {
@@ -177,8 +181,7 @@ export default class Schema {
 				}
 			});
 
-			// 50 - размер наибольшей силы в пикселях
-			this.#forceCoff = max.absValue / 50;
+			this.#forceCoff = max.absValue / this.forceSize;
 		}
 		return this.#forceCoff;
 	}

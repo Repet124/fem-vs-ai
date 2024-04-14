@@ -27,14 +27,14 @@ export default class Force {
 		return this.#absValue || this.#buildAbsVal();
 	}
 
-	getStart() {
+	get start() {
 		return {
 			x: this.point.drawX,
 			y: this.point.drawY,
 		};
 	}
 
-	getEnd() {
+	get end() {
 		return  {
 			x: this.point.drawX - this.#components.x / schema.forceCoff,
 			y: this.point.drawY - this.#components.y / schema.forceCoff,
@@ -67,7 +67,7 @@ export default class Force {
 	}
 
 	getRotation() {
-		var sin = this.#components.y;
+		var sin = -this.#components.y;
 		var cos = this.#components.x;
 		if (!sin || !cos) {return 0}
 		return Math.atan(sin / cos)*(-1);
@@ -92,6 +92,33 @@ export default class Force {
 		this.schemaElem = new SchemaElement(this.elem);
 	}
 
+	#drawArrow(ctx) {
+		let rotation = Math.PI / 2 + this.getRotation();
+		let forceText = this.absValue.toFixed(2)+' кН';
+
+		ctx.beginPath();
+		ctx.translate(this.start.x, this.start.y);
+		ctx.rotate(rotation);
+
+		ctx.moveTo(0,0);
+		ctx.lineTo(10,20);
+		ctx.moveTo(0,0);
+		ctx.lineTo(-10,20);
+		ctx.stroke();
+
+		ctx.closePath();
+
+		ctx.rotate(-rotation);
+		ctx.translate(this.end.x-this.start.x-20, this.end.y-this.start.y+10);
+		ctx.scale(1,-1);
+
+		ctx.font = '16px sans-serif';
+		ctx.fillText(forceText, 0, 0);
+
+		ctx.scale(1,-1);
+		ctx.translate(-this.end.x, -this.end.y-10);
+	}
+
 	draw(ctx) {
 		ctx.beginPath();
 		ctx.lineWidth = 2;
@@ -102,12 +129,11 @@ export default class Force {
 			ctx.fillStyle = ctx.strokeStyle = 'rgba(0,0,255,.5)';
 		}
 
-		let start = this.getStart();
-		let end = this.getEnd();
-
-		ctx.moveTo(start.x, start.y);
-		ctx.lineTo(end.x, end.y);
+		ctx.moveTo(this.start.x, this.start.y);
+		ctx.lineTo(this.end.x, this.end.y);
 		ctx.stroke();
+
+		this.#drawArrow(ctx);
 
 		if (this.elem) {
 			document.body.append(this.elem);

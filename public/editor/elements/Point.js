@@ -120,7 +120,7 @@ export default class Point {
 			ctx.strokeStyle = '#000';
 			ctx.lineWidth = 1;
 		}
-		ctx.arc(this.drawX, this.drawY, 10, 0, 2 * Math.PI);
+		ctx.arc(this.drawX, this.drawY, schema.pointSize, 0, 2 * Math.PI);
 		ctx.fill();
 		ctx.stroke();
 		if (this.elem) {
