@@ -9,6 +9,7 @@ export default class Bar {
 
 		this.start.link(this);
 		this.end.link(this);
+		this.EA = 1;
 
 		this.selected = false;
 		this.status = statusEnum.new;

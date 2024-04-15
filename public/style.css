@@ -141,18 +141,10 @@ label:has(.pallete-field) {
 	min-width: 20px;
 	min-height: 20px;
 }
-.barElemJS {
+.barElemJS, .forceElemJS {
 	position: absolute;
 	min-height: 20px;
 	transform-origin: center center;
-	top: -10px;
-	left: 0;
-}
-
-.forceElemJS {
-	position: absolute;
-	min-height: 20px;
-	transform-origin: center left;
 	top: -10px;
 	left: 0;
 }

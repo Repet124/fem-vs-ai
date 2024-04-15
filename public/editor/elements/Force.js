@@ -80,10 +80,14 @@ export default class Force {
 	}
 
 	getRotation() {
-		var sin = -this.#components.y;
+		var sin = this.#components.y;
 		var cos = this.#components.x;
-		if (!cos) {return -Math.PI / 2;}
-		return Math.atan(sin / cos)*(-1);
+		var rotation = Math.atan(cos / sin) + Math.PI;
+		if (sin < 0) {rotation += Math.PI;}
+		// console.log(sin)
+		// console.log(cos)
+		// console.log(rotation)
+		return rotation;
 	}
 
 	#buildElemPosiotion() {
@@ -91,7 +95,7 @@ export default class Force {
 			this.point.x,
 			this.point.y,
 		);
-		this.elem.style.transform = `translate(${x-this.#components.x/schema.forceCoff}px, ${y+this.#components.y/schema.forceCoff}px) rotate(${-this.getRotation()}rad)`;
+		this.elem.style.transform = `translate(${x - (this.absValue + this.componentX) / schema.forceCoff / 2}px, ${y + this.componentY / schema.forceCoff / 2}px) rotate(${this.getRotation() + Math.PI / 2}rad)`;
 	}
 
 	buildElem() {
@@ -105,7 +109,7 @@ export default class Force {
 	}
 
 	#drawArrow(ctx) {
-		let rotation = Math.PI / 2 + this.getRotation();
+		let rotation = -this.getRotation();
 		let forceText = this.absValue.toFixed(2)+' кН';
 
 		ctx.beginPath();

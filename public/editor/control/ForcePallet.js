@@ -17,10 +17,13 @@ class ForcePallet {
 			fields[axis].className = 'pallete-field';
 			fields[axis].value = this.force['component'+axis.toUpperCase()];
 			fields[axis].addEventListener('input', () => {
+				if (isNaN(fields.x.value) || isNaN(fields.y.value)) {return;}
 				this.force.change(+fields.x.value, +fields.y.value);
 				schema.draw();
 			});
 			schema.document.addListener('keydown', e => {
+
+				console.log('123')
 				if (e.code === 'Enter') {
 					this.commitAction();
 					this.off();
