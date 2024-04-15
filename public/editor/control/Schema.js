@@ -200,4 +200,17 @@ export default class Schema {
 		}
 	}
 
+	toJson() {
+		var nodes = new Map(this.#static.points.map((point,i) => [point, i]));
+		const bars = this.#static.bars.map(bar => [
+			nodes.get(bar.start),
+			nodes.get(bar.end),
+		]);
+		nodes = nodes.map(node => [node.x/1000, node.y/1000]);
+		return JSON.stringify({
+			nodes,
+			bars
+		});
+	}
+
 }
