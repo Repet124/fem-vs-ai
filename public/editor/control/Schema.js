@@ -198,13 +198,6 @@ export default class Schema {
 				.concat(this.#temp[entityKey])
 				.forEach(entity => entity.draw(this.ctx));
 		}
-		for (let entityKey in this.#static) {
-			console.log(entityKey);
-			this.#static[entityKey].forEach(entity => {
-				console.log(entity)
-			});
-		}
-		console.info('-----')
 	}
 
 }

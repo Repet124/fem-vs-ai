@@ -23,6 +23,14 @@ export default class Force {
 		this.decline = null;
 	}
 
+	get componentX() {
+		return this.#components.x;
+	}
+
+	get componentY() {
+		return this.#components.y;
+	}
+
 	get absValue() {
 		return this.#absValue || this.#buildAbsVal();
 	}
@@ -39,6 +47,11 @@ export default class Force {
 			x: this.point.drawX - this.#components.x / schema.forceCoff,
 			y: this.point.drawY - this.#components.y / schema.forceCoff,
 		}
+	}
+
+	change(x,y) {
+		this.#components.x = x;
+		this.#components.y = y;
 	}
 
 	#buildAbsVal() {
@@ -121,6 +134,7 @@ export default class Force {
 	}
 
 	draw(ctx) {
+		this.#absValue = 0;
 		ctx.beginPath();
 		ctx.lineWidth = 2;
 		ctx.fillStyle = ctx.strokeStyle = this.selected ? 'orange' : '#000';

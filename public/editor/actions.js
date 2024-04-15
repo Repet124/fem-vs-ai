@@ -1,6 +1,7 @@
 import statusEnum from './control/StatusEnum.js';
 import { schema, info } from './init.js';
 import cordsPallet from './control/CordsPallet.js';
+import forcePallet from './control/ForcePallet.js';
 
 function offActions(afterSelect=true) {
 	cordsPallet.off();
@@ -136,10 +137,7 @@ function divideSelectedBars() {
 	});
 }
 
-function movePoint() {
-	var {points} = schema.getSelection();
-	offActions(false);
-
+function movePoint(points) {
 	if (points.length !== 1) {
 		info.err('Необходимо выделить один узел');
 		return;
@@ -153,10 +151,7 @@ function movePoint() {
 	});
 }
 
-function changeForce() {
-	var {forces} = schema.getSelection();
-	offActions(false);
-
+function changeForce(forces) {
 	if (forces.length !== 1) {
 		info.err('Необходимо выделить одну силу');
 		return;
@@ -164,10 +159,17 @@ function changeForce() {
 	info.setCommand('Редактирование компонент силы');
 	forces[0].selected = true;
 	schema.draw();
-	// cordsPallet.active(points[0], () => {
-	// 	schema.commit();
-	// 	offActions();
-	// });
+	forcePallet.active(forces[0], () => {
+		schema.commit();
+		offActions();
+	});
+}
+
+function edit() {
+	var {points, forces} = schema.getSelection();
+	offActions(false);
+	movePoint(points);
+	changeForce(forces);
 }
 
 function toggleSupport() {
@@ -196,8 +198,7 @@ export default {
 	addPoints,
 	addBar,
 	addForce,
-	movePoint,
-	changeForce,
+	edit,
 	deleteSelected,
 	select,
 	divide: divideSelectedBars,
