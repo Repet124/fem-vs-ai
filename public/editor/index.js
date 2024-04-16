@@ -45,6 +45,7 @@ function getTranslationHandler() {
 
 function assignCommandToKeys(commandToKeySuit) {
 	document.addEventListener('keydown', e => {
+		console.log(e)
 		commandToKeySuit.forEach((command, keyCodes) => {
 			if (keyCodes.includes(e.code)) {
 				command();
@@ -59,6 +60,14 @@ function isCrodsOverElem(clientX, clientY, boundingClientRect) {
 
 var controls = document.querySelectorAll('[data-command]');
 var canvas = schema.canvas.htmlNode;
+
+controls.forEach(btn => {
+	btn.addEventListener('click', e => {
+		if (actions[btn.dataset.command]) {
+			actions[btn.dataset.command]();
+		}
+	})
+})
 
 canvas.addEventListener('mousedown', e => {
 	if (e.button !== 1) {return;} // только нажатие колёсика

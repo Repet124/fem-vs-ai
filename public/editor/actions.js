@@ -194,6 +194,10 @@ function toggleSupport() {
 	schema.draw();
 }
 
+function saveSchema() {
+	window.api.save(schema.upload());
+}
+
 export default {
 	addPoints,
 	addBar,
@@ -203,5 +207,6 @@ export default {
 	select,
 	divide: divideSelectedBars,
 	toggleSupport,
+	saveSchema,
 	off: offActions,
 }

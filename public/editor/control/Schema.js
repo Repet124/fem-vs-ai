@@ -202,29 +202,26 @@ export default class Schema {
 
 	upload() {
 		var nodes = new Map(this.#static.points.map((point,i) => [point, i]));
-		var forces = Array(nodes.size).fill();
+		var forces = Array(nodes.size).fill().map(_ => [0,0]);
 
 		this.#static.forces.forEach(force => {
 			let nodeNum = nodes.get(force.point);
-			if (!forces[nodeNum]) {
-				forces[nodeNum] = [0,0];
-			}
 			forces[nodeNum][0] += force.componentX;
-			forces[nodeNum][0] += force.componentY;
+			forces[nodeNum][1] += force.componentY;
 		});
 
 		var bars = this.#static.bars.map(bar => [
 			nodes.get(bar.start),
 			nodes.get(bar.end),
 			bar.EA,
-			undefined,
+			'undefined',
 		]);
 
-		nodes = nodes.map(node => [
+		nodes = this.#static.points.map(node => [
 			node.x/1000,
 			node.y/1000,
-			node.support.x ? 0 : undefined,
-			node.support.y ? 0 : undefined,
+			node.support.x ? 0 : 'undefined',
+			node.support.y ? 0 : 'undefined',
 		]);
 		return {
 			nodes,
