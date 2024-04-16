@@ -1,8 +1,12 @@
-var {nodes, bars, forces} = require('./template');
+const fs = require('fs');
+const path = require('path');
+const { parseSchema } = require('../common');
 
 module.exports = class SchemesBuilder {
 
-	constructor(forceMax=20, maxPercentTranslations=20) {
+	constructor(schemaNum, forceMax=20, maxPercentTranslations=20) {
+		let schemaJson = fs.readFileSync(path.join(__dirname,`../schemes/${schemaNum}/schema.json`));
+		this.template = parseSchema(schemaJson);
 		this.forceMax = 10;
 		this.maxDistanceChange = 1;
 	}
@@ -18,9 +22,9 @@ module.exports = class SchemesBuilder {
 				// 	node[2], // сохраняется положение опор
 				// 	node[3]
 				// ]),
-				nodes: nodes.map(node => [...node]),
-				forces: forces.map((force,i) => {
-					if ([1,2].includes(i)) { // задаются усилия только для двух свободных узлов - второй и третий 
+				nodes: this.template.nodes.map(node => [...node]),
+				forces: this.template.forces.map((force,i) => {
+					if (Math.random() > .5) { // усилия назначаются (в среднем) половине случайных узлов
 						return [
 							Number((this.forceMax*rand(100)).toFixed(1)),
 							Number((this.forceMax*rand(100)).toFixed(1)),
@@ -28,7 +32,7 @@ module.exports = class SchemesBuilder {
 					}
 					return force;
 				}),
-				bars: bars
+				bars: this.template.bars
 			}
 		}
 		return data;

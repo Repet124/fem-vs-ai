@@ -7,13 +7,13 @@ import Grid from '../elements/Grid.js';
 
 export default class Schema {
 	#temp = {
-		forces: [],
 		bars: [],
+		forces: [],
 		points: [],
 	}
 	#static  = {
-		forces: [],
 		bars: [],
+		forces: [],
 		points: [],
 	}
 	#scale = 1;

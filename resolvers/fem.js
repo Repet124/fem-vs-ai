@@ -6,6 +6,7 @@ var logger = new Logger('Fem');
 module.exports.calc = (schema) => {
 	logger.info('Старт расчёта МКЭ');
 	logger.bench('fem');
+	// console.log(schema)
 	// Матрица узловых нагрузок
 	const R = mathjs.matrix(schema.forces.flat().map(a => [a]));
 	var matrixForBar = mathjs.matrix([

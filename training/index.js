@@ -1,3 +1,4 @@
+var path = require('path');
 var train = require('./trainer');
 var Logger = require('../services/logger');
 const {getArgs} = require('../common');
@@ -6,9 +7,15 @@ var args = getArgs();
 var logger = new Logger();
 
 try {
+	if (!args.num) {
+		throw new Error('Не указан номер расчётной схемы');
+	}
 	logger.success('Запуск команды обучения.');
-	// train('./dataset.json', './trained.json', 'Модель расчёт ферм');
-	train('./dataset.json', './trained.js', 'Модель расчёт ферм');
+	train(
+		path.join(__dirname,`../schemes/${args.num}/dataset.json`),
+		path.join(__dirname,`../schemes/${args.num}/trained.js`),
+		'Модель расчёт ферм'
+	);
 } catch (err) {
 	logger.err(err.message);
 	throw err;

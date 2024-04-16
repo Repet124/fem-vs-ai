@@ -1,4 +1,5 @@
 var fs = require('fs');
+var path = require('path');
 var Logger = require('../services/logger');
 var InputBuilder = require('./rankOneInputBuilder');
 var OutputBuilder = require('./rankOneOutputBuilder');
@@ -8,7 +9,7 @@ var {calc} = require('../resolvers/fem');
 module.exports = class DatasetBuilder {
 
 	constructor(shBuilder) {
-		this.schemesBuilder = shBuilder || new SchemesBuilder();
+		this.schemesBuilder = shBuilder;
 
 		this.sources = null;
 		this.dataset = null;
@@ -58,7 +59,7 @@ module.exports = class DatasetBuilder {
 			this.logger.err('Сохранение невозможно- датасет не сформирован');
 			return;
 		}
-		fs.writeFileSync(fileName, JSON.stringify(this.dataset), 'utf8');
+		fs.writeFileSync(path.join(__dirname,fileName), JSON.stringify(this.dataset), 'utf8');
 		this.logger.success('Датасет сохранён в ' + fileName);
 	}
 }

@@ -13,3 +13,14 @@ module.exports.getArgs = function() {
 	});
 	return args;
 }
+
+module.exports.parseSchema = function(schemaJson) {
+	var schema = JSON.parse(schemaJson);
+
+	for(let key in schema) {
+		schema[key].forEach((entity,i,arr) => {
+			arr[i] = entity.map(item => item === 'undefined' ? undefined : item)
+		});
+	}
+	return schema;
+}
