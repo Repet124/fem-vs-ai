@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron')
+const { parseSchema } = require('./common');
 const fs = require('fs');
 const path = require('node:path');
 const fem = require('./resolvers/fem');
@@ -22,8 +23,11 @@ function calcFem(e, schema) {
 	return fem.calc(schema);
 }
 
-function calcNeyro(e, schema) {
-	return neyro.calc(schema);
+function calcNeyro(e, schemaNum) {
+	const net = require(`./schemes/${schemaNum}/trained.js`);
+	const schemaJson = fs.readFileSync(path.join(__dirname,`./schemes/${schemaNum}/schema.json`));
+	const schema = require(`./schemes/${schemaNum}/trained.js`);
+	return neyro.calc(net, schema);
 }
 
 function saveSchema(e, schema) {

@@ -1,6 +1,4 @@
 import { getScale, drawLine } from './common.js'
-import { nodes, bars } from './schema.js';
-import schema from './schema.js';
 
 function drawSchema(ctx, bars, nodes, opacity, color) {
 	color = color || '#fff';
@@ -101,37 +99,27 @@ function getTensorColor(pow) {
 	return '#'+colors.reduce((res,chanel) => res+numToChanel(chanel),'');
 }
 
-const calcFemBtn = document.getElementById('calcFem');
-const calcNeyroBtn = document.getElementById('calcNeyro');
+export default function init(canvas) {
+	const ctx = canvas.getContext('2d');
 
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
+	const offset = 100;
+	ctx.clear = function() {this.clearRect(-offset/scale,-offset/scale, canvas.width/scale, canvas.height/scale)};
 
-const offset = 100;
-const scale = getScale(canvas.width, canvas.height, nodes, offset);
-ctx.clear = function() {this.clearRect(-offset/scale,-offset/scale, canvas.width/scale, canvas.height/scale)};
+	ctx.lineCap = 'round';
+	ctx.translate(offset, (canvas.height-offset));
+	ctx.save();
 
-ctx.translate(offset, (canvas.height-offset));
-ctx.scale(scale, -scale);
-ctx.lineCap = 'round';
-ctx.save();
+	this.show = function(schema) {
+		ctx.restore();
+		const scale = getScale(canvas.width, canvas.height, schema.nodes, offset);
+		ctx.scale(scale, -scale);
+		drawSchema(ctx, schema.bars, schema.nodes);
+	}
 
-drawSchema(ctx, bars, nodes);
-
-calcFemBtn.onclick = () => {
-
-	window.api.fem(schema).then(schema => {
-		console.log('fem', schema.bars)
+	this.visualizate = function(schema) {
+		ctx.restore();
+		const scale = getScale(canvas.width, canvas.height, schema.nodes, offset);
+		ctx.scale(scale, -scale);
 		animate(scale => drawCalcsSchema(schema, scale), ctx, .03);
-	});
-
-}
-
-calcNeyroBtn.onclick = () => {
-
-	window.api.neyro(schema).then(schema => {
-		console.log('ai', schema)
-		animate(scale => drawCalcsSchema(schema, scale), ctx, .03);
-	});
-
+	}
 }

@@ -28,12 +28,19 @@ body {
 	color: #fff;
 }
 
-#canvas {
+#editor-canvas, #visualization-canvas {
 	grid-area: canvas;
 	cursor: crosshair;
 	width: 100%;
 	place-self: center;
 	background-color: var(--gray);
+}
+
+#editor-canvas {
+	z-index: 1;
+}
+#visualization-canvas {
+	z-index: 0;
 }
 
 #pallete {

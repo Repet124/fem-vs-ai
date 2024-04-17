@@ -1,11 +1,10 @@
 require('../services/neyroArr');
 
-var net = require('../trained.js');
 var InputBuilder = require('../dataset/rankOneInputBuilder');
 var Logger = require('../services/logger');
 var logger = new Logger('Neyro');
 
-module.exports.calc = (schema) => {
+module.exports.calc = (net, schema) => {
 	var builder = new InputBuilder(schema);
 	var maxForce = Math.max(...schema.forces.flat().separateNegative());
 
