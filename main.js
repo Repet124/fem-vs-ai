@@ -1,5 +1,5 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron')
-const { parseSchema } = require('./common');
+const { parseSchema, stringifySchema } = require('./common');
 const fs = require('fs');
 const path = require('node:path');
 const fem = require('./resolvers/fem');
@@ -31,8 +31,8 @@ function calcNeyro(e, schemaNum) {
 	return neyro.calc(net, schema);
 }
 
-function loadSchema(win, e) {
-	var file = dialog.showOpenDialogSync(win, {
+function loadSchema(e) {
+	var file = dialog.showOpenDialogSync({
 		title: 'Загрузить расчётную схему',
 		defaultPath: __dirname + '/schemes',
 		properties: ['openFile']
@@ -48,15 +48,14 @@ function saveSchema(e, schema) {
 		title: 'Сохранение расчётной схемы',
 		defaultPath: __dirname + '/schemes/schema.json',
 	})
-		.then(responce => fs.writeFileSync(responce.filePath, JSON.stringify(schema)));
+		.then(responce => fs.writeFileSync(responce.filePath, stringifySchema(schema)));
 }
 
 app.whenReady().then(() => {
-
-	const win = createWindow();
+	createWindow();
 	ipcMain.handle('fem', calcFem);
 	ipcMain.handle('neyro', calcNeyro);
-	ipcMain.handle('load', loadSchema.bind(null, win));
+	ipcMain.handle('load', loadSchema);
 	ipcMain.handle('save', saveSchema);
 });
 

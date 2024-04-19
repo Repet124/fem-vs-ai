@@ -24,3 +24,11 @@ module.exports.parseSchema = function(schemaJson) {
 	}
 	return schema;
 }
+
+module.exports.stringifySchema = function(schemaObj) {
+	var preparedSchema = {};
+	for(let key in schemaObj) {
+		preparedSchema[key] = schemaObj[key].map(entity => entity.map(item => item === undefined ? 'undefined' : item));
+	}
+	return JSON.stringify(preparedSchema);
+}

@@ -207,9 +207,6 @@ function calcFem() {
 	window.api.fem(schema.upload()).then(schema => {
 		show(visualizator);
 		visualizator.show(schema);
-		setTimeout(() => {
-			visualizator.visualizate(schema);
-		}, 300);
 	});
 }
 
@@ -219,6 +216,10 @@ function load() {
 		schema.load(loadingSchema);
 		select();
 	});
+}
+
+function save() {
+	window.api.save(schema.upload());
 }
 
 export default {
@@ -232,5 +233,6 @@ export default {
 	toggleSupport,
 	calcFem,
 	load,
+	save,
 	off: offActions,
 }

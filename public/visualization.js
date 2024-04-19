@@ -51,15 +51,16 @@ function getDeformScale(scalePercent, nodes) {
 	return (maxSize/100*scalePercent)/getMaxDeform(nodes);
 }
 
-function animate(painter, ctx, step=.01) {
+function animate(painter, ctx, step=.01, afterCallback) {
 	var from = 0;
 	var interval = setInterval(() => {
 		ctx.clear();
+		painter(from);
 		if (from >= 1) {
 			from = 1;
 			clearInterval(interval);
+			afterCallback();
 		}
-		painter(from);
 		from += step;
 	}, 30);
 }
@@ -106,24 +107,17 @@ export default function init(canvas) {
 	ctx.clear = () => {ctx.clearRect(-offset/this.scale,-offset/this.scale, canvas.width/this.scale, canvas.height/this.scale)};
 	ctx.lineCap = 'round';
 	ctx.translate(offset, (canvas.height-offset));
-	ctx.save();
-	ctx.save();
 
 	this.getCanvas = function() {
 		return canvas;
 	}
 
 	this.show = function(schema) {
-		ctx.restore();
+		ctx.save();
 		this.scale = getScale(canvas.width, canvas.height, schema.nodes, offset);
 		ctx.scale(this.scale, -this.scale);
-		drawSchema(ctx, schema.bars, schema.nodes);
-	}
-
-	this.visualizate = function(schema) {
-		ctx.restore();
-		this.scale = getScale(canvas.width, canvas.height, schema.nodes, offset);
-		ctx.scale(this.scale, -this.scale);
-		animate(scale => drawCalcsSchema(ctx, schema, scale), ctx, .03);
+		animate(scale => drawCalcsSchema(ctx, schema, scale), ctx, .03, () => {
+			ctx.restore();
+		});
 	}
 }
