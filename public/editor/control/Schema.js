@@ -98,9 +98,12 @@ export default class Schema {
 		for (let entityKey in this.#static) {
 			this.#static[entityKey] = this.#static[entityKey]
 				// удаляем отмеченные как deleted
-				.filter(entity => 
-					(!entity.tempLink || entity.tempLink.status !== statusEnum.deleted) && entity.status !== statusEnum.deleted
-				)
+				.filter(entity => {
+					if ((!entity.tempLink || entity.tempLink.status !== statusEnum.deleted) && entity.status !== statusEnum.deleted) {
+						return true;
+					}
+					entity.schemaElem.htmlNode.remove();
+				})
 				// замещение существующих изменёнными
 				.map(entity => {
 					if (!entity.tempLink) {return entity;}
@@ -191,6 +194,14 @@ export default class Schema {
 		return this.#forceCoff;
 	}
 
+	clear() {
+		this.decline();
+		this.#static.points.forEach(point => point.selected = true);
+		var {points} = this.getSelection();
+		points.forEach(point => point.delete());
+		this.commit();
+	}
+
 	draw() {
 		this.ctx.clearRect(0,0,this.canvas.htmlNode.width, this.canvas.htmlNode.height);
 		this.grid.draw(this.ctx);
@@ -203,6 +214,13 @@ export default class Schema {
 				.concat(this.#temp[entityKey])
 				.forEach(entity => entity.draw(this.ctx));
 		}
+	}
+
+	load() {
+		this.clear();
+		// var {nodes, bars, forces} = loadingSchema;
+		// var points = nodes.map(node => this.createPoint(node[0]*1000, node[1]*1000));
+		this.draw();
 	}
 
 	upload() {
