@@ -3,6 +3,14 @@ import { schema, info, visualizator } from './init.js';
 import cordsPallet from './control/CordsPallet.js';
 import forcePallet from './control/ForcePallet.js';
 
+function show(canvasOwner) {
+	[schema, visualizator].forEach(item => {
+		console.log(item.canvas)
+		item.getCanvas().style.zIndex = 0
+	});
+	canvasOwner.getCanvas().style.zIndex = 100;
+}
+
 function offActions(afterSelect=true) {
 	cordsPallet.off();
 	schema.unselect();
@@ -194,8 +202,14 @@ function toggleSupport() {
 	schema.draw();
 }
 
-function saveSchema() {
-	window.api.save(schema.upload());
+function calcFem() {
+	window.api.fem(schema.upload()).then(schema => {
+		show(visualizator);
+		visualizator.show(schema);
+		setTimeout(() => {
+			visualizator.visualizate(schema);
+		}, 1000);
+	});
 }
 
 export default {
@@ -207,6 +221,6 @@ export default {
 	select,
 	divide: divideSelectedBars,
 	toggleSupport,
-	saveSchema,
+	calcFem,
 	off: offActions,
 }

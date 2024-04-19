@@ -35,6 +35,11 @@ export default class Schema {
 
 		this.pointSize = 9;
 		this.forceSize = 70;
+		this.saved = false;
+	}
+
+	getCanvas() {
+		return this.canvas.htmlNode;
 	}
 
 	get scale() {
@@ -214,14 +219,14 @@ export default class Schema {
 			nodes.get(bar.start),
 			nodes.get(bar.end),
 			bar.EA,
-			'undefined',
+			undefined,
 		]);
 
 		nodes = this.#static.points.map(node => [
 			node.x/1000,
 			node.y/1000,
-			node.support.x ? 0 : 'undefined',
-			node.support.y ? 0 : 'undefined',
+			node.support.x ? 0 : undefined,
+			node.support.y ? 0 : undefined,
 		]);
 		return {
 			nodes,

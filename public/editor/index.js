@@ -45,7 +45,6 @@ function getTranslationHandler() {
 
 function assignCommandToKeys(commandToKeySuit) {
 	document.addEventListener('keydown', e => {
-		console.log(e)
 		commandToKeySuit.forEach((command, keyCodes) => {
 			if (keyCodes.includes(e.code)) {
 				command();

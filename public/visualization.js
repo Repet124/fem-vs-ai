@@ -101,13 +101,16 @@ function getTensorColor(pow) {
 
 export default function init(canvas) {
 	const ctx = canvas.getContext('2d');
-
 	const offset = 100;
-	ctx.clear = function() {this.clearRect(-offset/scale,-offset/scale, canvas.width/scale, canvas.height/scale)};
 
+	ctx.clear = function() {this.clearRect(-offset/scale,-offset/scale, canvas.width/scale, canvas.height/scale)};
 	ctx.lineCap = 'round';
 	ctx.translate(offset, (canvas.height-offset));
 	ctx.save();
+
+	this.getCanvas = function() {
+		return canvas;
+	}
 
 	this.show = function(schema) {
 		ctx.restore();
