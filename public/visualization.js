@@ -64,7 +64,7 @@ function animate(painter, ctx, step=.01) {
 	}, 30);
 }
 
-function drawCalcsSchema(schema, scale) {
+function drawCalcsSchema(ctx, schema, scale) {
 	let nodes = getDeformNodes(schema.nodes, 10*scale);
 	drawSchema(ctx, schema.bars, schema.nodes, .3); // init schema
 	drawSchemaWithTensors(ctx, schema.bars, nodes, scale)
@@ -103,9 +103,10 @@ export default function init(canvas) {
 	const ctx = canvas.getContext('2d');
 	const offset = 100;
 
-	ctx.clear = function() {this.clearRect(-offset/scale,-offset/scale, canvas.width/scale, canvas.height/scale)};
+	ctx.clear = () => {ctx.clearRect(-offset/this.scale,-offset/this.scale, canvas.width/this.scale, canvas.height/this.scale)};
 	ctx.lineCap = 'round';
 	ctx.translate(offset, (canvas.height-offset));
+	ctx.save();
 	ctx.save();
 
 	this.getCanvas = function() {
@@ -114,15 +115,15 @@ export default function init(canvas) {
 
 	this.show = function(schema) {
 		ctx.restore();
-		const scale = getScale(canvas.width, canvas.height, schema.nodes, offset);
-		ctx.scale(scale, -scale);
+		this.scale = getScale(canvas.width, canvas.height, schema.nodes, offset);
+		ctx.scale(this.scale, -this.scale);
 		drawSchema(ctx, schema.bars, schema.nodes);
 	}
 
 	this.visualizate = function(schema) {
 		ctx.restore();
-		const scale = getScale(canvas.width, canvas.height, schema.nodes, offset);
-		ctx.scale(scale, -scale);
-		animate(scale => drawCalcsSchema(schema, scale), ctx, .03);
+		this.scale = getScale(canvas.width, canvas.height, schema.nodes, offset);
+		ctx.scale(this.scale, -this.scale);
+		animate(scale => drawCalcsSchema(ctx, schema, scale), ctx, .03);
 	}
 }

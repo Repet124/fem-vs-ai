@@ -4,11 +4,11 @@ import cordsPallet from './control/CordsPallet.js';
 import forcePallet from './control/ForcePallet.js';
 
 function show(canvasOwner) {
-	[schema, visualizator].forEach(item => {
-		console.log(item.canvas)
-		item.getCanvas().style.zIndex = 0
-	});
-	canvasOwner.getCanvas().style.zIndex = 100;
+	if (canvasOwner === visualizator) {
+		visualizator.getCanvas().style.zIndex = 200;
+	} else {
+		visualizator.getCanvas().style.zIndex = 0;
+	}
 }
 
 function offActions(afterSelect=true) {
@@ -18,6 +18,7 @@ function offActions(afterSelect=true) {
 	schema.draw();
 	if (afterSelect) {
 		select();
+		show(schema);
 	}
 }
 
@@ -208,7 +209,7 @@ function calcFem() {
 		visualizator.show(schema);
 		setTimeout(() => {
 			visualizator.visualizate(schema);
-		}, 1000);
+		}, 300);
 	});
 }
 
