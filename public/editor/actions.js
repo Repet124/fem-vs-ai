@@ -213,6 +213,14 @@ function calcFem() {
 	});
 }
 
+function load() {
+	window.api.load().then(loadingSchema => {
+		if (!loadingSchema) {return;}
+		schema.load(loadingSchema);
+		select();
+	});
+}
+
 export default {
 	addPoints,
 	addBar,
@@ -223,5 +231,6 @@ export default {
 	divide: divideSelectedBars,
 	toggleSupport,
 	calcFem,
+	load,
 	off: offActions,
 }

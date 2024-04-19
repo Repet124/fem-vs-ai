@@ -17,6 +17,7 @@ const createWindow = () => {
 	})
 
 	win.loadFile('./public/index.html')
+	return win;
 }
 
 function calcFem(e, schema) {
@@ -30,6 +31,18 @@ function calcNeyro(e, schemaNum) {
 	return neyro.calc(net, schema);
 }
 
+function loadSchema(win, e) {
+	var file = dialog.showOpenDialogSync(win, {
+		title: 'Загрузить расчётную схему',
+		defaultPath: __dirname + '/schemes',
+		properties: ['openFile']
+	})[0];
+	if (file && /.*\.json/.test(file)) {
+		return parseSchema(fs.readFileSync(file));
+	}
+	return false;
+}
+
 function saveSchema(e, schema) {
 	dialog.showSaveDialog({
 		title: 'Сохранение расчётной схемы',
@@ -39,9 +52,11 @@ function saveSchema(e, schema) {
 }
 
 app.whenReady().then(() => {
+
+	const win = createWindow();
 	ipcMain.handle('fem', calcFem);
 	ipcMain.handle('neyro', calcNeyro);
+	ipcMain.handle('load', loadSchema.bind(null, win));
 	ipcMain.handle('save', saveSchema);
-	createWindow();
 });
 

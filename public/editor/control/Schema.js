@@ -216,10 +216,21 @@ export default class Schema {
 		}
 	}
 
-	load() {
+	load(loadingSchema) {
 		this.clear();
-		// var {nodes, bars, forces} = loadingSchema;
-		// var points = nodes.map(node => this.createPoint(node[0]*1000, node[1]*1000));
+		var {nodes, bars, forces} = loadingSchema;
+		var points = nodes.map(node => {
+			var point = this.createPoint(node[0]*1000, node[1]*1000)
+			point.support.x = node[2] === 0;
+			point.support.y = node[3] === 0;
+			return point
+		});
+		bars.forEach(bar => this.createBar(points[bar[0]], points[bar[1]]));
+		forces.forEach((force, i) => {
+			if (!force[0] && !force[1]) {return}
+			this.createForce(points[i], force[0], force[1])
+		});
+		this.commit();
 		this.draw();
 	}
 
