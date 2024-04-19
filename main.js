@@ -24,10 +24,8 @@ function calcFem(e, schema) {
 	return fem.calc(schema);
 }
 
-function calcNeyro(e, schemaNum) {
-	const net = require(`./schemes/${schemaNum}/trained.js`);
-	const schemaJson = fs.readFileSync(path.join(__dirname,`./schemes/${schemaNum}/schema.json`));
-	const schema = require(`./schemes/${schemaNum}/trained.js`);
+function calcNeyro(e, schema, schemaPath) {
+	const net = require(schemaPath.replace('schema.json', 'trained.js'));
 	return neyro.calc(net, schema);
 }
 
@@ -38,17 +36,21 @@ function loadSchema(e) {
 		properties: ['openFile']
 	})[0];
 	if (file && /.*\.json/.test(file)) {
-		return parseSchema(fs.readFileSync(file));
+		return {
+			schema: parseSchema(fs.readFileSync(file)),
+			path: file,
+		};
 	}
 	return false;
 }
 
 function saveSchema(e, schema) {
-	dialog.showSaveDialog({
+	var filePath = dialog.showSaveDialogSync({
 		title: 'Сохранение расчётной схемы',
 		defaultPath: __dirname + '/schemes/schema.json',
-	})
-		.then(responce => fs.writeFileSync(responce.filePath, stringifySchema(schema)));
+	});
+	fs.writeFileSync(filePath, stringifySchema(schema));
+	return filePath;
 }
 
 app.whenReady().then(() => {

@@ -210,16 +210,30 @@ function calcFem() {
 	});
 }
 
+function calcNeyro() {
+	if (!schema.saved) {
+		info.err('Схема должна быть сохранена');
+		return;
+	}
+	window.api.neyro(schema.upload(), schema.saved).then(schema => {
+		show(visualizator);
+		visualizator.show(schema);
+	});
+}
+
 function load() {
-	window.api.load().then(loadingSchema => {
-		if (!loadingSchema) {return;}
-		schema.load(loadingSchema);
+	window.api.load().then(responce => {
+		if (!responce.schema) {return;}
+		schema.load(responce.schema);
+		schema.saved = responce.path;
 		select();
 	});
 }
 
 function save() {
-	window.api.save(schema.upload());
+	window.api.save(schema.upload()).then(filePath => {
+		schema.saved = filePath;
+	});
 }
 
 export default {
@@ -232,6 +246,7 @@ export default {
 	divide: divideSelectedBars,
 	toggleSupport,
 	calcFem,
+	calcNeyro,
 	load,
 	save,
 	off: offActions,
