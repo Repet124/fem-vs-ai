@@ -7,7 +7,7 @@ module.exports = class SchemesBuilder {
 	constructor(schemaNum, forceMax=20, maxPercentTranslations=20) {
 		let schemaJson = fs.readFileSync(path.join(__dirname,`../schemes/${schemaNum}/schema.json`));
 		this.template = parseSchema(schemaJson);
-		this.forceMax = 10;
+		this.forceMax = 20;
 		this.maxDistanceChange = 1;
 	}
 

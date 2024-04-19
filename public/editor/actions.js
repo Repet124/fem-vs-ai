@@ -236,6 +236,12 @@ function save() {
 	});
 }
 
+function clear() {
+	schema.clear();
+	schema.saved = false;
+	schema.draw();
+}
+
 export default {
 	addPoints,
 	addBar,
@@ -249,5 +255,6 @@ export default {
 	calcNeyro,
 	load,
 	save,
+	clear,
 	off: offActions,
 }
