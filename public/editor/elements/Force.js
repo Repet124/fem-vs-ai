@@ -6,7 +6,7 @@ export default class Force {
 	#components = null;
 	#absValue = 0;
 
-	constructor(point, xComponenet=0, yComponent=-1) {
+	constructor(point, xComponenet=0, yComponent=-10) {
 		this.point = point;
 		this.point.link(this);
 
@@ -84,9 +84,6 @@ export default class Force {
 		var cos = this.#components.x;
 		var rotation = Math.atan(cos / sin) + Math.PI;
 		if (sin < 0) {rotation += Math.PI;}
-		// console.log(sin)
-		// console.log(cos)
-		// console.log(rotation)
 		return rotation;
 	}
 
@@ -95,6 +92,7 @@ export default class Force {
 			this.point.x,
 			this.point.y,
 		);
+		this.elem.style.width = this.absValue/schema.forceCoff+'px';
 		this.elem.style.transform = `translate(${x - (this.absValue + this.componentX) / schema.forceCoff / 2}px, ${y + this.componentY / schema.forceCoff / 2}px) rotate(${this.getRotation() + Math.PI / 2}rad)`;
 	}
 

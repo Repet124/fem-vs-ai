@@ -56,11 +56,13 @@ export default class Bar {
 	getRotation() {
 		var sin = this.proectionY;
 		var cos = this.proectionX;
-		if (!sin || !cos) {return 0}
-		return Math.atan(sin / cos)*(-1);
+
+		var rotation = Math.atan(sin / cos) + Math.PI;
+		return rotation*(-1);
 	}
 
 	#buildElemPosiotion() {
+		this.elem.style.width = this.getLength()+'px';
 		let {x,y} = schema.toPageCords(
 			this.start.x + this.proectionX/2,
 			this.start.y + this.proectionY/2,
