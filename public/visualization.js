@@ -104,9 +104,9 @@ export default function init(canvas) {
 	const ctx = canvas.getContext('2d');
 	const offset = 100;
 
-	ctx.clear = () => {ctx.clearRect(-offset/this.scale,-offset/this.scale, canvas.width/this.scale, canvas.height/this.scale)};
+	ctx.clear = () => {ctx.clearRect(-offset/this.scale,-offset/this.scale*2, canvas.width/this.scale, canvas.height/this.scale*2)};
 	ctx.lineCap = 'round';
-	ctx.translate(offset, (canvas.height-offset));
+	ctx.translate(offset, (canvas.height-offset*2));
 
 	this.getCanvas = function() {
 		return canvas;

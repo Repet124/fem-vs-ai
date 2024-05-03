@@ -6,7 +6,7 @@ function getZoomHandler() {
 	return (e) => {
 		if (!isCrodsOverElem(e.clientX, e.clientY, canvPos)) {return}
 		const scaleOld = schema.scale;
-		const scaleNew = schema.scale * (e.deltaY > 0 ? 1.2 : 0.8);
+		const scaleNew = schema.scale * (e.deltaY < 0 ? 1.2 : 0.8);
 
 		if(!schema.setScale(scaleNew)){return};
 
