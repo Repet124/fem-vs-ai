@@ -13,7 +13,7 @@ try {
 	logger.success('Запуск команды обучения.');
 	train(
 		path.join(__dirname,`../schemes/${args.num}/dataset.json`),
-		path.join(__dirname,`../schemes/${args.num}/trained.js`),
+		path.join(__dirname,`../schemes/${args.num}/trained.json`),
 		'Модель расчёт ферм'
 	);
 } catch (err) {

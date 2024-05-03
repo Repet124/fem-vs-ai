@@ -25,8 +25,11 @@ function calcFem(e, schema) {
 }
 
 function calcNeyro(e, schema, schemaPath) {
-	const net = require(schemaPath.replace('schema.json', 'trained.js'));
-	return neyro.calc(net, schema);
+	// const net = require(schemaPath.replace('schema.json', 'trained.js'));
+	return neyro.calc(
+		JSON.parse(fs.readFileSync(schemaPath.replace('schema.json', 'trained.json'))),
+		schema
+	);
 }
 
 function loadSchema(e) {
