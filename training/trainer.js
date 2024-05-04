@@ -7,13 +7,13 @@ var { parseSchema } = require('../common');
 var logger = new Logger('Train');
 
 function train(datasetFile, modelFile, modelName) {
-	const rawDataset = fs.readFileSync(datasetFile).toString();
+	var rawDataset = fs.readFileSync(datasetFile).toString();
 	if (!rawDataset) {
 		logger.err('Отсутствует датасет для обучений');
 		return;
 	}
 
-	const dataset = rawDataset
+	rawDataset = rawDataset
 		.split('\n')
 		.map(schema => {
 			schema = parseSchema(schema);
@@ -23,14 +23,18 @@ function train(datasetFile, modelFile, modelName) {
 			}
 		});
 
+	var datasets = new Array(rawDataset.length/100).fill().map((_,i) => rawDataset.slice(i*100, i*100+100));
 
 	const config = {
 		// iterations: 10000,
-		binaryThresh: 0.5,
-		inputSize: dataset[0].input.length,
-		outputSize: dataset[0].output.length,
+		errorThresh: 0.001,
+		binaryThresh: 0.001,
+		learningRate: 0.01,
+		inputSize: datasets[0][0].input.length,
+		outputSize: datasets[0][0].output.length,
 		hiddenLayers: [
-			Math.round(dataset[0].output.length*2),
+			Math.round(datasets[0][0].output.length*2),
+			Math.round(datasets[0][0].output.length*1.2),
 		], // array of ints for the sizes of the hidden layers in the network
 		activation: 'sigmoid', // supported activation types: ['sigmoid', 'relu', 'leaky-relu', 'tanh'],
 		leakyReluAlpha: 0.01, // supported for activation type 'leaky-relu'
@@ -43,7 +47,10 @@ function train(datasetFile, modelFile, modelName) {
 	logger.info('Старт обучения. ' + modelName);
 	logger.bench('train');
 
-	net.train(dataset);
+	for (var i = 0; i < datasets.length; i++) {
+		logger.info('Эпоха ' + (i+1));
+		net.train(datasets[i]);
+	}
 
 	logger.success('Обучение завершено');
 	logger.bench('train');

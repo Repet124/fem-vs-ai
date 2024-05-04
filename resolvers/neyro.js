@@ -10,7 +10,7 @@ module.exports.calc = (netJson, schema) => {
 	net.fromJSON(netJson);
 
 	var builder = new InputBuilder(schema);
-	var maxForce = Math.max(...schema.forces.flat().separateNegative());
+	var maxForce = Math.max(...schema.forces.flat().separateNegative())*schema.forces.length;
 
 	logger.info('Старт расчёта ИИ');
 	logger.bench('ai');
