@@ -27,9 +27,9 @@ function train(datasetFile, modelFile, modelName) {
 
 	const config = {
 		// iterations: 10000,
-		errorThresh: 0.001,
+		errorThresh: 0.0001,
 		binaryThresh: 0.001,
-		learningRate: 0.01,
+		learningRate: 0.005,
 		inputSize: datasets[0][0].input.length,
 		outputSize: datasets[0][0].output.length,
 		hiddenLayers: [

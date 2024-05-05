@@ -1,4 +1,4 @@
-import { getScale, drawLine } from './common.js'
+import { getScale, drawLine, getMinMax } from './common.js'
 
 function drawSchema(ctx, bars, nodes, opacity, color) {
 	color = color || '#fff';
@@ -103,10 +103,11 @@ function getTensorColor(pow) {
 export default function init(canvas) {
 	const ctx = canvas.getContext('2d');
 	const offset = 100;
+	const vertCoff = 1;
 
-	ctx.clear = () => {ctx.clearRect(-offset/this.scale,-offset/this.scale*2, canvas.width/this.scale, canvas.height/this.scale*2)};
+	ctx.clear = () => {ctx.clearRect(-offset/this.scale,-offset/this.scale*vertCoff, canvas.width/this.scale, canvas.height/this.scale)};
 	ctx.lineCap = 'round';
-	ctx.translate(offset, (canvas.height-offset*2));
+	ctx.translate(offset, (canvas.height-offset*vertCoff));
 
 	this.getCanvas = function() {
 		return canvas;
