@@ -26,7 +26,7 @@ function drawSchemaWithTensors(ctx, bars, nodes, scale) {
 }
 
 function drawText(text, ctx, x, y) {
-	ctx.font = '200px sans-serif'
+	ctx.font = '100px sans-serif'
 	ctx.fillStyle = '#fff'
 	ctx.scale(1, -1)
 	ctx.fillText(text, x, -y);

@@ -36,6 +36,13 @@ export default class Schema {
 		this.pointSize = 9;
 		this.forceSize = 70;
 		this.saved = false;
+
+		setInterval(() => {
+			if (this.drawing) {
+				this.#draw();
+				this.drawing = false;
+			}
+		}, 50);
 	}
 
 	getCanvas() {
@@ -202,7 +209,7 @@ export default class Schema {
 		this.commit();
 	}
 
-	draw() {
+	#draw() {
 		this.ctx.clearRect(0,0,this.canvas.htmlNode.width, this.canvas.htmlNode.height);
 		this.grid.draw(this.ctx);
 
@@ -214,6 +221,10 @@ export default class Schema {
 				.concat(this.#temp[entityKey])
 				.forEach(entity => entity.draw(this.ctx));
 		}
+	}
+
+	draw() {
+		this.drawing = true;
 	}
 
 	load(loadingSchema) {
