@@ -1,4 +1,4 @@
-import { getScale, drawLine, getMinMax } from './common.js'
+import { getScale, drawLine } from './common.js'
 
 function drawSchema(ctx, bars, nodes, opacity, color) {
 	color = color || '#fff';
