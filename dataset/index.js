@@ -12,8 +12,7 @@ var countDatasets = args.count || 100;
 try {
 	var builder = new DatasetBuilder(new SchemesBuilder(args.num));
 	logger.success('Запуск команды формирования датасетов');
-	builder.buildSources(countDatasets);
-	builder.buildDataset();
+	builder.buildDataset(countDatasets);
 	builder.save(`../schemes/${args.num}/dataset.json`);
 } catch (err) {
 	logger.err(err.message);

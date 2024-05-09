@@ -5,37 +5,18 @@ var InputBuilder = require('./rankOneInputBuilder');
 var OutputBuilder = require('./rankOneOutputBuilder');
 var SchemesBuilder = require('./schemesBuilder');
 var {calc} = require('../resolvers/fem');
+var { stringifySchema } = require('../common');
 
 module.exports = class DatasetBuilder {
 
 	constructor(shBuilder) {
 		this.schemesBuilder = shBuilder;
 
-		this.sources = null;
 		this.dataset = null;
 		this.logger = new Logger('DatasetBuilder');
 	}
 
-	buildDataset() {
-		if (!this.dataset) {
-			this.sourcesCheck();
-			this.logger.info('Запуск формирования общего датасета');
-			this.dataset = this.sources.map(source => ({
-				input: source.input.getDataset(),
-				output: source.output.getDataset()
-			}));
-			this.logger.info('Формирования датасета для перемещений завершено');
-		}
-		return this.dataset;
-	}
-
-	sourcesCheck() {
-		if (!this.sources) {
-			throw Error('Невозможно создать датасет - нет исходных данных');
-		}
-	}
-
-	buildSources(count) {
+	buildDataset(count) {
 		if (!Number.isInteger(count)) {
 			throw new Error('Не указано количество расчётных схем');
 		}
@@ -45,10 +26,10 @@ module.exports = class DatasetBuilder {
 		this.logger.success('Начато формирования данных для датасета');
 		this.logger.bench('data');
 
-		this.sources = this.schemesBuilder.getSchemes(count).map(schema => ({
-			input: new InputBuilder(schema),
-			output: new OutputBuilder(calc(schema))
-		}));
+		this.dataset = this.schemesBuilder
+			.getSchemes(count)
+			.map(schema => stringifySchema(calc(schema)))
+			.join('\n');
 
 		this.logger.success('Данные для датасета сформированы');
 		this.logger.bench('data');
@@ -59,7 +40,7 @@ module.exports = class DatasetBuilder {
 			this.logger.err('Сохранение невозможно- датасет не сформирован');
 			return;
 		}
-		fs.writeFileSync(path.join(__dirname,fileName), JSON.stringify(this.dataset), 'utf8');
+		fs.writeFileSync(path.join(__dirname,fileName), this.dataset, 'utf8');
 		this.logger.success('Датасет сохранён в ' + fileName);
 	}
 }
