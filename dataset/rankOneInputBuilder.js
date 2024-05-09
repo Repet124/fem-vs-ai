@@ -36,8 +36,12 @@ module.exports = class InputBuilder {
 				return force;
 			})
 			.flat()
-			.separateNegative()
-			.normalize();
+			.separateNegative();
+
+		// let max = Math.max(...this.dataset);
+		let max = 20;
+		// let maxForce = 20*this.schema.forces.length/4;
+		this.dataset = this.dataset.map(force => force/max);
 
 		// const forces = this.schema.forces.flat();
 		// const reactions = this.schema.nodes.map(node => [node[2], node[3]]).flat().map(R => R === 0 ? 1 : 0);

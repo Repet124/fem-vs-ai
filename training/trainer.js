@@ -22,13 +22,13 @@ function train(datasetFile, modelFile, modelName) {
 				output: new OutputBuilder(schema).getDataset()
 			}
 		});
-
-	var datasets = new Array(rawDataset.length/100).fill().map((_,i) => rawDataset.slice(i*100, i*100+100));
+	var batch = 100;
+	var datasets = new Array(rawDataset.length/batch).fill().map((_,i) => rawDataset.slice(i*batch, i*batch+batch));
 
 	const config = {
-		// iterations: 10000,
-		errorThresh: 0.0001,
-		binaryThresh: 0.001,
+		iterations: 10000,
+		errorThresh: 0.001,
+		binaryThresh: 0.005,
 		learningRate: 0.005,
 		inputSize: datasets[0][0].input.length,
 		outputSize: datasets[0][0].output.length,
