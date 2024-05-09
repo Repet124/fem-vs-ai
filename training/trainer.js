@@ -6,7 +6,7 @@ var OutputBuilder = require('../dataset/rankOneOutputBuilder');
 var { parseSchema } = require('../common');
 var logger = new Logger('Train');
 
-function train(datasetFile, modelFile, modelName) {
+function train(datasetFile, modelFile, modelName, batch, limit=false) {
 	var rawDataset = fs.readFileSync(datasetFile).toString();
 	if (!rawDataset) {
 		logger.err('Отсутствует датасет для обучений');
@@ -25,15 +25,18 @@ function train(datasetFile, modelFile, modelName) {
 				output: new OutputBuilder(schema).getDataset()
 			}
 		});
-	var batch = 100;
-	var datasets = new Array(rawDataset.length/batch).fill().map((_,i) => rawDataset.slice(i*batch, i*batch+batch));
+
+	var agesCount = (limit || rawDataset.length) / batch;
+	var datasets = new Array(agesCount).fill().map((_,i) => rawDataset.slice(i*batch, i*batch+batch));
 
 	logger.bench('format'); 
 	logger.success('Форматирование датасета завершено');
+	logger.info('Размер эпохи: ' + batch);
+	logger.info('Число эпох: ' + agesCount);
 
 	const config = {
 		iterations: 10000,
-		errorThresh: 0.01,
+		errorThresh: 0.005,
 		binaryThresh: 0.005,
 		learningRate: 0.005,
 		inputSize: datasets[0][0].input.length,

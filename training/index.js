@@ -14,7 +14,9 @@ try {
 	train(
 		path.join(__dirname,`../schemes/${args.num}/dataset.json`),
 		path.join(__dirname,`../schemes/${args.num}/trained.json`),
-		'Модель расчёт ферм'
+		'Модель расчёт ферм',
+		args.batch || 100,
+		args.limit
 	);
 } catch (err) {
 	logger.err(err.message);
