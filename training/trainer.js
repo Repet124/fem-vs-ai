@@ -1,15 +1,29 @@
 var brain = require('brain.js')
 var fs = require('fs');
 var Logger = require('../services/logger');
+var InputBuilder = require('../dataset/rankOneInputBuilder');
+var OutputBuilder = require('../dataset/rankOneOutputBuilder');
+var { parseSchema } = require('../common');
 var logger = new Logger('Train');
 
 function train(datasetFile, modelFile, modelName) {
-	const jsonDataset = fs.readFileSync(datasetFile)
-	if (!jsonDataset) {
+	const rawDataset = fs.readFileSync(datasetFile).toString();
+	if (!rawDataset) {
 		logger.err('Отсутствует датасет для обучений');
 		return;
 	}
-	const dataset = JSON.parse(jsonDataset);
+
+	const dataset = rawDataset
+		.split('\n')
+		.map(schema => {
+			schema = parseSchema(schema);
+			return {
+				input: new InputBuilder(schema).getDataset(),
+				output: new OutputBuilder(schema).getDataset()
+			}
+		});
+
+
 	const config = {
 		// iterations: 10000,
 		binaryThresh: 0.5,

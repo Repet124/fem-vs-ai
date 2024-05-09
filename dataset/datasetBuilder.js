@@ -1,8 +1,6 @@
 var fs = require('fs');
 var path = require('path');
 var Logger = require('../services/logger');
-var InputBuilder = require('./rankOneInputBuilder');
-var OutputBuilder = require('./rankOneOutputBuilder');
 var SchemesBuilder = require('./schemesBuilder');
 var {calc} = require('../resolvers/fem');
 var { stringifySchema } = require('../common');
