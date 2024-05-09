@@ -13,6 +13,9 @@ function train(datasetFile, modelFile, modelName) {
 		return;
 	}
 
+	logger.info('Форматирование датасета. ' + modelName);
+	logger.bench('format'); 
+
 	rawDataset = rawDataset
 		.split('\n')
 		.map(schema => {
@@ -25,9 +28,12 @@ function train(datasetFile, modelFile, modelName) {
 	var batch = 100;
 	var datasets = new Array(rawDataset.length/batch).fill().map((_,i) => rawDataset.slice(i*batch, i*batch+batch));
 
+	logger.bench('format'); 
+	logger.success('Форматирование датасета завершено');
+
 	const config = {
 		iterations: 10000,
-		errorThresh: 0.001,
+		errorThresh: 0.01,
 		binaryThresh: 0.005,
 		learningRate: 0.005,
 		inputSize: datasets[0][0].input.length,
