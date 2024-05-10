@@ -12,30 +12,43 @@ module.exports = class SchemesBuilder {
 	}
 
 	getSchemes(count) {
+		if (count % 10 !== 0) {
+			throw new Error('Размер датасета должен быть кратен 10');
+		}
 		var data = Array(count);
 
-		for (var i = 0; i < count; i++) {
-			data[i] = {
-				// nodes: nodes.map(node => [
-				// 	Number((node[0]+this.maxDistanceChange*rand(100)).toFixed(3)),
-				// 	Number((node[1]+this.maxDistanceChange*rand(100)).toFixed(3)),
-				// 	node[2], // сохраняется положение опор
-				// 	node[3]
-				// ]),
-				nodes: this.template.nodes.map(node => [...node]),
-				forces: this.template.forces.map((force,i) => {
-					if (Math.random() > .5) { // усилия назначаются (в среднем) половине случайных узлов
-						return [
-							Number((this.forceMax*rand(100)).toFixed(1)),
-							Number((this.forceMax*rand(100)).toFixed(1)),
-						]
-					}
-					return force;
-				}),
-				bars: this.template.bars
-			}
+		for (var i = 0; i < count; ) {
+			// схемы с горизонтальными усилиями
+			data[i++] = this.#buildSchema(.1, 0);
+			data[i++] = this.#buildSchema(.2, 0);
+			data[i++] = this.#buildSchema(.3, 0);
+			data[i++] = this.#buildSchema(.5, 0);
+
+			// схемы с вертикальными усилиями
+			data[i++] = this.#buildSchema(0, .1);
+			data[i++] = this.#buildSchema(0, .2);
+			data[i++] = this.#buildSchema(0, .3);
+			data[i++] = this.#buildSchema(0, .5);
+
+			// схемы с усилиями в обих направлениях
+			data[i++] = this.#buildSchema(.2, .2);
+			data[i++] = this.#buildSchema(.5, .5);
 		}
 		return data;
+	}
+
+	#buildSchema(chanceX, chanceY) {
+		var schema = {
+			// копирование узлов и стержней без изменений
+			nodes: this.template.nodes.map(node => [...node]),
+			bars: this.template.bars.map(bar => [...bar]),
+			// назначение усилий в зависимости от их шанса появления в определённом направлении
+			forces: this.template.forces.map(() => ([
+				(Math.random() <= chanceX) ? Number((this.forceMax*rand(100)).toFixed(1)) : 0,
+				(Math.random() <= chanceY) ? Number((this.forceMax*rand(100)).toFixed(1)) : 0
+			])),
+		}
+		return schema;
 	}
 }
 
