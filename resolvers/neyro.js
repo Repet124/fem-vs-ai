@@ -6,8 +6,8 @@ var logger = new Logger('Neyro');
 const brain = require('../services/brain.js')
 
 module.exports.calc = (netJson, schema) => {
-	const net = (new brain.NeuralNetworkGPU());
-	// const net = (new brain.NeuralNetwork());
+	// const net = (new brain.NeuralNetworkGPU());
+	const net = (new brain.NeuralNetwork());
 	net.fromJSON(netJson);
 
 	var builder = new InputBuilder(schema);
@@ -24,7 +24,7 @@ module.exports.calc = (netJson, schema) => {
 	});
 	var forceCoff = result.shift()*10;
 	schema.bars.forEach(bar => {
-		bar[3] = result.shiftWithSign() * (1.8** forceCoff);
+		bar[3] = result.shiftWithSign() * (1.4** forceCoff);
 	});
 
 	logger.success('Расчёт завершён');

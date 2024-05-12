@@ -35,24 +35,24 @@ function train(datasetFile, modelFile, modelName, batch, limit=false) {
 	logger.info('Число эпох: ' + agesCount);
 
 	const config = {
-		iterations: 10000,
-		errorThresh: 0.01,
+		iterations: 20000,
+		errorThresh: 0.005,
 		binaryThresh: 0.001,
-		learningRate: 0.005,
+		learningRate: 0.001,
 		inputSize: datasets[0][0].input.length,
 		outputSize: datasets[0][0].output.length,
 		hiddenLayers: [
 			Math.round(datasets[0][0].output.length)*2,
 			Math.round(datasets[0][0].output.length*1.2),
-			Math.round(datasets[0][0].input.length),
+			// Math.round(datasets[0][0].input.length),
 		], // array of ints for the sizes of the hidden layers in the network
 		activation: 'sigmoid', // supported activation types: ['sigmoid', 'relu', 'leaky-relu', 'tanh'],
 		leakyReluAlpha: 0.01, // supported for activation type 'leaky-relu'
 		log: true,
 	};
 
-	// const net = new brain.NeuralNetwork(config);
-	const net = new brain.NeuralNetworkGPU(config);
+	const net = new brain.NeuralNetwork(config);
+	// const net = new brain.NeuralNetworkGPU(config);
 
 	logger.info('Старт обучения. ' + modelName);
 	logger.bench('train');
