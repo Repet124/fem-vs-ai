@@ -68,7 +68,7 @@ function animate(painter, ctx, step=.01, afterCallback) {
 function drawCalcsSchema(ctx, schema, scale) {
 	let nodes = getDeformNodes(schema.nodes, 10*scale);
 	drawSchema(ctx, schema.bars, schema.nodes, .3); // init schema
-	drawSchemaWithTensors(ctx, schema.bars, nodes, scale)
+	drawSchemaWithTensors(ctx, schema.bars, schema.nodes, scale)
 }
 
 function numToChanel(num) {

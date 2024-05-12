@@ -16,6 +16,7 @@ Array.prototype.normalize = function() {
 	let min = Math.min(...arr);
 	arr = arr.map(item => item - min)
 	let max = Math.max(...arr);
+	if (max === 0) {return Array(arr.length).fill(0)}
 	arr = arr.map(item => item / max);
 	return arr;
 }

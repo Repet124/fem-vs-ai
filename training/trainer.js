@@ -36,18 +36,19 @@ function train(datasetFile, modelFile, modelName, batch, limit=false) {
 
 	const config = {
 		iterations: 10000,
-		errorThresh: 0.005,
-		binaryThresh: 0.005,
+		errorThresh: 0.01,
+		binaryThresh: 0.001,
 		learningRate: 0.005,
 		inputSize: datasets[0][0].input.length,
 		outputSize: datasets[0][0].output.length,
 		hiddenLayers: [
-			Math.round(datasets[0][0].output.length*2),
+			Math.round(datasets[0][0].output.length)*2,
 			Math.round(datasets[0][0].output.length*1.2),
+			Math.round(datasets[0][0].input.length),
 		], // array of ints for the sizes of the hidden layers in the network
 		activation: 'sigmoid', // supported activation types: ['sigmoid', 'relu', 'leaky-relu', 'tanh'],
 		leakyReluAlpha: 0.01, // supported for activation type 'leaky-relu'
-		log: true
+		log: true,
 	};
 
 	// const net = new brain.NeuralNetwork(config);

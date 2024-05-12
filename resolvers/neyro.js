@@ -11,9 +11,6 @@ module.exports.calc = (netJson, schema) => {
 	net.fromJSON(netJson);
 
 	var builder = new InputBuilder(schema);
-	// var maxForce = Math.max(...schema.forces.flat().separateNegative())*schema.forces.length;
-	// const maxForce = 20*schema.forces.length/4;
-	const maxForce = 50;
 
 	logger.info('Старт расчёта ИИ');
 	logger.bench('ai');
@@ -25,9 +22,9 @@ module.exports.calc = (netJson, schema) => {
 		node[2] = 0;
 		node[3] = 0;
 	});
-	var forceCoff = result.shift()*100;
+	var forceCoff = result.shift()*10;
 	schema.bars.forEach(bar => {
-		bar[3] = result.shiftWithSign()*forceCoff;
+		bar[3] = result.shiftWithSign() * (1.8** forceCoff);
 	});
 
 	logger.success('Расчёт завершён');
