@@ -18,21 +18,32 @@ module.exports = class SchemesBuilder {
 		var data = Array(count);
 
 		for (var i = 0; i < count; ) {
-			// схемы с горизонтальными усилиями
-			data[i++] = this.#buildSchema(.1, 0);
-			data[i++] = this.#buildSchema(.2, 0);
-			data[i++] = this.#buildSchema(.3, 0);
-			data[i++] = this.#buildSchema(.5, 0);
+			// // схемы с горизонтальными усилиями
+			// data[i++] = this.#buildSchema(.1, 0);
+			// data[i++] = this.#buildSchema(.2, 0);
+			// data[i++] = this.#buildSchema(.3, 0);
+			// data[i++] = this.#buildSchema(.5, 0);
 
-			// схемы с вертикальными усилиями
-			data[i++] = this.#buildSchema(0, .1);
-			data[i++] = this.#buildSchema(0, .2);
-			data[i++] = this.#buildSchema(0, .3);
-			data[i++] = this.#buildSchema(0, .5);
+			// // схемы с вертикальными усилиями
+			// data[i++] = this.#buildSchema(0, .1);
+			// data[i++] = this.#buildSchema(0, .2);
+			// data[i++] = this.#buildSchema(0, .3);
+			// data[i++] = this.#buildSchema(0, .5);
 
-			// схемы с усилиями в обих направлениях
+			// // схемы с усилиями в обих направлениях
+			// data[i++] = this.#buildSchema(.2, .2);
+			// data[i++] = this.#buildSchema(.5, .5);
+
 			data[i++] = this.#buildSchema(.2, .2);
-			data[i++] = this.#buildSchema(.5, .5);
+			data[i++] = this.#buildSchema(.2, .2);
+			data[i++] = this.#buildSchema(.2, .2);
+			data[i++] = this.#buildSchema(.2, .2);
+			data[i++] = this.#buildSchema(.2, .2);
+			data[i++] = this.#buildSchema(.2, .2);
+			data[i++] = this.#buildSchema(.2, .2);
+			data[i++] = this.#buildSchema(1, 1);
+			data[i++] = this.#buildSchema(1, 1);
+			data[i++] = this.#buildSchema(1, 1);
 		}
 		return data;
 	}
