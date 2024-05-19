@@ -2,6 +2,7 @@ import statusEnum from './control/StatusEnum.js';
 import { schema, info, visualizator } from './init.js';
 import cordsPallet from './control/CordsPallet.js';
 import forcePallet from './control/ForcePallet.js';
+import reportPallet from './control/ReportPallet.js';
 
 function show(canvasOwner) {
 	if (canvasOwner === visualizator) {
@@ -205,7 +206,7 @@ function toggleSupport() {
 
 function calcFem() {
 	window.api.fem(schema.upload()).then(schema => {
-		console.log(JSON.stringify(schema));
+		reportPallet.fem = schema;
 		show(visualizator);
 		visualizator.show(schema);
 	});
@@ -217,7 +218,7 @@ function calcNeyro() {
 		return;
 	}
 	window.api.neyro(schema.upload(), schema.saved).then(schema => {
-		console.log(JSON.stringify(schema));
+		reportPallet.ai = schema;
 		show(visualizator);
 		visualizator.show(schema);
 	});

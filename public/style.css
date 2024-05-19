@@ -54,6 +54,24 @@ body {
 	display: none;
 }
 
+#pallete-stats {
+	gap: 0;
+}
+.stats-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 5px 10px;
+	&:nth-child(even){
+		background-color: var(--gray-light);
+	}
+	span {
+		font-weight: bold;
+		width: 70px;
+		text-align: right;
+	}
+}
+
 #info {
 	grid-area: info;
 	color: #fff;
