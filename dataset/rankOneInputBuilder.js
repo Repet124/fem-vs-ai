@@ -16,8 +16,8 @@ module.exports = class InputBuilder {
 	}
 
 	buildDataset() {
-		this.logger.info('Формирование матрицы исходных данных для датасета')
-		this.logger.bench('form');
+		// this.logger.info('Формирование матрицы исходных данных для датасета')
+		// this.logger.bench('form');
 
 		// назначение separateNegative:
 		// положительное и отрицательное значение нагрузок идут в разные входные нейроны
@@ -26,7 +26,7 @@ module.exports = class InputBuilder {
 		// const cords = this.schema.nodes.map(node => [node[0], node[1]]).flat();
 		this.dataset = this.schema.forces.flat();
 
-		this.logger.success('Формирование матрицы исходных данных для датасета звершено')
-		this.logger.bench('form');
+		// this.logger.success('Формирование матрицы исходных данных для датасета звершено')
+		// this.logger.bench('form');
 	}
 }
