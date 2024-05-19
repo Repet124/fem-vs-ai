@@ -16,6 +16,7 @@ try {
 		path.join(__dirname,`../schemes/${args.num}/trained.json`),
 		'Модель расчёт ферм',
 		args.batch || 100,
+		args.ages || 3,
 		args.limit
 	);
 } catch (err) {

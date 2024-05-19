@@ -6,19 +6,19 @@ var OutputBuilder = require('../dataset/rankOneOutputBuilder');
 var { parseSchema } = require('../common');
 var logger = new Logger('Train');
 
-function train(datasetFile, modelFile, modelName, batch, limit=false) {
+function train(datasetFile, modelFile, modelName, batchSize, agesCount, datasetSize) {
 	var rawDataset = fs.readFileSync(datasetFile).toString();
 	if (!rawDataset) {
 		logger.err('Отсутствует датасет для обучений');
 		return;
 	}
 
-	logger.info('Форматирование датасета. ' + modelName);
-	logger.bench('format'); 
+	rawDataset = rawDataset.split('\n');
+	if (datasetSize) {
+		rawDataset = rawDataset.slice(0, datasetSize);
+	}
 
-	rawDataset = rawDataset
-		.split('\n')
-		.map(schema => {
+	var dataset = rawDataset.map(schema => {
 			schema = parseSchema(schema);
 			return {
 				input: new InputBuilder(schema).getDataset(),
@@ -26,24 +26,16 @@ function train(datasetFile, modelFile, modelName, batch, limit=false) {
 			}
 		});
 
-	var agesCount = (limit || rawDataset.length) / batch;
-	var datasets = new Array(agesCount).fill().map((_,i) => rawDataset.slice(i*batch, i*batch+batch));
-
-	logger.bench('format'); 
-	logger.success('Форматирование датасета завершено');
-	logger.info('Размер эпохи: ' + batch);
-	logger.info('Число эпох: ' + agesCount);
-
 	const config = {
 		iterations: 20000,
-		errorThresh: 0.005,
+		errorThresh: 0.01,
 		binaryThresh: 0.001,
-		learningRate: 0.001,
-		inputSize: datasets[0][0].input.length,
-		outputSize: datasets[0][0].output.length,
+		learningRate: 0.01,
+		inputSize: dataset[0].input.length,
+		outputSize: dataset[0].output.length,
 		hiddenLayers: [
-			Math.round(datasets[0][0].output.length)*2,
-			Math.round(datasets[0][0].output.length*1.2),
+			Math.round(dataset[0].output.length)*2,
+			Math.round(dataset[0].output.length*1.2),
 			// Math.round(datasets[0][0].input.length),
 		], // array of ints for the sizes of the hidden layers in the network
 		activation: 'sigmoid', // supported activation types: ['sigmoid', 'relu', 'leaky-relu', 'tanh'],
@@ -57,9 +49,13 @@ function train(datasetFile, modelFile, modelName, batch, limit=false) {
 	logger.info('Старт обучения. ' + modelName);
 	logger.bench('train');
 
-	for (var i = 0; i < datasets.length; i++) {
-		logger.info('Эпоха ' + (i+1));
-		net.train(datasets[i]);
+	for (var i = 0; i < agesCount; i++) {
+		logger.info('Размер пакета: ' + batchSize);
+		logger.info('Число пакетов: ' + (dataset.length / batchSize));
+		logger.info('Число эпох: ' + agesCount);
+		logger.info('Текущая эпоха: ' + (i+1));
+
+		getAge(dataset, batchSize).forEach((batch,i) => net.train(batch));
 	}
 
 	logger.success('Обучение завершено');
@@ -70,6 +66,21 @@ function train(datasetFile, modelFile, modelName, batch, limit=false) {
 	fs.writeFileSync(modelFile, JSON.stringify(net.toJSON()), 'utf8');
 
 	logger.success('Модель сохранена ' + modelFile);
+}
+
+
+function getAge(dataset, batchSize) {
+	shuffle(dataset);
+	return Array(dataset.length / batchSize).fill().map((_,i) => dataset.slice(i*batchSize, i*batchSize+batchSize-1))
+}
+
+function shuffle(array) {
+	Array(array.length).fill().forEach((_,i,arr) => {
+		let index = arr.length - 1 - i;
+		if (index < 0 || index >= arr.length) {console.log(index)}
+		let j = Math.floor(Math.random() * (index));
+		[array[index], array[j]] = [array[j], array[index]];
+	});
 }
 
 module.exports = train;
