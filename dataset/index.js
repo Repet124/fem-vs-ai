@@ -10,9 +10,9 @@ var logger = new Logger();
 var countDatasets = args.count || 100;
 
 try {
-	var builder = new DatasetBuilder(new SchemesBuilder(args.num));
+	var builder = new DatasetBuilder();
 	logger.success('Запуск команды формирования датасетов');
-	builder.buildDataset(countDatasets);
+	builder.buildDataset(new SchemesBuilder(args.num), countDatasets);
 	builder.save(`../schemes/${args.num}/dataset.json`);
 } catch (err) {
 	logger.err(err.message);

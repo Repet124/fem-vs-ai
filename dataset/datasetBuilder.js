@@ -7,14 +7,12 @@ var { stringifySchema } = require('../common');
 
 module.exports = class DatasetBuilder {
 
-	constructor(shBuilder) {
-		this.schemesBuilder = shBuilder;
-
+	constructor() {
 		this.dataset = null;
 		this.logger = new Logger('DatasetBuilder');
 	}
 
-	buildDataset(count) {
+	buildDataset(schemesBuilder, count) {
 		if (!Number.isInteger(count)) {
 			throw new Error('Не указано количество расчётных схем');
 		}
@@ -24,7 +22,7 @@ module.exports = class DatasetBuilder {
 		this.logger.success('Начато формирования данных для датасета');
 		this.logger.bench('data');
 
-		this.dataset = this.schemesBuilder
+		this.dataset = schemesBuilder
 			.getSchemes(count)
 			.map(schema => calc(schema));
 
