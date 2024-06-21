@@ -24,7 +24,10 @@ module.exports = class InputBuilder {
 		// пример: в узле с нагрузками по x,y [-1, 2], входные нейроны будут [0,1,2,0], до нормализации
 
 		// const cords = this.schema.nodes.map(node => [node[0], node[1]]).flat();
-		this.dataset = this.schema.forces.flat();
+		this.dataset = [
+			40,
+			...(this.schema.forces.flat())
+		];
 
 		// this.logger.success('Формирование матрицы исходных данных для датасета звершено')
 		// this.logger.bench('form');

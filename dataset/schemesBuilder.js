@@ -7,7 +7,7 @@ module.exports = class SchemesBuilder {
 	constructor(schemaNum, forceMax=20, maxPercentTranslations=20) {
 		let schemaJson = fs.readFileSync(path.join(__dirname,`../schemes/${schemaNum}/schema.json`));
 		this.template = parseSchema(schemaJson);
-		this.forceMax = 20;
+		this.forceMax = 40;
 		this.maxDistanceChange = 1;
 	}
 
@@ -34,13 +34,18 @@ module.exports = class SchemesBuilder {
 			// data[i++] = this.#buildSchema(.2, .2);
 			// data[i++] = this.#buildSchema(.5, .5);
 
-			data[i++] = this.#buildSchema(.2, .2);
-			data[i++] = this.#buildSchema(.2, .2);
-			data[i++] = this.#buildSchema(.2, .2);
-			data[i++] = this.#buildSchema(.2, .2);
-			data[i++] = this.#buildSchema(.2, .2);
-			data[i++] = this.#buildSchema(.2, .2);
-			data[i++] = this.#buildSchema(.2, .2);
+			data[i++] = this.#buildSchema(.3, .3);
+			data[i++] = this.#buildSchema(.3, .3);
+			data[i++] = this.#buildSchema(.3, .3);
+			data[i++] = this.#buildSchema(.3, .3);
+			data[i++] = this.#buildSchema(.3, .3);
+			// data[i++] = this.#buildSchema(.3, .3);
+			// data[i++] = this.#buildSchema(.3, .3);
+			// data[i++] = this.#buildSchema(.3, .3);
+			// data[i++] = this.#buildSchema(.3, .3);
+			// data[i++] = this.#buildSchema(.3, .3);
+			data[i++] = this.#buildSchema(1, 1);
+			data[i++] = this.#buildSchema(1, 1);
 			data[i++] = this.#buildSchema(1, 1);
 			data[i++] = this.#buildSchema(1, 1);
 			data[i++] = this.#buildSchema(1, 1);

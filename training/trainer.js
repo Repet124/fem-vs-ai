@@ -27,8 +27,8 @@ function train(datasetFile, modelFile, modelName, batchSize, agesCount, datasetS
 		});
 
 	const config = {
-		iterations: 20000,
-		errorThresh: 0.01,
+		iterations: 5,
+		errorThresh: 0.003,
 		binaryThresh: 0.001,
 		learningRate: 0.01,
 		inputSize: dataset[0].input.length,
@@ -41,10 +41,11 @@ function train(datasetFile, modelFile, modelName, batchSize, agesCount, datasetS
 		activation: 'sigmoid', // supported activation types: ['sigmoid', 'relu', 'leaky-relu', 'tanh'],
 		leakyReluAlpha: 0.01, // supported for activation type 'leaky-relu'
 		log: true,
+		logPeriod: 5
 	};
 
-	const net = new brain.NeuralNetwork(config);
-	// const net = new brain.NeuralNetworkGPU(config);
+	// const net = new brain.NeuralNetwork(config);
+	const net = new brain.NeuralNetworkGPU(config);
 
 	logger.info('Старт обучения. ' + modelName);
 	logger.bench('train');

@@ -15,7 +15,7 @@ module.exports = class OutputBuilder {
 
 		const maxForce = Math.max(...tensors);
 		tensors = tensors.map(ten => (maxForce ? ten/maxForce : 0));
-		const pow = maxForce ? (Math.log(maxForce) / Math.log(1.4))/10 : 0;
+		const pow = maxForce ? (Math.log(maxForce) / Math.log(1.65))/10 : 0;
 
 		this.dataset = [
 			pow,
