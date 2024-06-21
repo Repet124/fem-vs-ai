@@ -10,7 +10,7 @@ module.exports = class OutputBuilder {
 
 	buildDataset(schema) {
 
-		let translations = schema.nodes.map(node => [node[2], node[3]]).flat();
+		// let translations = schema.nodes.map(node => [node[2], node[3]]).flat();
 		let tensors = schema.bars.map(bar => bar[3]).separateNegative().flat();
 
 		const maxForce = Math.max(...tensors);

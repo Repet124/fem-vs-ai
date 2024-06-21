@@ -4,6 +4,8 @@ var Logger = require('../services/logger');
 var SchemesBuilder = require('./schemesBuilder');
 var {calc} = require('../resolvers/fem');
 var { stringifySchema } = require('../common');
+var InputBuilder = require('./rankOneInputBuilder');
+var OutputBuilder = require('./rankOneOutputBuilder');
 
 module.exports = class DatasetBuilder {
 
@@ -46,4 +48,33 @@ module.exports = class DatasetBuilder {
 		fs.writeFileSync(path.join(__dirname,fileName), dataset, 'utf8');
 		this.logger.success('Датасет сохранён в ' + fileName);
 	}
-}
+
+	parse(fileName, size, baseSchema) {
+
+		var raw = fs.readFileSync(fileName);
+		if (!raw) {
+			this.logger.err('Отсутствуют данные для обучения');
+			return;
+		}
+
+		raw = JSON.parse(rawDataset);
+
+		if (size) {
+			raw = raw.slice(0, size);
+		}
+
+		baseSchema = JSON.parse(JSON.stringify(baseSchema));
+
+		var dataset = raw.map(schemaChanges => {
+				baseSchema.bars.forEach((bar,i) => bar[3] = schemaChanges.tensors[i]);
+				baseSchema.forces = Array(baseSchema.forces.length).fill().map(() => [0,0]);
+				schemaChanges.settedForces.forEach(iAndF => { // index and force
+					baseSchema.forces[iAndF[0], iAndF[0]];
+				})
+				return {
+					input: new InputBuilder(schema).getDataset(),
+					output: new OutputBuilder(schema).getDataset()
+				}
+			});
+		}
+	}
