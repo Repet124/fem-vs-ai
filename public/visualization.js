@@ -9,24 +9,43 @@ function drawSchema(ctx, bars, nodes, opacity, color) {
 }
 
 function drawSchemaWithTensors(ctx, bars, nodes, scale) {
-	let max = bars.reduce((max,bar) => Math.max(max, Math.abs(bar[3])), 1);
+	let max = Math.max(...(bars.map(bar => bar[3])));
+	let min = -Math.min(...(bars.map(bar => bar[3])));
 
 	bars.forEach(bar => {
-		drawLine(ctx, nodes[bar[0]], nodes[bar[1]], getTensorColor(bar[3]*scale/max), 1, 80*scale)
+		drawLine(
+			ctx,
+			nodes[bar[0]],
+			nodes[bar[1]],
+			getTensorColor(bar[3]*scale/(bar[3]>0 ? max : min)),
+			1,
+			80*scale
+		)
 	});
 
 	bars.forEach(bar => {
+		let offsetX = (nodes[bar[0]][0]+(nodes[bar[1]][0] - nodes[bar[0]][0])/2)*1000,
+			offsetY = (nodes[bar[0]][1]+(nodes[bar[1]][1] - nodes[bar[0]][1])/2)*1000,
+			barLength = Math.sqrt((nodes[bar[1]][0] - nodes[bar[0]][0])**2+(nodes[bar[1]][1] - nodes[bar[0]][1])**2),
+			rotation = Math.PI/2 - Math.atan((nodes[bar[1]][0] - nodes[bar[0]][0])/(nodes[bar[1]][1] - nodes[bar[0]][1]));
+		if (rotation > Math.PI/2) {
+			rotation += Math.PI
+		}
+		ctx.translate(offsetX, offsetY);
+		ctx.rotate(rotation);
 		drawText(
 			bar[3].toFixed(2),
 			ctx,
-			(nodes[bar[0]][0]+(nodes[bar[1]][0] - nodes[bar[0]][0])/2)*1000,
-			(nodes[bar[0]][1]+(nodes[bar[1]][1] - nodes[bar[0]][1])/2)*1000,
+			-400, // offset to start point parallel bar
+			(bar[3] < -30 && barLength < 1.2) ? 150 : 50 // the MAGIC
 		)
+		ctx.rotate(-rotation);
+		ctx.translate(-offsetX, -offsetY);
 	});
 }
 
 function drawText(text, ctx, x, y) {
-	ctx.font = '100px sans-serif'
+	ctx.font = '250px sans-serif'
 	ctx.fillStyle = '#fff'
 	ctx.scale(1, -1)
 	ctx.fillText(text, x, -y);
@@ -102,12 +121,13 @@ function getTensorColor(pow) {
 
 export default function init(canvas) {
 	const ctx = canvas.getContext('2d');
-	const offset = 100;
+	const offset = 50;
 	const vertCoff = 1;
 
-	ctx.clear = () => {ctx.clearRect(-offset/this.scale,-offset/this.scale*vertCoff, canvas.width/this.scale, canvas.height/this.scale)};
+	// offset for last schema - DIRT!
+	ctx.clear = () => {ctx.clearRect(-offset/this.scale,(-300-offset)/this.scale*vertCoff, canvas.width/this.scale, canvas.height/this.scale)};
 	ctx.lineCap = 'round';
-	ctx.translate(offset, (canvas.height-offset*vertCoff));
+	ctx.translate(offset, (canvas.height-offset*vertCoff)-300);
 
 	this.getCanvas = function() {
 		return canvas;
