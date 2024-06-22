@@ -1,4 +1,4 @@
-var brain = require('brain.js')
+var brain = require('../services/brain.js')
 var fs = require('fs');
 var Logger = require('../services/logger');
 var DatasetBuilder = require('../dataset/datasetBuilder');

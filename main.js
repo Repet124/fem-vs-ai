@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('node:path');
 const fem = require('./resolvers/fem');
 const neyro = require('./resolvers/neyro');
+const train = require('./training/trainer');
 const dotenv = require('dotenv');
 dotenv.config()
 
@@ -56,10 +57,24 @@ function saveSchema(e, schema) {
 	return filePath;
 }
 
+function runTrain(e, schemaNum, batch, ages, limit) {
+	train(
+		path.join(__dirname,`schemes/${schemaNum}/schema.json`),
+		path.join(__dirname,`schemes/${schemaNum}/dataset.json`),
+		path.join(__dirname,`schemes/${schemaNum}/trained.json`),
+		'Модель расчёт ферм',
+		batch,
+		ages,
+		limit
+	);
+	return 'trained!'; // this is a promise
+}
+
 app.whenReady().then(() => {
 	createWindow();
 	ipcMain.handle('fem', calcFem);
 	ipcMain.handle('neyro', calcNeyro);
+	ipcMain.handle('train', runTrain);
 	ipcMain.handle('load', loadSchema);
 	ipcMain.handle('save', saveSchema);
 });

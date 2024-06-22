@@ -245,6 +245,12 @@ function clear() {
 	schema.draw();
 }
 
+function train() {
+	window.api.train(1,100,3,undefined).then(test => {
+		console.log(test)
+	})
+}
+
 export default {
 	addPoints,
 	addBar,
@@ -260,4 +266,5 @@ export default {
 	save,
 	clear,
 	off: offActions,
+	train,
 }
