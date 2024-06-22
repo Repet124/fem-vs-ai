@@ -49,32 +49,30 @@ module.exports = class DatasetBuilder {
 		this.logger.success('Датасет сохранён в ' + fileName);
 	}
 
-	parse(fileName, size, baseSchema) {
-
-		var raw = fs.readFileSync(fileName);
-		if (!raw) {
-			this.logger.err('Отсутствуют данные для обучения');
-			return;
-		}
-
-		raw = JSON.parse(rawDataset);
+	parse(rawDataset, schema, size) {
+		rawDataset = JSON.parse(rawDataset);
 
 		if (size) {
-			raw = raw.slice(0, size);
+			rawDataset = rawDataset.slice(0, size);
 		}
 
-		baseSchema = JSON.parse(JSON.stringify(baseSchema));
+		schema = JSON.parse(JSON.stringify(schema));
 
-		var dataset = raw.map(schemaChanges => {
-				baseSchema.bars.forEach((bar,i) => bar[3] = schemaChanges.tensors[i]);
-				baseSchema.forces = Array(baseSchema.forces.length).fill().map(() => [0,0]);
-				schemaChanges.settedForces.forEach(iAndF => { // index and force
-					baseSchema.forces[iAndF[0], iAndF[0]];
-				})
-				return {
-					input: new InputBuilder(schema).getDataset(),
-					output: new OutputBuilder(schema).getDataset()
-				}
+		var dataset = rawDataset.map(schemaChanges => {
+
+			schema.bars.forEach((bar,i) => bar[3] = schemaChanges.tensors[i]);
+			schema.forces = Array(schema.forces.length).fill().map(() => [0,0]);
+
+			schemaChanges.settedForces.forEach(iAndF => { // index and force
+				schema.forces[iAndF[0]] = iAndF[1];
 			});
-		}
+
+			return {
+				input: new InputBuilder(schema).getDataset(),
+				output: new OutputBuilder(schema).getDataset()
+			}
+		});
+
+		return dataset;
 	}
+}
