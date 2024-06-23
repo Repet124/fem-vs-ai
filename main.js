@@ -1,11 +1,14 @@
+const path = require('node:path');
+const fs = require('fs');
+const dotenv = require('dotenv');
+const { fork } = require('node:child_process');
+
 const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const { parseSchema, stringifySchema } = require('./common');
-const fs = require('fs');
-const path = require('node:path');
+
 const fem = require('./resolvers/fem');
 const neyro = require('./resolvers/neyro');
 const train = require('./training/trainer');
-const dotenv = require('dotenv');
 dotenv.config()
 
 const createWindow = () => {
@@ -58,16 +61,16 @@ function saveSchema(e, schema) {
 }
 
 function runTrain(e, schemaNum, batch, ages, limit) {
-	train(
-		path.join(__dirname,`schemes/${schemaNum}/schema.json`),
-		path.join(__dirname,`schemes/${schemaNum}/dataset.json`),
-		path.join(__dirname,`schemes/${schemaNum}/trained.json`),
-		'Модель расчёт ферм',
-		batch,
-		ages,
-		limit
+
+	const child = fork(
+		path.join(__dirname, 'training/index.js'),
+		[JSON.stringify({schemaNum, batch, ages, limit})]
 	);
-	return 'trained!'; // this is a promise
+
+	child.on('message', mess => {
+		console.log('test test test mess');
+	})
+	return 'train run!'; // this is a promise
 }
 
 app.whenReady().then(() => {
