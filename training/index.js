@@ -1,8 +1,6 @@
 var path = require('path');
 var train = require('./trainer');
 var Logger = require('../services/logger');
-// const {getArgs} = require('../common');
-// var args = getArgs();
 var { schemaNum, batch, ages, limit } = JSON.parse(process.argv[2]); // training settings
 
 var logger = new Logger();
