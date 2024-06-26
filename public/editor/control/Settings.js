@@ -20,6 +20,10 @@ export default class Settings {
 			var label = document.createElement('label');
 			var input = document.createElement('input');
 
+			input.addEventListener('change', () => {
+				param.value = input.value;
+			})
+
 			label.classList.add('settings-label');
 			input.classList.add('settings-input');
 
