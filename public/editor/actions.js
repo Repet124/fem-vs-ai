@@ -1,5 +1,5 @@
 import statusEnum from './control/StatusEnum.js';
-import { schema, info, visualizator } from './init.js';
+import { schema, info, visualizator, settings } from './init.js';
 import cordsPallet from './control/CordsPallet.js';
 import forcePallet from './control/ForcePallet.js';
 import reportPallet from './control/ReportPallet.js';

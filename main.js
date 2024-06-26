@@ -36,6 +36,58 @@ function calcNeyro(e, schema, schemaPath) {
 	);
 }
 
+// 11111111111111111111
+
+function createProject() {
+	var filePath = dialog.showSaveDialogSync({
+		title: 'Создание проекта',
+	});
+
+	(/.*\.json/.test(filePath)) || (filePath += '.json')
+
+	project.buildEmpty();
+	project.filePath = filePath;
+	project.save();
+
+	return project.toFrontend();
+}
+
+function loadProject() {
+	var filePath = dialog.showOpenDialogSync({
+		title: 'Загрузить проект',
+		properties: ['openFile']
+	})[0];
+	if (filePath && /.*\.json/.test(filePath)) {
+		project.load(filePath);
+		return project.toFrontend();
+	}
+	return false;
+}
+
+function saveProject(schema, settings) {
+	project.schema = schema;
+	project.settings = settings;
+	return project.save();
+}
+
+function train() {
+	
+}
+
+function buildDataset() {
+	// body...
+}
+
+function calcFem() {
+	// body...
+}
+
+function calcNeyro() {
+	// body...
+}
+
+// 1111111111111111111111
+
 function loadSchema(e) {
 	var file = dialog.showOpenDialogSync({
 		title: 'Загрузить расчётную схему',
@@ -60,11 +112,11 @@ function saveSchema(e, schema) {
 	return filePath;
 }
 
-function runTrain(e, schemaNum, batch, ages, limit) {
+function runTrain(e, settings) {
 
 	const child = fork(
 		path.join(__dirname, 'training/index.js'),
-		[JSON.stringify({schemaNum, batch, ages, limit})]
+		[JSON.stringify({schemaNum: 1, ...settings})]
 	);
 
 	child.on('message', mess => {

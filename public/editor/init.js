@@ -23,4 +23,5 @@ export {
 	schema,
 	info,
 	visualizator,
+	settings
 }
