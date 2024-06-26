@@ -6,14 +6,14 @@
 }
 
 :root {
-	--main: #31332b;
-	--gray: #4d4f46;
+	--main: 49, 51, 43;
+	--gray: 77, 79, 70;
 	--gray-light: #63665c;
 	--red: #e54c4c;
 }
 
 body {
-	background-color: var(--main);
+	background-color: rgb(var(--main));
 	overflow: hidden;
 }
 
@@ -32,8 +32,8 @@ body {
 	grid-area: canvas;
 	cursor: crosshair;
 	width: 100%;
-	place-self: center;
-	background-color: var(--gray);
+	place-self: start center;
+	background-color: rgb(var(--gray));
 }
 
 #editor-canvas {
@@ -43,6 +43,37 @@ body {
 	z-index: 0;
 }
 
+#settings {
+	position: relative;
+	grid-area: canvas;
+	place-self: start end;
+	margin: 10px;
+	padding: 10px;
+	min-width: 300px;
+	width: 50%;
+	max-height: 50px;
+	z-index: 200;
+	overflow: hidden;
+	transition: .3s;
+	background-color: rgba(var(--main), .5);
+	&>div:nth-child(1) {
+		margin-bottom: 10px;
+	}
+}
+
+.settings-label {
+	display: flex;
+	justify-content: space-between;
+	align-items: start;
+	padding: 5px;
+	&:nth-child(2n) {
+		background-color: rgba(var(--gray), .5);
+	}
+}
+.settings-input {
+	width: 100px;
+}
+
 #pallete {
 	grid-area: pallete;
 	display: flex;
@@ -50,7 +81,7 @@ body {
 	gap: 15px;
 }
 
-#pallete-cords {
+#pallete-cords, #pallete-force {
 	display: none;
 }
 
@@ -180,7 +211,7 @@ label:has(.pallete-field) {
 	padding:  5px;
 	color: #fff;
 	font-size: 16px;
-	background-color: var(--gray);
+	background-color: rgb(var(--gray));
 	border: none;
 	&:hover {
 		background-color: var(--gray-light);

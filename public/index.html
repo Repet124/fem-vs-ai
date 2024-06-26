@@ -18,6 +18,9 @@
 		<div id="editor">
 			<canvas id="visualization-canvas" width="800" height="500"></canvas>
 			<canvas id="editor-canvas" width="800" height="500"></canvas>
+			<div id="settings">
+				<div>Настройки обучения: <button class="btn settings-toggleJS">Развернуть</button></div>
+			</div>
 			<section id="pallete">
 				<div id="pallete-cords" class="pallete"></div>
 				<div id="pallete-force" class="pallete"></div>
@@ -94,6 +97,6 @@
 			</section>
 		</div>
 		<script type="module" src="./editor/index.js"></script>
-		<!-- <script type="module" src="./visualization.js"></script> -->
+		<script src="./editor/additional.js"></script>
 	</body>
 </html>

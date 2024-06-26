@@ -33,7 +33,7 @@ export default class Settings {
 	}
 
 	load(loadingParams) {
-		this.#params.forEach((param => {
+		this.#params.forEach(param => {
 			if (!loadingParams[param.ident]) {
 				throw new Error('Отсутствует параметр ' + param.name);
 			}

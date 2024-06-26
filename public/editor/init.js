@@ -1,4 +1,5 @@
 import Schema from './control/Schema.js';
+import Settings from './control/Settings.js';
 import Info from './control/Info.js';
 import Visualizator from '../visualization.js';
 
@@ -13,6 +14,7 @@ const visualizationCanvas = document.getElementById('visualization-canvas');
 var schema = new Schema(editorCanvas);
 var visualizator = new Visualizator(visualizationCanvas);
 var info = new Info(document.getElementById('info'));
+var settings = new Settings(document.getElementById('settings'));
 
 schema.commit();
 schema.draw();
