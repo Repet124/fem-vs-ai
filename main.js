@@ -61,7 +61,7 @@ function saveProject() {
 function buildDataset() {
 	const child = fork(
 		path.join(__dirname, 'dataset/index.js'),
-		[project.schema.stringify(), project.settings.stringify()]
+		[stringifySchema(project.schema), JSON.stringify(project.settings)]
 	);
 
 	child.on('message', dataset => {
@@ -75,7 +75,7 @@ function buildDataset() {
 function train() {
 	const child = fork(
 		path.join(__dirname, 'training/index.js'),
-		[project.schema.stringify(), project.settings.stringify(), project.dataset.stringify()]
+		[stringifySchema(project.schema), JSON.stringify(project.settings), project.dataset]
 	);
 
 	child.on('message', trainedModel => {
@@ -89,7 +89,7 @@ function train() {
 function calc(type) {
 	const child = fork(
 		path.join(__dirname, 'resolvers/index.js'),
-		[type, project.schema.stringify()]
+		[type, stringifySchema(project.schema)]
 	);
 
 	child.on('message', schema => {

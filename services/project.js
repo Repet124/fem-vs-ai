@@ -9,6 +9,11 @@ module.exports = class Project {
 	#trained;
 	#dataset;
 
+	#schemaProxy = {
+		actual: true,
+		obj: null
+	};
+
 	constructor() {
 		this.buildEmpty();
 	}
@@ -36,13 +41,42 @@ module.exports = class Project {
 		return true;
 	}
 
+	stringify() {
+		return stringifySchema(this.#schema)+'\n'
+			+JSON.stringify(this.#settings)+'\n'
+			+this.#dataset+'\n'
+			+this.#trained;
+	}
+
 	load(filePath) {
 		this.filePath = filePath;
 		return this.parse();
 	}
 
-	save() {}
-	toFrontend() {}
+	save() {
+		if (!this.#filePath) {
+			throw new Error('File path is not exists');
+		}
+		return fs.writeFileSync(filePath, this.stringify());
+	}
+
+	toFrontend() {
+		return {
+			schema: this.#schem.valuea
+		}
+	}
+
+	#buildSchemaProxy() {
+		// same schema, but read only via proxy
+		this.#schemaProxy.obj = Object.fromEntrice(Object.entries(this.#schema).map(([key, val]) => [
+			key,
+			val.map(item => new Proxy(item, {
+				get(target, prop) {
+					return target[prop];
+				}
+			})
+		]));
+	}
 
 	set filePath() {}
 	set schema() {}
@@ -51,7 +85,12 @@ module.exports = class Project {
 	set dataset() {}
 
 	get filePath() {}
-	get schema() {}
+	get schema() {
+		if (!this.#schemaProxy.actual || !this.#schemaProxy.obj) {
+			this.#buildSchemaProxy();
+		}
+		return this.#schemaProxy.obj;
+	}
 	get settings() {}
 	get trained() {}
 	get dataset() {}
