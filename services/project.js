@@ -1,18 +1,11 @@
 var fs = require('fs');
-var { parseSchema, stringifySchema } = require('./common');
+var { parseSchema, stringifySchema } = require('./func');
 
 module.exports = class Project {
 
-	#filePath;
-	#schema;
-	#settings;
-	#trained;
-	#dataset;
-
-	#schemaProxy = {
-		actual: true,
-		obj: null
-	};
+	#filePath = '';
+	#schema = {proxy: null,obj: null};
+	#settings = {proxy: null,obj: null};
 
 	constructor() {
 		this.buildEmpty();
@@ -20,10 +13,12 @@ module.exports = class Project {
 
 	buildEmpty() {
 		this.#filePath = '';
-		this.#schema = null;
-		this.#settings = null;
-		this.#trained = '';
-		this.#dataset = '';
+		this.#schema.obj = null;
+		this.#schema.proxy = null;
+		this.#settings.obj = null;
+		this.#settings.proxy = null;
+		this.trained = '';
+		this.dataset = '';
 	}
 
 	parse() {
@@ -44,31 +39,27 @@ module.exports = class Project {
 	stringify() {
 		return stringifySchema(this.#schema)+'\n'
 			+JSON.stringify(this.#settings)+'\n'
-			+this.#dataset+'\n'
-			+this.#trained;
+			+this.dataset+'\n'
+			+this.trained;
 	}
 
 	load(filePath) {
-		this.filePath = filePath;
+		this.#filePath = filePath;
 		return this.parse();
 	}
 
-	save() {
-		if (!this.#filePath) {
+	save(filePath) {
+		if (filePath) {
+			this.#filePath = filePath
+		} else if (!this.#filePath) {
 			throw new Error('File path is not exists');
 		}
-		return fs.writeFileSync(filePath, this.stringify());
+		return fs.writeFileSync(this.#filePath, this.stringify());
 	}
 
-	toFrontend() {
-		return {
-			schema: this.#schem.valuea
-		}
-	}
-
-	#buildSchemaProxy() {
+	#buildProxy(component) {
 		// same schema, but read only via proxy
-		this.#schemaProxy.obj = Object.fromEntrice(Object.entries(this.#schema).map(([key, val]) => [
+		component.proxy = Object.fromEntrice(Object.entries(component.obj).map(([key, val]) => [
 			key,
 			val.map(item => new Proxy(item, {
 				get(target, prop) {
@@ -76,45 +67,34 @@ module.exports = class Project {
 				}
 			})
 		]));
+		return component.proxy;
 	}
 
-	set filePath() {}
-	set schema() {}
-	set settings() {}
-	set trained() {}
-	set dataset() {}
+	set schema(newSchema) {
+		this.#schema.obj = newSchema;
+		this.#schema.proxy = null;
+	}
 
-	get filePath() {}
+	set settings(newSettings) {
+		this.#settings.obj = newSettings;
+		this.#settings.proxy = null;
+	}
+
+	get filePath() {
+		return this.#filePath;
+	}
 	get schema() {
-		if (!this.#schemaProxy.actual || !this.#schemaProxy.obj) {
-			this.#buildSchemaProxy();
-		}
-		return this.#schemaProxy.obj;
+		return this.#schema.proxy || this.#buildProxy(this.#schema);
 	}
-	get settings() {}
-	get trained() {}
-	get dataset() {}
+	get settings() {
+		return this.#settings.proxy || this.#buildProxy(this.#settings);
+	}
 
+	toFrontend() {
+		return {
+			filePath: this.filePath,
+			schema: this.schema,
+			settings: this.settings
+		}
+	}
 }
-
-// function saveSchema(e, schema) {
-// 	var filePath = dialog.showSaveDialogSync({
-// 		title: 'Сохранение расчётной схемы',
-// 		defaultPath: __dirname + '/schemes/schema.json',
-// 	});
-// 	fs.writeFileSync(filePath, stringifySchema(schema));
-// 	return filePath;
-// }
-
-// function runTrain(e, settings) {
-
-// 	const child = fork(
-// 		path.join(__dirname, 'training/index.js'),
-// 		[JSON.stringify({schemaNum: 1, ...settings})]
-// 	);
-
-// 	child.on('message', mess => {
-// 		console.log('test test test mess');
-// 	})
-// 	return 'train run!'; // this is a promise
-// }

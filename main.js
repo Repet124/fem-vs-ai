@@ -30,8 +30,7 @@ function createProject() {
 	(/.*\.json/.test(filePath)) || (filePath += '.json')
 
 	project.buildEmpty();
-	project.filePath = filePath;
-	project.save();
+	project.save(filePath);
 
 	return project.toFrontend();
 }
