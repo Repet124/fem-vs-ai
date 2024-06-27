@@ -58,20 +58,6 @@ function saveProject() {
 	return project.save();
 }
 
-function train() {
-	const child = fork(
-		path.join(__dirname, 'training/index.js'),
-		[project.schema.stringify(), project.settings.stringify()]
-	);
-
-	child.on('message', trainedModel => {
-		project.trained = trained;
-		saveProject();
-	})
-
-	return 'train run!'; // this is a promise
-}
-
 function buildDataset() {
 	const child = fork(
 		path.join(__dirname, 'dataset/index.js'),
@@ -84,6 +70,20 @@ function buildDataset() {
 	});
 
 	return 'dataset building was run!'; // this is a promise
+}
+
+function train() {
+	const child = fork(
+		path.join(__dirname, 'training/index.js'),
+		[project.schema.stringify(), project.settings.stringify(), project.dataset.stringify()]
+	);
+
+	child.on('message', trainedModel => {
+		project.trained = trained;
+		saveProject();
+	})
+
+	return 'train run!'; // this is a promise
 }
 
 function calc(type) {
