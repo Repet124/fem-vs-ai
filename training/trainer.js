@@ -6,19 +6,9 @@ var { parseSchema } = require('../services/func');
 var logger = new Logger('Train');
 var datasetBuilder = new DatasetBuilder();
 
-function train(schemaFile, datasetFile, modelFile, modelName, batchSize, agesCount, datasetSize) {
+function train(schema, rawDataset, modelName, batchSize, agesCount, datasetSize) {
 
-	var rawDataset = fs.readFileSync(datasetFile);
-	if (!rawDataset) {
-		logger.err('Отсутствуют данные для обучения');
-		return;
-	}
-
-	var dataset = datasetBuilder.parse(
-		rawDataset,
-		parseSchema(fs.readFileSync(schemaFile)),
-		datasetSize,
-	);
+	var dataset = datasetBuilder.parse(rawDataset, schema, datasetSize);
 
 	const config = {
 		iterations: 5,
@@ -56,11 +46,7 @@ function train(schemaFile, datasetFile, modelFile, modelName, batchSize, agesCou
 	logger.success('Обучение завершено');
 	logger.bench('train');
 
-	logger.info('Сохранение модели');
-
-	fs.writeFileSync(modelFile, JSON.stringify(net.toJSON()), 'utf8');
-
-	logger.success('Модель сохранена ' + modelFile);
+	return JSON.stringify(net.toJSON())
 }
 
 

@@ -54,7 +54,7 @@ module.exports = class Project {
 		} else if (!this.#filePath) {
 			throw new Error('File path is not exists');
 		}
-		return fs.writeFileSync(this.#filePath, this.stringify());
+		return fs.writeFileSync(this.#filePath, this.stringify(), 'utf8');
 	}
 
 	#buildProxy(component) {

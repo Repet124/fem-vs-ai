@@ -1,24 +1,30 @@
 var path = require('path');
 var train = require('./trainer');
 var Logger = require('../services/logger');
-var { schemaNum, batch, ages, limit } = JSON.parse(process.argv[2]); // training settings
+var { parseSchema } = require('../services/func');
 
+var schema = parseSchema(process.argv[2]);
+var settings = JSON.parse(process.argv[3]);
+var dataset = JSON.parse(process.argv[4]);
 var logger = new Logger();
 
 try {
-	if (!schemaNum) {
-		throw new Error('Не указан номер расчётной схемы');
+	if (!schema) {
+		throw new Error('Не передана схема');
 	}
+	if (!dataset) {
+		throw new Error('Отсутствуют данные для обучения');
+	}
+
 	logger.success('Запуск команды обучения.');
-	train(
-		path.join(__dirname,`../schemes/${schemaNum}/schema.json`),
-		path.join(__dirname,`../schemes/${schemaNum}/dataset.json`),
-		path.join(__dirname,`../schemes/${schemaNum}/trained.json`),
+	process.send(train(
+		schema,
+		dataset
 		'Модель расчёт ферм',
-		batch,
-		ages,
-		limit
-	);
+		settings.batch,
+		settings.ages,
+		settings.limit
+	));
 } catch (err) {
 	logger.err(err.message);
 	throw err;

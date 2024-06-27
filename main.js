@@ -5,10 +5,12 @@ const { fork } = require('node:child_process');
 const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const { stringifySchema } = require('./services/func');
 const Project = require('./services/project');
+const Logger = require('../services/logger');
 
 dotenv.config()
 
 var project = new Project();
+var logger = new Logger('Main');
 
 const createWindow = () => {
 	const win = new BrowserWindow({
@@ -82,7 +84,9 @@ function train() {
 	return new Promise(resolve => {
 		child.on('message', trainedModel => {
 			project.trained = trained;
+			logger.success('Модель записана');
 			saveProject();
+			logger.success('Проект сохранён');
 			resolve();
 		});
 	});
