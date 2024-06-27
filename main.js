@@ -64,14 +64,28 @@ function loadProject() {
 	return false;
 }
 
-function saveProject(schema, settings) {
+function syncProject(schema, settings) {
 	project.schema = schema;
 	project.settings = settings;
+	return true;
+}
+
+function saveProject() {
 	return project.save();
 }
 
 function train() {
-	
+	const child = fork(
+		path.join(__dirname, 'training/index.js'),
+		[project.schema.stringify(), project.settings.stringify()]
+	);
+
+	child.on('message', trainedModel => {
+		project.trained = trained;
+		saveProject();
+	})
+
+	return 'train run!'; // this is a promise
 }
 
 function buildDataset() {
