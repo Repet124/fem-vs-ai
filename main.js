@@ -69,7 +69,9 @@ function buildDataset() {
 	return new Promise((resolve) => {
 		child.on('message', dataset => {
 			project.dataset = dataset;
+			logger.success('Датасет записан');
 			saveProject();
+			logger.success('Проект сохранён');
 			resolve();
 		});
 	})

@@ -32,21 +32,18 @@ module.exports = class DatasetBuilder {
 		this.logger.bench('data');
 	}
 
-	save(fileName='./dataset.json') {
+	stringify() {
 		if (!this.dataset) {
 			this.logger.err('Сохранение невозможно- датасет не сформирован');
 			return;
 		}
 
-		var dataset = JSON.stringify(
+		return JSON.stringify(
 			this.dataset.map(schema => ({
 				tensors: schema.bars.map(bar => bar[3]),
 				settedForces: schema.forces.map((f,i) => [i, f]).filter(item => item[1][0] || item[1][1]),
 			}))
 		);
-
-		fs.writeFileSync(path.join(__dirname,fileName), dataset, 'utf8');
-		this.logger.success('Датасет сохранён в ' + fileName);
 	}
 
 	parse(rawDataset, schema, size) {

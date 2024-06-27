@@ -1,12 +1,10 @@
 const fs = require('fs');
 const path = require('path');
-const { parseSchema } = require('../services/func');
 
 module.exports = class SchemesBuilder {
 
-	constructor(schemaNum, forceMax=20, maxPercentTranslations=20) {
-		let schemaJson = fs.readFileSync(path.join(__dirname,`../schemes/${schemaNum}/schema.json`));
-		this.template = parseSchema(schemaJson);
+	constructor(schema, forceMax=20, maxPercentTranslations=20) {
+		this.template = schema;
 		this.forceMax = 40;
 		this.maxDistanceChange = 1;
 	}

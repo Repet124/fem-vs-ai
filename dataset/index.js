@@ -1,19 +1,20 @@
 var DatasetBuilder = require('./datasetBuilder');
 var SchemesBuilder = require('./schemesBuilder');
 var Logger = require('../services/logger');
+var { parseSchema } = require('../services/func');
 
-const {getArgs} = require('../common');
-var args = getArgs();
+var schema = parseSchema(process.argv[2]);
+var settings = JSON.parse(process.argv[3]);
 
 var logger = new Logger();
 
-var countDatasets = args.count || 100;
-
 try {
 	var builder = new DatasetBuilder();
+
 	logger.success('Запуск команды формирования датасетов');
-	builder.buildDataset(new SchemesBuilder(args.num), countDatasets);
-	builder.save(`../schemes/${args.num}/dataset.json`);
+
+	builder.buildDataset(new SchemesBuilder(schema), settings.datasetLength || 100);
+	process.send(builder.stringify());
 } catch (err) {
 	logger.err(err.message);
 	throw err;
