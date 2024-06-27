@@ -1,9 +1,11 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('api', {
-	fem: (schema) => ipcRenderer.invoke('fem', schema),
-	neyro: (schema, schemaPath) => ipcRenderer.invoke('neyro', schema, schemaPath),
-	train: (schemaNum, batch, ages, limit) => ipcRenderer.invoke('train', schemaNum, batch, ages, limit),
-	load: (schema) => ipcRenderer.invoke('load', schema),
-	save: (schema) => ipcRenderer.invoke('save', schema),
+	create: () => ipcRenderer.invoke('create'),
+	load: () => ipcRenderer.invoke('load'),
+	sync: (schema, settings) => ipcRenderer.invoke('sync', schema, settings),
+	save: () => ipcRenderer.invoke('save'),
+	dataset: () => ipcRenderer.invoke('dataset', ),
+	train: () => ipcRenderer.invoke('train', ),
+	calc: (type) => ipcRenderer.invoke('calc', type),
 });
