@@ -2,7 +2,7 @@ var brain = require('../services/brain.js')
 var fs = require('fs');
 var Logger = require('../services/logger');
 var DatasetBuilder = require('../dataset/datasetBuilder');
-var { parseSchema } = require('../common');
+var { parseSchema } = require('../services/func');
 var logger = new Logger('Train');
 var datasetBuilder = new DatasetBuilder();
 

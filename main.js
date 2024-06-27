@@ -3,6 +3,7 @@ const fs = require('fs');
 const dotenv = require('dotenv');
 const { fork } = require('node:child_process');
 const { app, BrowserWindow, ipcMain, dialog } = require('electron')
+const { stringifySchema } = require('./services/func');
 const Project = require('./services/project');
 
 dotenv.config()
@@ -63,12 +64,13 @@ function buildDataset() {
 		[stringifySchema(project.schema), JSON.stringify(project.settings)]
 	);
 
-	child.on('message', dataset => {
-		project.dataset = dataset;
-		saveProject();
-	});
-
-	return 'dataset building was run!'; // this is a promise
+	return new Promise((resolve) => {
+		child.on('message', dataset => {
+			project.dataset = dataset;
+			saveProject();
+			resolve();
+		});
+	})
 }
 
 function train() {
@@ -77,12 +79,13 @@ function train() {
 		[stringifySchema(project.schema), JSON.stringify(project.settings), project.dataset]
 	);
 
-	child.on('message', trainedModel => {
-		project.trained = trained;
-		saveProject();
-	})
-
-	return 'train run!'; // this is a promise
+	return new Promise(resolve => {
+		child.on('message', trainedModel => {
+			project.trained = trained;
+			saveProject();
+			resolve();
+		});
+	});
 }
 
 function calc(type) {
@@ -91,11 +94,11 @@ function calc(type) {
 		[type, stringifySchema(project.schema)]
 	);
 
-	child.on('message', schema => {
-		// schema to frontend
+	return new Promise(resolve => {
+		child.on('message', schema => {
+			resolve(schema);
+		});
 	});
-
-	return 'calculating with ' + type + ' method was run!'; // this is a promise
 }
 
 app.whenReady().then(() => {

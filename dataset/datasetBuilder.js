@@ -3,7 +3,7 @@ var path = require('path');
 var Logger = require('../services/logger');
 var SchemesBuilder = require('./schemesBuilder');
 var {calc} = require('../resolvers/fem');
-var { stringifySchema } = require('../common');
+var { stringifySchema } = require('../services/func');
 var InputBuilder = require('./rankOneInputBuilder');
 var OutputBuilder = require('./rankOneOutputBuilder');
 

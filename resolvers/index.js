@@ -1,4 +1,4 @@
-var { parseSchema } = require('../common');
+var { parseSchema } = require('../services/func');
 var resolvers = {
 	fem: require('./fem'),
 	neyro: require('./neyro')

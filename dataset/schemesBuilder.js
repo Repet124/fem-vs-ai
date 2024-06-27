@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { parseSchema } = require('../common');
+const { parseSchema } = require('../services/func');
 
 module.exports = class SchemesBuilder {
 
