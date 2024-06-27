@@ -89,7 +89,17 @@ function train() {
 }
 
 function buildDataset() {
-	// body...
+	const child = fork(
+		path.join(__dirname, 'dataset/index.js'),
+		[project.schema.stringify(), project.settings.stringify()]
+	);
+
+	child.on('message', dataset => {
+		project.dataset = dataset;
+		saveProject();
+	});
+
+	return 'dataset building was run!'; // this is a promise
 }
 
 function calcFem() {
