@@ -82,6 +82,9 @@ function buildDataset() {
 }
 
 function train() {
+	if (!project.dataset) {
+		return 'Dataset is not exisit';
+	}
 	const child = fork(
 		path.join(__dirname, 'training/index.js'),
 		[stringifySchema(project.schema), JSON.stringify(project.settings), project.dataset]

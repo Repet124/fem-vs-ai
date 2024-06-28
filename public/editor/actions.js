@@ -12,6 +12,8 @@ function show(canvasOwner) {
 	}
 }
 
+// READACTOR ACTIONS
+
 function offActions(afterSelect=true) {
 	cordsPallet.off();
 	schema.unselect();
@@ -204,22 +206,12 @@ function toggleSupport() {
 	schema.draw();
 }
 
-function uploadHandler(project) {
-	schema.load(project.schema);
-	select();
+function clear() {
+	schema.clear();
+	schema.draw();
 }
 
-function calcHandler(schema) {
-	reportPallet.fem = schema;
-	show(visualizator);
-	visualizator.show(schema);
-}
-
-function syncProject() {
-	return window.api.sync(schema.upload(), settings.upload())
-}
-
-// =======================
+// BACKEND ACTIONS
 
 function createProject() {
 	window.api.create().then(uploadHandler);
@@ -233,7 +225,7 @@ function save() {
 	syncProject()
 		.then(() => window.api.save())
 		.then(response => console.log(response
-			? 'Схема успешно сохранена'
+			? 'Проект успешно сохранен'
 			: 'Ошибка при сохранении')
 		);
 }
@@ -254,15 +246,26 @@ function calcNeyro() {
 		.then(calcHandler);
 }
 
-function clear() {
-	schema.clear();
-	schema.draw();
+function train() {
+	console.log('Train start');
+	window.api.train().then(console.log);
 }
 
-function train() {
-	window.api.train(1,100,3,undefined).then(test => {
-		console.log(test)
-	})
+// ADDITIONAL FOR BACKAND ACTIONS
+
+function uploadHandler(project) {
+	schema.load(project.schema);
+	select();
+}
+
+function calcHandler(schema) {
+	reportPallet.fem = schema;
+	show(visualizator);
+	visualizator.show(schema);
+}
+
+function syncProject() {
+	return window.api.sync(schema.upload(), settings.upload())
 }
 
 export default {
@@ -274,11 +277,13 @@ export default {
 	select,
 	divide: divideSelectedBars,
 	toggleSupport,
-	calcFem,
-	calcNeyro,
-	load,
-	save,
 	clear,
 	off: offActions,
+
+	createProject,
+	loadProject,
+	save,
+	calcFem,
+	calcNeyro,
 	train,
 }
