@@ -4,6 +4,7 @@ var { parseSchema, stringifySchema } = require('./func');
 module.exports = class Project {
 
 	#filePath = '';
+	#emptySchema = {nodes:[],bars:[],forces:[]};
 	#schema = {proxy: null,obj: null};
 	#settings = {proxy: null,obj: null};
 
@@ -37,8 +38,8 @@ module.exports = class Project {
 	}
 
 	stringify() {
-		return stringifySchema(this.#schema)+'\n'
-			+JSON.stringify(this.#settings)+'\n'
+		return stringifySchema(this.#schema.obj)+'\n'
+			+JSON.stringify(this.#settings.obj)+'\n'
 			+this.dataset+'\n'
 			+this.trained;
 	}
@@ -59,32 +60,46 @@ module.exports = class Project {
 
 	#buildProxy(component) {
 		// same schema, but read only via proxy
-		component.proxy = Object.fromEntrice(Object.entries(component.obj).map(([key, val]) => [
-			key,
-			val.map(item => new Proxy(item, {
-				get(target, prop) {
-					return target[prop];
-				}
-			})
-		]));
+		if (!component.obj) {
+			return this.#emptySchema;
+		}
+
+		console.log(component.obj)
+		component.proxy = Object.fromEntries(
+			Object.entries(component.obj).map(([key, val]) => [
+				key,
+				val.map(item =>
+					new Proxy(item, {
+						get(target, prop) {
+							return target[prop];
+						}
+					})
+				)
+			]
+		));
 		return component.proxy;
 	}
 
 	set schema(newSchema) {
-		var nodesIsEqual = this.#schema.obj.nodes.even((item,i) => 
-			// equal cords
-			item[0] === newSchema.nodes[i][0] && item[1] === newSchema.nodes[i][1]
-			// equal supports
-			&& ((item[2] !== 0 && newSchema.nodes[i][2] !== 0) || item[2] === newSchema.nodes[i][2])
-			&& ((item[3] !== 0 && newSchema.nodes[i][3] !== 0) || item[3] === newSchema.nodes[i][3])
-		);
+		var nodesIsEqual, barsIsEqual = false;
 
-		var barsIsEqual = this.#schema.obj.bars.even((item,i) => item[0] === newSchema.bars[i][0] && item[1] === newSchema.bars[i][1]);
+		if (newSchema && this.#schema.obj) {
+			nodesIsEqual = this.#schema.obj.nodes.every((item,i) => 
+				// equal cords
+				item[0] === newSchema.nodes[i][0] && item[1] === newSchema.nodes[i][1]
+				// equal supports
+				&& ((item[2] !== 0 && newSchema.nodes[i][2] !== 0) || item[2] === newSchema.nodes[i][2])
+				&& ((item[3] !== 0 && newSchema.nodes[i][3] !== 0) || item[3] === newSchema.nodes[i][3])
+			);
+
+			barsIsEqual = this.#schema.obj.bars.every((item,i) => item[0] === newSchema.bars[i][0] && item[1] === newSchema.bars[i][1]);
+		}
 
 		if (!nodesIsEqual || !barsIsEqual) {
 			this.dataset = '';
 			this.trained = '';
 		}
+
 		this.#schema.obj = newSchema;
 		this.#schema.proxy = null;
 	}

@@ -5,7 +5,7 @@ const { fork } = require('node:child_process');
 const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const { stringifySchema } = require('./services/func');
 const Project = require('./services/project');
-const Logger = require('../services/logger');
+const Logger = require('./services/logger');
 
 dotenv.config()
 
@@ -50,7 +50,7 @@ function loadProject() {
 	return false;
 }
 
-function syncProject(schema, settings) {
+function syncProject(e, schema, settings) {
 	project.schema = schema;
 	project.settings = settings;
 	return true;
@@ -101,7 +101,7 @@ function train() {
 	});
 }
 
-function calc(type) {
+function calc(e, type) {
 	const child = fork(
 		path.join(__dirname, 'resolvers/index.js'),
 		[type, stringifySchema(project.schema)]

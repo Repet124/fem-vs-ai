@@ -221,7 +221,7 @@ function loadProject() {
 	window.api.load().then(uploadHandler);
 }
 
-function save() {
+function saveProject() {
 	syncProject()
 		.then(() => window.api.save())
 		.then(response => console.log(response
@@ -282,7 +282,7 @@ export default {
 
 	createProject,
 	loadProject,
-	save,
+	saveProject,
 	calcFem,
 	calcNeyro,
 	train,

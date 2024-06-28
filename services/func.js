@@ -34,6 +34,9 @@ module.exports.parseSchema = function(schemaJson) {
 }
 
 module.exports.stringifySchema = function(schemaObj) {
+	if (!schemaObj) {
+		return null;
+	}
 	var preparedSchema = {};
 	for(let key in schemaObj) {
 		preparedSchema[key] = schemaObj[key].map(entity => entity.map(item => item === undefined ? 'undefined' : item));
