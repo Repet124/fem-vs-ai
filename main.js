@@ -56,6 +56,10 @@ function syncProject(schema, settings) {
 	return true;
 }
 
+function uploadProject() {
+	return project.toFrontend();
+}
+
 function saveProject() {
 	return project.save();
 }
@@ -112,6 +116,7 @@ app.whenReady().then(() => {
 	ipcMain.handle('create', createProject);
 	ipcMain.handle('load', loadProject);
 	ipcMain.handle('sync', syncProject);
+	ipcMain.handle('upload', uploadProject);
 	ipcMain.handle('save', saveProject);
 	ipcMain.handle('dataset', buildDataset);
 	ipcMain.handle('train', train);
