@@ -71,6 +71,20 @@ module.exports = class Project {
 	}
 
 	set schema(newSchema) {
+		var nodesIsEqual = this.#schema.obj.nodes.even((item,i) => 
+			// equal cords
+			item[0] === newSchema.nodes[i][0] && item[1] === newSchema.nodes[i][1]
+			// equal supports
+			&& ((item[2] !== 0 && newSchema.nodes[i][2] !== 0) || item[2] === newSchema.nodes[i][2])
+			&& ((item[3] !== 0 && newSchema.nodes[i][3] !== 0) || item[3] === newSchema.nodes[i][3])
+		);
+
+		var barsIsEqual = this.#schema.obj.bars.even((item,i) => item[0] === newSchema.bars[i][0] && item[1] === newSchema.bars[i][1]);
+
+		if (!nodesIsEqual || !barsIsEqual) {
+			this.dataset = '';
+			this.trained = '';
+		}
 		this.#schema.obj = newSchema;
 		this.#schema.proxy = null;
 	}

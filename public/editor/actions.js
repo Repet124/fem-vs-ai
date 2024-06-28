@@ -204,44 +204,58 @@ function toggleSupport() {
 	schema.draw();
 }
 
-function calcFem() {
-	window.api.fem(schema.upload()).then(schema => {
-		reportPallet.fem = schema;
-		show(visualizator);
-		visualizator.show(schema);
-	});
+function uploadHandler(project) {
+	schema.load(project.schema);
+	select();
 }
 
-function calcNeyro() {
-	if (!schema.saved) {
-		info.err('Схема должна быть сохранена');
-		return;
-	}
-	window.api.neyro(schema.upload(), schema.saved).then(schema => {
-		reportPallet.ai = schema;
-		show(visualizator);
-		visualizator.show(schema);
-	});
+function calcHandler(schema) {
+	reportPallet.fem = schema;
+	show(visualizator);
+	visualizator.show(schema);
 }
 
-function load() {
-	window.api.load().then(responce => {
-		if (!responce.schema) {return;}
-		schema.load(responce.schema);
-		schema.saved = responce.path;
-		select();
-	});
+function syncProject() {
+	return window.api.sync(schema.upload(), settings.upload())
+}
+
+// =======================
+
+function createProject() {
+	window.api.create().then(uploadHandler);
+}
+
+function loadProject() {
+	window.api.load().then(uploadHandler);
 }
 
 function save() {
-	window.api.save(schema.upload()).then(filePath => {
-		schema.saved = filePath;
-	});
+	syncProject()
+		.then(() => window.api.save())
+		.then(response => console.log(response
+			? 'Схема успешно сохранена'
+			: 'Ошибка при сохранении')
+		);
+}
+
+function calcFem() {
+	syncProject()
+		.then(() => window.api.calc('fem'))
+		.then(calcHandler);
+}
+
+function calcNeyro() {
+	window.api.upload()
+		.then(project => {
+			settings.load(project.settings);
+			return syncProject();
+		})
+		.then(() => window.api.calc('neyro'))
+		.then(calcHandler);
 }
 
 function clear() {
 	schema.clear();
-	schema.saved = false;
 	schema.draw();
 }
 

@@ -35,7 +35,6 @@ export default class Schema {
 
 		this.pointSize = 9;
 		this.forceSize = 70;
-		this.saved = false;
 
 		setInterval(() => {
 			if (this.drawing) {
