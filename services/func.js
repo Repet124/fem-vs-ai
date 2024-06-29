@@ -43,3 +43,40 @@ module.exports.stringifySchema = function(schemaObj) {
 	}
 	return JSON.stringify(preparedSchema);
 }
+
+// Если изменились что либо, КРОМЕ сил, то возвращает false, иначе true
+module.exports.isChangedCalcSchema = function(sh1, sh2) {
+	// one from schemes is null
+	if (!sh1 !== !sh2) {
+		return false;
+	}
+	// different count of nodes or bars
+	if (sh1.nodes.length !== sh2.nodes.length || sh1.bars.length !== sh2.nodes.length) {
+		return false;
+	}
+
+	var nodesAreEqual = sh2.nodes.every((item,i) => 
+		// equal cords
+		item[0] === sh1.nodes[i][0] && item[1] === sh1.nodes[i][1]
+		// equal supports
+		&& ((item[2] !== 0 && sh1.nodes[i][2] !== 0) || item[2] === sh1.nodes[i][2])
+		&& ((item[3] !== 0 && sh1.nodes[i][3] !== 0) || item[3] === sh1.nodes[i][3])
+	);
+
+	var barsAreEqual = sh2.bars.every((item,i) => item[0] === sh1.bars[i][0] && item[1] === sh1.bars[i][1]);
+
+	return nodesAreEqual && barsAreEqual;
+}
+
+function deepFreeze(object) {
+
+	Object.entries(object).forEach(([_, prop]) => {
+		if (prop && (typeof prop === "object" || typeof prop === "function")) {
+			deepFreeze(prop);
+		}
+	});
+
+	return Object.freeze(object);
+}
+
+module.exports.deepFreeze = deepFreeze;

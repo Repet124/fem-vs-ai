@@ -1,12 +1,12 @@
 var fs = require('fs');
-var { parseSchema, stringifySchema } = require('./func');
+var { parseSchema, stringifySchema, deepFreeze, isChangedCalcSchema } = require('./func');
 
 module.exports = class Project {
 
 	#filePath = '';
-	#emptySchema = {nodes:[],bars:[],forces:[]};
-	#schema = {proxy: null,obj: null};
-	#settings = {proxy: null,obj: null};
+	#emptySchema = deepFreeze({nodes:[],bars:[],forces:[]});
+	#schema = null;
+	#settings = null;
 
 	constructor() {
 		this.buildEmpty();
@@ -14,10 +14,8 @@ module.exports = class Project {
 
 	buildEmpty() {
 		this.#filePath = '';
-		this.#schema.obj = null;
-		this.#schema.proxy = null;
-		this.#settings.obj = null;
-		this.#settings.proxy = null;
+		this.#schema = this.#emptySchema;
+		this.#settings = null;
 		this.trained = '';
 		this.dataset = '';
 	}
@@ -38,8 +36,8 @@ module.exports = class Project {
 	}
 
 	stringify() {
-		return stringifySchema(this.#schema.obj)+'\n'
-			+JSON.stringify(this.#settings.obj)+'\n'
+		return stringifySchema(this.schema)+'\n'
+			+JSON.stringify(this.settings)+'\n'
 			+this.dataset+'\n'
 			+this.trained;
 	}
@@ -55,68 +53,30 @@ module.exports = class Project {
 		} else if (!this.#filePath) {
 			throw new Error('File path is not exists');
 		}
-		return fs.writeFileSync(this.#filePath, this.stringify(), 'utf8');
-	}
-
-	#buildProxy(component) {
-		// same schema, but read only via proxy
-		if (!component.obj) {
-			return this.#emptySchema;
-		}
-
-		console.log(component.obj)
-		component.proxy = Object.fromEntries(
-			Object.entries(component.obj).map(([key, val]) => [
-				key,
-				val.map(item =>
-					new Proxy(item, {
-						get(target, prop) {
-							return target[prop];
-						}
-					})
-				)
-			]
-		));
-		return component.proxy;
+		fs.writeFileSync(this.#filePath, this.stringify(), 'utf8');
+		return true;
 	}
 
 	set schema(newSchema) {
-		var nodesIsEqual, barsIsEqual = false;
-
-		if (newSchema && this.#schema.obj) {
-			nodesIsEqual = this.#schema.obj.nodes.every((item,i) => 
-				// equal cords
-				item[0] === newSchema.nodes[i][0] && item[1] === newSchema.nodes[i][1]
-				// equal supports
-				&& ((item[2] !== 0 && newSchema.nodes[i][2] !== 0) || item[2] === newSchema.nodes[i][2])
-				&& ((item[3] !== 0 && newSchema.nodes[i][3] !== 0) || item[3] === newSchema.nodes[i][3])
-			);
-
-			barsIsEqual = this.#schema.obj.bars.every((item,i) => item[0] === newSchema.bars[i][0] && item[1] === newSchema.bars[i][1]);
-		}
-
-		if (!nodesIsEqual || !barsIsEqual) {
+		if (isChangedCalcSchema(newSchema, this.schema)) {
 			this.dataset = '';
 			this.trained = '';
 		}
-
-		this.#schema.obj = newSchema;
-		this.#schema.proxy = null;
+		this.#schema = newSchema ? deepFreeze(newSchema) : this.#emptySchema;
 	}
 
 	set settings(newSettings) {
-		this.#settings.obj = newSettings;
-		this.#settings.proxy = null;
+		this.#settings = newSettings ? deepFreeze(newSettings) : null;
 	}
 
 	get filePath() {
 		return this.#filePath;
 	}
 	get schema() {
-		return this.#schema.proxy || this.#buildProxy(this.#schema);
+		return this.#schema;
 	}
 	get settings() {
-		return this.#settings.proxy || this.#buildProxy(this.#settings);
+		return this.#settings;
 	}
 
 	toFrontend() {
