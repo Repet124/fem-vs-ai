@@ -1,4 +1,4 @@
-import { getScale, drawLine } from './common.js'
+import { getScale, drawLine, getMaxMinFromNodes } from './common.js'
 
 function drawSchema(ctx, bars, nodes, opacity, color) {
 	color = color || '#fff';
@@ -19,7 +19,7 @@ function drawSchemaWithTensors(ctx, bars, nodes, scale) {
 			nodes[bar[1]],
 			getTensorColor(bar[3]*scale/(bar[3]>0 ? max : min)),
 			1,
-			80*scale
+			10*scale
 		)
 	});
 
@@ -119,15 +119,27 @@ function getTensorColor(pow) {
 	return '#'+colors.reduce((res,chanel) => res+numToChanel(chanel),'');
 }
 
+function schemaNodesNormalize(schema) {
+	// var min = Math.min(minX, minY);
+
+	schema.nodes.forEach(node => {
+		node[0] = (node[0]-minX)/max;
+		node[1] = (node[1]-minY)/max;
+	});
+}
+
+function schemaNodesScale(width, height, schema) {
+	// body...
+}
+
 export default function init(canvas) {
 	const ctx = canvas.getContext('2d');
 	const offset = 50;
-	const vertCoff = 1;
 
 	// offset for last schema - DIRT!
-	ctx.clear = () => {ctx.clearRect(-offset/this.scale,(-300-offset)/this.scale*vertCoff, canvas.width/this.scale, canvas.height/this.scale)};
+	ctx.clear = () => {ctx.clearRect(0,0,canvas.width,canvas.height)};
 	ctx.lineCap = 'round';
-	ctx.translate(offset, (canvas.height-offset*vertCoff)-300);
+	ctx.translate(offset, canvas.height-offset);
 
 	this.getCanvas = function() {
 		return canvas;
@@ -135,8 +147,24 @@ export default function init(canvas) {
 
 	this.show = function(schema) {
 		ctx.save();
-		this.scale = getScale(canvas.width, canvas.height, schema.nodes, offset);
-		ctx.scale(this.scale, -this.scale);
+
+		var {minX,maxX,minY,maxY} = getMaxMinFromNodes(schema.nodes);
+		console.log(
+			canvas.width / (maxX - minX),
+			canvas.height / (maxY - minY)
+		)
+		this.scale = Math.max(
+			canvas.width / (maxX - minX),
+			canvas.height / (maxY - minY)
+		);
+		schema.nodes.forEach(node => {
+			node[0] = (node[0]-minX)*this.scale;
+			node[1] = (node[1]-minY)*this.scale;
+		});
+
+		// this.scale = getScale(canvas.width, canvas.height, schema.nodes, offset);
+		this.scalse = 1;
+		ctx.scale(1, -1);
 		animate(scale => drawCalcsSchema(ctx, schema, scale), ctx, .03, () => {
 			ctx.restore();
 		});
