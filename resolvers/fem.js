@@ -3,7 +3,7 @@ var Logger = require('../services/logger');
 var outputBuilder = require('../dataset/rankOneOutputBuilder')
 var logger = new Logger('Fem');
 
-module.exports.calc = (schema) => {
+module.exports = function(schema) {
 	logger.info('Старт расчёта МКЭ');
 	logger.bench('fem');
 	// console.log(schema)
