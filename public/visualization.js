@@ -33,12 +33,7 @@ function drawSchemaWithTensors(ctx, bars, nodes, scale) {
 		}
 		ctx.translate(offsetX, offsetY);
 		ctx.rotate(rotation);
-		drawText(
-			bar[3].toFixed(2),
-			ctx,
-			-400, // offset to start point parallel bar
-			(bar[3] < -30 && barLength < 1.2) ? 150 : 50 // the MAGIC
-		)
+		drawText(bar[3].toFixed(2), ctx, 0, 15);
 		ctx.rotate(-rotation);
 		ctx.translate(-offsetX, -offsetY);
 	});
@@ -147,20 +142,20 @@ export default function init(canvas) {
 
 	this.show = function(schema) {
 		ctx.save();
-		// console.log(schema)
 		var {minX,maxX,minY,maxY} = getMaxMinFromNodes(schema.nodes);
-		console.log(this.offset)
-		this.scale = Math.min(
+		var scale = Math.min(
 			(canvas.width - this.offset*2) / (maxX - minX),
 			(canvas.height - this.offset*2) / (maxY - minY)
 		);
+		this.centerTranslation = {
+			x: canvas.width/2-this.offset-(maxX-minX)*scale/2,
+			y: canvas.height/2-this.offset-(maxY-minY)*scale/2,
+		}
 		schema.nodes.forEach(node => {
-			node[0] = (node[0]-minX)*this.scale;
-			node[1] = (node[1]-minY)*this.scale;
+			node[0] = (node[0]-minX)*scale+this.centerTranslation.x;
+			node[1] = (node[1]-minY)*scale+this.centerTranslation.y;
 		});
 
-		// this.scale = getScale(canvas.width, canvas.height, schema.nodes, offset);
-		this.scalse = 1;
 		ctx.scale(1, -1);
 		animate(scale => drawCalcsSchema(ctx, schema, scale), ctx, .03, () => {
 			ctx.restore();
