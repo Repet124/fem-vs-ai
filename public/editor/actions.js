@@ -234,10 +234,13 @@ function loadProject() {
 
 function saveProject() {
 	syncProject()
-		.then(() => window.api.save())
-		.then(response => console.log(response
-			? 'Проект успешно сохранен'
-			: 'Ошибка при сохранении')
+		.then(() => {
+			info.info('Сохранение проекта...');
+			return window.api.save();
+		})
+		.then(response => response
+			? info.success('Проект успешно сохранен')
+			: info.err('Ошибка при сохранении')
 		);
 }
 
@@ -258,14 +261,15 @@ function calcNeyro() {
 }
 
 function train() {
-	console.log('Train start');
-	window.api.train().then(console.log);
+	window.api.train().then(response => info.info(response));
+	info.info('Начат процесс обучения')
 }
 
 // ADDITIONAL FOR BACKAND ACTIONS
 
 function uploadHandler(project) {
 	schema.load(project.schema);
+	info.info('Загружен проект ' + project.filePath)
 	select();
 }
 

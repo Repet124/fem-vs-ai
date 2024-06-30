@@ -1,16 +1,27 @@
 export default class Info {
+	#timeout = 0;
+
 	constructor(container) {
 		this.container = container;
-		this.messageContainer = container.querySelector('.info-messageJS');
 		this.commandContainer = container.querySelector('.info-commandJS');
+		this.messageContainer = container.querySelector('.info-messageJS');
+		this.defaultMessageClassName = this.messageContainer.className;
 	}
 
-	#message(text) {
+	#message(text, className) {
+		if (this.#timeout) {
+			clearTimeout(this.#timeout)
+			this.clear();
+			this.#timeout = 0;
+		}
+		this.messageContainer.classList.add(className);
 		this.messageContainer.innerText = text;
-		setTimeout(() => {
-			this.messageContainer.className = '';
-			this.messageContainer.innerText = '';
-		}, 2000);
+		this.#timeout = setTimeout(() => {this.clear()}, 2000);
+	}
+
+	clear() {
+		this.messageContainer.className = this.defaultMessageClassName;
+		this.messageContainer.innerText = '';
 	}
 
 	setCommand(commandName) {
@@ -18,12 +29,14 @@ export default class Info {
 	}
 
 	err(message) {
-		this.messageContainer.classList.add('err');
-		this.#message(message);
+		this.#message(message, 'err');
 	}
 
 	info(message) {
-		this.messageContainer.classList.add('info');
-		this.#message(message);
+		this.#message(message, 'info');
+	}
+
+	success(message) {
+		this.#message(message, 'success');
 	}
 }
