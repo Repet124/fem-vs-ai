@@ -4,7 +4,7 @@ function drawSchema(ctx, bars, nodes, opacity, color) {
 	color = color || '#fff';
 	opacity = opacity || 1;
 	bars.forEach(bar => 
-		drawLine(ctx, nodes[bar[0]], nodes[bar[1]], color, opacity)
+		drawLine(ctx, nodes[bar[0]], nodes[bar[1]], color, opacity,0)
 	);
 }
 
