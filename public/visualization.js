@@ -114,50 +114,49 @@ function getTensorColor(pow) {
 	return '#'+colors.reduce((res,chanel) => res+numToChanel(chanel),'');
 }
 
-function schemaNodesNormalize(schema) {
-	// var min = Math.min(minX, minY);
-
-	schema.nodes.forEach(node => {
-		node[0] = (node[0]-minX)/max;
-		node[1] = (node[1]-minY)/max;
-	});
-}
-
-function schemaNodesScale(width, height, schema) {
-	// body...
-}
-
 export default function init(canvas) {
 	const ctx = canvas.getContext('2d');
-	this.offset = 50;
+	const offset = 50;
 
 	// offset for last schema - DIRT!
-	ctx.clear = () => {ctx.clearRect(-this.offset,-this.offset,canvas.width,canvas.height)};
+	ctx.clear = () => {ctx.clearRect(-offset,-offset,canvas.width,canvas.height)};
 	ctx.lineCap = 'round';
-	ctx.translate(this.offset, canvas.height-this.offset);
+	ctx.translate(offset, canvas.height-offset);
 
 	this.getCanvas = function() {
 		return canvas;
 	}
 
-	this.show = function(schema) {
-		ctx.save();
-		var {minX,maxX,minY,maxY} = getMaxMinFromNodes(schema.nodes);
+	this.buildSchemaPosition = function() {
+		var schemaLength = (this.schema.maxX - this.schema.minX);
+		var schemaHeight = (this.schema.maxY - this.schema.minY);
 		var scale = Math.min(
-			(canvas.width - this.offset*2) / (maxX - minX),
-			(canvas.height - this.offset*2) / (maxY - minY)
+			(canvas.width - offset*2) / schemaLength,
+			(canvas.height - offset*2) / schemaHeight
 		);
-		this.centerTranslation = {
-			x: canvas.width/2-this.offset-(maxX-minX)*scale/2,
-			y: canvas.height/2-this.offset-(maxY-minY)*scale/2,
+		var centerTranslation = {
+			x: canvas.width/2-offset-schemaLength*scale/2,
+			y: canvas.height/2-offset-schemaHeight*scale/2,
 		}
-		schema.nodes.forEach(node => {
-			node[0] = (node[0]-minX)*scale+this.centerTranslation.x;
-			node[1] = (node[1]-minY)*scale+this.centerTranslation.y;
-		});
+		this.schema.nodes = this.baseSchema.nodes.map(node => [
+			(node[0]-this.schema.minX)*scale+centerTranslation.x,
+			(node[1]-this.schema.minY)*scale+centerTranslation.y,
+			node[2],
+			node[3]
+		]);
+	}
 
+	this.show = function(schema) {
+		this.baseSchema = schema;
+		this.schema = {
+			nodes: null,
+			bars: schema.bars,
+			...getMaxMinFromNodes(schema.nodes)
+		};
+		ctx.save();
+		this.buildSchemaPosition();
 		ctx.scale(1, -1);
-		animate(scale => drawCalcsSchema(ctx, schema, scale), ctx, .03, () => {
+		animate(scale => drawCalcsSchema(ctx, this.schema, scale), ctx, .03, () => {
 			ctx.restore();
 		});
 	}
