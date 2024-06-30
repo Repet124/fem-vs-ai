@@ -18,15 +18,16 @@ export default class Schema {
 	}
 	#scale = 1;
 	#forceCoff = 0;
+	#resizeInterval = 0;
 
 	constructor(canvas, scale=0.1) {
 		this.document = new SchemaElement(document);
 		this.canvas = new SchemaElement(canvas);
 
 		this.ctx = canvas.getContext('2d');
-		this.ctx.translate(0, canvas.height);
 		this.ctx.scale(1,-1);
 		this.ctx.save();
+		this.ctx.translate(0, -canvas.height);
 
 		this.grid = new Grid();
 		this.#scale = scale;
@@ -35,13 +36,14 @@ export default class Schema {
 
 		this.pointSize = 9;
 		this.forceSize = 70;
+		this.intervalFrequency = 33; // 1000ms / 33 ~ 30fps
 
 		setInterval(() => {
 			if (this.drawing) {
 				this.#draw();
 				this.drawing = false;
 			}
-		}, 50);
+		}, this.intervalFrequency);
 	}
 
 	getCanvas() {
@@ -272,6 +274,21 @@ export default class Schema {
 			bars,
 			forces,
 		};
+	}
+
+	resize() {
+		if (this.drawing && this.#resizeInterval) {
+			setTimeout(() => {
+				this.resize();
+				this.#resizeInterval = 0;
+			}, this.intervalFrequency);
+			return;
+		}
+		this.canvas.htmlNode.width = this.canvas.htmlNode.clientWidth;
+		this.canvas.htmlNode.height = this.canvas.htmlNode.clientHeight;
+		this.ctx.scale(1,-1);
+		this.ctx.translate(0, -this.canvas.htmlNode.height);
+		this.draw();
 	}
 
 }

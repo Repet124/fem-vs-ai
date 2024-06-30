@@ -117,19 +117,24 @@ function getTensorColor(pow) {
 export default function init(canvas) {
 	const ctx = canvas.getContext('2d');
 	const offset = 50;
-
-	// offset for last schema - DIRT!
-	ctx.clear = () => {ctx.clearRect(-offset,-offset,canvas.width,canvas.height)};
 	ctx.lineCap = 'round';
-	ctx.translate(offset, canvas.height-offset);
 
 	this.getCanvas = function() {
 		return canvas;
 	}
 
+	this.buildCanvas = function() {
+		canvas.width = canvas.clientWidth;
+		canvas.height = canvas.clientHeight;
+		ctx.translate(offset, canvas.height-offset);
+		ctx.clear = () => {ctx.clearRect(-offset,-offset,canvas.width,canvas.height)};
+		ctx.scale(1,-1);
+	}
+
 	this.buildSchemaPosition = function() {
 		var schemaLength = (this.schema.maxX - this.schema.minX);
 		var schemaHeight = (this.schema.maxY - this.schema.minY);
+
 		var scale = Math.min(
 			(canvas.width - offset*2) / schemaLength,
 			(canvas.height - offset*2) / schemaHeight
@@ -154,10 +159,17 @@ export default function init(canvas) {
 			...getMaxMinFromNodes(schema.nodes)
 		};
 		ctx.save();
+		this.buildCanvas();
 		this.buildSchemaPosition();
-		ctx.scale(1, -1);
 		animate(scale => drawCalcsSchema(ctx, this.schema, scale), ctx, .03, () => {
 			ctx.restore();
 		});
+	}
+
+	this.resize = function() {
+		if (!this.schema) {return}
+		this.buildCanvas();
+		this.buildSchemaPosition();
+		drawCalcsSchema(ctx, this.schema, 1)
 	}
 }

@@ -1,5 +1,5 @@
 import actions from './actions.js';
-import { schema } from './init.js';
+import { schema, visualizator } from './init.js';
 
 function getZoomHandler() {
 	var canvPos = schema.canvas.htmlNode.getBoundingClientRect();
@@ -67,6 +67,9 @@ controls.forEach(btn => {
 		}
 	})
 })
+
+window.addEventListener('resize', actions.resize);
+// setInterval(actions.resize, 1000)
 
 canvas.addEventListener('mousedown', e => {
 	if (e.button !== 1) {return;} // только нажатие колёсика

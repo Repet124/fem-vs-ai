@@ -8,7 +8,7 @@ const visualizationCanvas = document.getElementById('visualization-canvas');
 
 [editorCanvas, visualizationCanvas].forEach(canvas => {
 	canvas.width = canvas.clientWidth;
-	canvas.height = document.documentElement.clientHeight - 200;
+	canvas.height = canvas.clientHeight;
 });
 
 var schema = new Schema(editorCanvas);

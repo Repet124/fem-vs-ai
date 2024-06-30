@@ -4,15 +4,26 @@ import cordsPallet from './control/CordsPallet.js';
 import forcePallet from './control/ForcePallet.js';
 import reportPallet from './control/ReportPallet.js';
 
-function show(canvasOwner) {
-	if (canvasOwner === visualizator) {
-		visualizator.getCanvas().style.zIndex = 200;
-	} else {
-		visualizator.getCanvas().style.zIndex = 0;
+function getShowFunc(canvasOwners) {
+	var active = canvasOwners[0];
+	return canvasOwner => {
+		if (canvasOwner) {
+			active = canvasOwner;
+			canvasOwners.forEach(co => {
+				co.getCanvas().style.zIndex = (co === active) ? 200 : 0
+			});
+			canvasOwner.resize();
+		}
+		return active;
 	}
 }
+var show = getShowFunc([schema, visualizator]);
 
 // READACTOR ACTIONS
+
+function resizeActiveCanvas() {
+	show().resize();
+}
 
 function offActions(afterSelect=true) {
 	cordsPallet.off();
@@ -279,6 +290,7 @@ export default {
 	toggleSupport,
 	clear,
 	off: offActions,
+	resize: resizeActiveCanvas,
 
 	createProject,
 	loadProject,
