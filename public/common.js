@@ -4,11 +4,15 @@ export function getMaxMinFromNodes(nodes) {
 		minY = nodes[0][1],
 		maxY = nodes[0][1];
 	nodes.forEach(node => {
-		minX = Math.min(minX, node[0]*1000);
-		maxX = Math.max(maxX, node[0]*1000);
-		minY = Math.min(minY, node[1]*1000);
-		maxY = Math.max(maxY, node[1]*1000);
+		minX = Math.min(minX, node[0]);
+		maxX = Math.max(maxX, node[0]);
+		minY = Math.min(minY, node[1]);
+		maxY = Math.max(maxY, node[1]);
 	});
+	// minX *=1000;
+	// maxX *=1000;
+	// minY *=1000;
+	// maxY *=1000;
 	return {minX,maxX,minY,maxY};
 }
 
@@ -24,8 +28,8 @@ export function drawLine(ctx, start, end, color, opacity, weight) {
 	ctx.strokeStyle = color;
 	ctx.globalAlpha = opacity;
 	ctx.lineWidth = weight || 10;
-	ctx.moveTo(start[0]*1000, start[1]*1000);
-	ctx.lineTo(end[0]*1000, end[1]*1000);
+	ctx.moveTo(start[0], start[1]);
+	ctx.lineTo(end[0], end[1]);
 	ctx.stroke();
 	ctx.closePath();
 	ctx.strokeStyle = '#fff';

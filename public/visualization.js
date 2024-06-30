@@ -24,8 +24,8 @@ function drawSchemaWithTensors(ctx, bars, nodes, scale) {
 	});
 
 	bars.forEach(bar => {
-		let offsetX = (nodes[bar[0]][0]+(nodes[bar[1]][0] - nodes[bar[0]][0])/2)*1000,
-			offsetY = (nodes[bar[0]][1]+(nodes[bar[1]][1] - nodes[bar[0]][1])/2)*1000,
+		let offsetX = (nodes[bar[0]][0]+(nodes[bar[1]][0] - nodes[bar[0]][0])/2),
+			offsetY = (nodes[bar[0]][1]+(nodes[bar[1]][1] - nodes[bar[0]][1])/2),
 			barLength = Math.sqrt((nodes[bar[1]][0] - nodes[bar[0]][0])**2+(nodes[bar[1]][1] - nodes[bar[0]][1])**2),
 			rotation = Math.PI/2 - Math.atan((nodes[bar[1]][0] - nodes[bar[0]][0])/(nodes[bar[1]][1] - nodes[bar[0]][1]));
 		if (rotation > Math.PI/2) {
@@ -45,7 +45,7 @@ function drawSchemaWithTensors(ctx, bars, nodes, scale) {
 }
 
 function drawText(text, ctx, x, y) {
-	ctx.font = '250px sans-serif'
+	ctx.font = '20px sans-serif'
 	ctx.fillStyle = '#fff'
 	ctx.scale(1, -1)
 	ctx.fillText(text, x, -y);
@@ -134,12 +134,12 @@ function schemaNodesScale(width, height, schema) {
 
 export default function init(canvas) {
 	const ctx = canvas.getContext('2d');
-	const offset = 50;
+	this.offset = 50;
 
 	// offset for last schema - DIRT!
-	ctx.clear = () => {ctx.clearRect(0,0,canvas.width,canvas.height)};
+	ctx.clear = () => {ctx.clearRect(-this.offset,-this.offset,canvas.width,canvas.height)};
 	ctx.lineCap = 'round';
-	ctx.translate(offset, canvas.height-offset);
+	ctx.translate(this.offset, canvas.height-this.offset);
 
 	this.getCanvas = function() {
 		return canvas;
@@ -147,15 +147,12 @@ export default function init(canvas) {
 
 	this.show = function(schema) {
 		ctx.save();
-
+		// console.log(schema)
 		var {minX,maxX,minY,maxY} = getMaxMinFromNodes(schema.nodes);
-		console.log(
-			canvas.width / (maxX - minX),
-			canvas.height / (maxY - minY)
-		)
-		this.scale = Math.max(
-			canvas.width / (maxX - minX),
-			canvas.height / (maxY - minY)
+		console.log(this.offset)
+		this.scale = Math.min(
+			(canvas.width - this.offset*2) / (maxX - minX),
+			(canvas.height - this.offset*2) / (maxY - minY)
 		);
 		schema.nodes.forEach(node => {
 			node[0] = (node[0]-minX)*this.scale;
