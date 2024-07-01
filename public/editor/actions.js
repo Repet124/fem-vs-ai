@@ -271,12 +271,14 @@ function calcNeyro() {
 			return syncProject();
 		})
 		.then(() => window.api.calc('neyro'))
+		.then(schema => (reportPallet.ai = schema))
 		.then(calcHandler);
 }
 
 function calcFem() {
 	syncProject()
 		.then(() => window.api.calc('fem'))
+		.then(schema => (reportPallet.fem = schema))
 		.then(calcHandler);
 }
 
@@ -294,7 +296,6 @@ function uploadHandler(project) {
 }
 
 function calcHandler(schema) {
-	reportPallet.fem = schema;
 	show(visualizator);
 	visualizator.show(schema);
 }

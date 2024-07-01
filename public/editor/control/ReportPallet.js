@@ -8,19 +8,25 @@ class ReportPallet {
 
 	set fem(schema) {
 		this.#femSchema = schema;
-		this.#aiSchema = null;
-		this.#clear();
+		this.#doIfBothSchemes();
 	}
 
 	set ai(schema) {
 		this.#aiSchema = schema;
-		if (this.#femSchema) {
+		this.#doIfBothSchemes();
+	}
+
+	#doIfBothSchemes() {
+		if (this.#femSchema && this.#aiSchema) {
 			this.#report();
+			this.#femSchema = null;
+			this.#aiSchema = null;
+		} else {
+			this.#clear();
 		}
 	}
 
 	#report() {
-
 		var fem = this.#femSchema.bars.map(bar => bar[3]);
 		var ai = this.#aiSchema.bars.map(bar => bar[3]);
 
@@ -66,11 +72,12 @@ class ReportPallet {
 		// Отклонения максимального сжимающего
 		this.#buildPercentRow('compress', getDelta(fem[minIndex], ai[minIndex]));
 		// Максимальное абсолютное отклоненние
-		this.#buildReportRow('absMax', `${absDelta[absMaxIndex]}, FEM - ${fem[absMaxIndex]}, AI - ${ai[absMaxIndex]}`);
+		this.#buildReportRow('absMax', `${absDelta[absMaxIndex]}`);
+		// this.#buildReportRow('absMax', `${absDelta[absMaxIndex]}, FEM - ${fem[absMaxIndex]}, AI - ${ai[absMaxIndex]}`);
 		// Минимальное абсолютное отклоненеие
 		this.#buildReportRow('absMin', absDelta[absMinIndex]);
 		// Сред абс откл
-		this.#buildReportRow('absAverage', absDelta.reduce((accum,f) => accum+f, 0)/absDelta.length);
+		this.#buildReportRow('absAverage', (absDelta.reduce((accum,f) => accum+f, 0)/absDelta.length).toFixed(2));
 	}
 
 	#buildPercentRow(spanId, val){
