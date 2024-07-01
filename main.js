@@ -92,11 +92,11 @@ function train() {
 
 	return new Promise(resolve => {
 		child.on('message', trainedModel => {
-			project.trained = trained;
+			project.trained = trainedModel;
 			logger.success('Модель записана');
 			saveProject();
 			logger.success('Проект сохранён');
-			resolve();
+			resolve(true);
 		});
 	});
 }

@@ -238,10 +238,10 @@ function saveProject() {
 			info.info('Сохранение проекта...');
 			return window.api.save();
 		})
-		.then(response => response
-			? info.success('Проект успешно сохранен')
-			: info.err('Ошибка при сохранении')
-		);
+		.then(doInfoSuccsecOrFail(
+			'Проект успешно сохранен',
+			'Ошибка при сохранении'
+		));
 }
 
 function dataset() {
@@ -250,14 +250,17 @@ function dataset() {
 			info.info('Запущен процесс формирование датасета...');
 			return window.api.dataset();
 		})
-		.then(response => response
-			? info.success('Датасет сформирован')
-			: info.err('Ошибка при формировании датасета')
-		);
+		.then(doInfoSuccsecOrFail(
+			'Датасет сформирован',
+			'Ошибка при формировании датасета'
+		));
 }
 
 function train() {
-	window.api.train().then(response => info.info(response));
+	window.api.train().then(doInfoSuccsecOrFail(
+		'Обучение завершено успешно',
+		'Обучение завершилось ошибкой'
+	));
 	info.info('Запущен процесс обучения')
 }
 
@@ -278,6 +281,10 @@ function calcFem() {
 }
 
 // ADDITIONAL FOR BACKAND ACTIONS
+
+function doInfoSuccsecOrFail(successMess, failMess) {
+	return status => status ? info.success(successMess) : info.err(failMess);
+}
 
 function uploadHandler(project) {
 	schema.load(project.schema);

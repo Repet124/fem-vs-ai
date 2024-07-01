@@ -47,13 +47,9 @@ module.exports = class DatasetBuilder {
 	}
 
 	parse(rawDataset, schema, size) {
-		rawDataset = JSON.parse(rawDataset);
-
 		if (size) {
 			rawDataset = rawDataset.slice(0, size);
 		}
-
-		schema = JSON.parse(JSON.stringify(schema));
 
 		var dataset = rawDataset.map(schemaChanges => {
 

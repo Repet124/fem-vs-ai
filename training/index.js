@@ -19,7 +19,7 @@ try {
 	logger.success('Запуск команды обучения.');
 	process.send(train(
 		schema,
-		dataset
+		dataset,
 		'Модель расчёт ферм',
 		settings.batch,
 		settings.ages,
