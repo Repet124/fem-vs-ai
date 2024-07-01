@@ -5,7 +5,7 @@ var Logger = require('../services/logger');
 var logger = new Logger('Neyro');
 const brain = require('../services/brain.js')
 
-module.exports = function(netJson, schema) {
+module.exports = function(schema, netJson) {
 	const net = (new brain.NeuralNetworkGPU());
 	// const net = (new brain.NeuralNetwork());
 	net.fromJSON(netJson);

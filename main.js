@@ -102,9 +102,12 @@ function train() {
 }
 
 function calc(e, type) {
+	if (type === 'neyro' && !project.trained) {
+		return false;
+	}
 	const child = fork(
 		path.join(__dirname, 'resolvers/index.js'),
-		[type, stringifySchema(project.schema)]
+		[type, stringifySchema(project.schema), project.trained]
 	);
 
 	return new Promise(resolve => {
