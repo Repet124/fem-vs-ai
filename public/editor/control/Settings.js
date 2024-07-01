@@ -1,12 +1,13 @@
 export default class Settings {
 
 	#params = [
-		{ident: 'maxForce', name: 'Максимальное усилие', _value: 40, elem: null,},
-		{ident: 'scaleCoff', name: 'Коэффициент масштабности', _value: 1.8, elem: null,},
-		{ident: 'batch', name: 'Размер пакета', _value: 100, elem: null,},
-		{ident: 'ages', name: 'Количество эпох', _value: 3, elem: null,},
-		{ident: 'limit', name: 'Ограничение длины датасета при обучении', _value: 0, elem: null,},
-		{ident: 'datasetLength', name: 'Длина датастета для генерации', _value: 1000, elem: null,},
+		{type:'num', ident: 'maxForce', name: 'Максимальное усилие', _value: 40, elem: null,},
+		{type:'num', ident: 'scaleCoff', name: 'Коэффициент масштабности', _value: 1.8, elem: null,},
+		{type:'num', ident: 'batch', name: 'Размер пакета', _value: 100, elem: null,},
+		{type:'num', ident: 'ages', name: 'Количество эпох', _value: 3, elem: null,},
+		{type:'num', ident: 'limit', name: 'Ограничение длины датасета при обучении', _value: 0, elem: null,},
+		{type:'num', ident: 'datasetLength', name: 'Длина датастета для генерации', _value: 1000, elem: null,},
+		{type:'radio', ident: 'processor', name: 'Процессор', _value: 'GPU', elems: null, _vals: ['CPU', 'GPU']},
 	];
 
 	constructor(container, defaultParams=null) {
@@ -21,10 +22,14 @@ export default class Settings {
 			var input = document.createElement('input');
 
 			Object.defineProperty(param, 'value', {
-				get() {return +this._value;},
+				get() {return Number.parseInt(this._value, 10) || this._value;},
 				set(val) {
-					this._value = +val;
-					input.value = val;
+					this._value = val;
+					if (this.type === 'radio') {
+						this.elems.some(elem => (elem.checked = (elem.value === val)));
+					} else {
+						this.elem.value = val;
+					}
 				}
 			})
 
@@ -37,7 +42,30 @@ export default class Settings {
 
 			input.value = param.value;
 			param.elem = input;
-			label.append(param.name, ':', input);
+
+			if (param.type === 'radio') {
+				param.elems = Array(param._vals.length);
+				var radios = param._vals.map(val => {
+					var el = document.createElement('input');
+					var lab = document.createElement('label');
+					el.type = 'radio';
+					el.name = param.ident;
+					el.value = val;
+					param.elems.push(el);
+					if (val === param._value) {el.checked=true;}
+					el.addEventListener('change', e => (e.target.checked && (param.value = e.target.value)));
+					lab.append(el,val);
+					return lab;
+				}).flat();
+				input.addEventListener('change', () => {
+					radios.some(radio => {
+						if (true) {}
+					})
+				});
+				label.append(param.name, ':', ...radios);
+			} else {
+				label.append(param.name, ':', input);
+			}
 			return label;
 		});
 

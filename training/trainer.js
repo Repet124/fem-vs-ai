@@ -6,7 +6,7 @@ var { parseSchema } = require('../services/func');
 var logger = new Logger('Train');
 var datasetBuilder = new DatasetBuilder();
 
-function train(schema, rawDataset, modelName, batchSize, agesCount, datasetSize) {
+function train(schema, rawDataset, modelName, batchSize, agesCount, datasetSize, processor) {
 
 	var dataset = datasetBuilder.parse(rawDataset, schema, datasetSize);
 
@@ -28,8 +28,8 @@ function train(schema, rawDataset, modelName, batchSize, agesCount, datasetSize)
 		logPeriod: 5
 	};
 
-	// const net = new brain.NeuralNetwork(config);
-	const net = new brain.NeuralNetworkGPU(config);
+	processor === 'CPU' && (processor = '');
+	const net = new (brain['NeuralNetwork'+processor.toUpperCase()])(config);
 
 	logger.info('Старт обучения. ' + modelName);
 	logger.bench('train');

@@ -6,8 +6,7 @@ var logger = new Logger('Neyro');
 const brain = require('../services/brain.js')
 
 module.exports = function(schema, netJson) {
-	const net = (new brain.NeuralNetworkGPU());
-	// const net = (new brain.NeuralNetwork());
+	const net = (new brain[netJson.type]());
 	net.fromJSON(netJson);
 
 	var builder = new InputBuilder(schema);

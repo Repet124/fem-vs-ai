@@ -23,7 +23,8 @@ try {
 		'Модель расчёт ферм',
 		settings.batch,
 		settings.ages,
-		settings.limit
+		settings.limit,
+		settings.processor
 	));
 } catch (err) {
 	logger.err(err.message);
