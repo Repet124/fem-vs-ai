@@ -23,11 +23,11 @@ module.exports = class Project {
 	parse() {
 		try {
 			var project = fs.readFileSync(this.#filePath, 'utf8');
-			var [schema, settings, trained, dataset] = project.split('\n');
+			var [schema, settings, dataset, trained] = project.split('\n');
 			this.schema = parseSchema(schema);
 			this.settings = JSON.parse(settings);
-			this.trained = trained;
 			this.dataset = dataset;
+			this.trained = trained;
 		} catch(e) {
 			console.log(e)
 			return false;
