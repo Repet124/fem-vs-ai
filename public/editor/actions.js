@@ -10,7 +10,7 @@ function getShowFunc(canvasOwners) {
 		if (canvasOwner) {
 			active = canvasOwner;
 			canvasOwners.forEach(co => {
-				co.getCanvas().style.zIndex = (co === active) ? 200 : 0
+				co.getCanvas().style.zIndex = (co === active) ? 100 : 0
 			});
 			canvasOwner.resize();
 		}
@@ -244,10 +244,21 @@ function saveProject() {
 		);
 }
 
-function calcFem() {
+function dataset() {
 	syncProject()
-		.then(() => window.api.calc('fem'))
-		.then(calcHandler);
+		.then(() => {
+			info.info('Запущен процесс формирование датасета...');
+			return window.api.dataset();
+		})
+		.then(response => response
+			? info.success('Датасет сформирован')
+			: info.err('Ошибка при формировании датасета')
+		);
+}
+
+function train() {
+	window.api.train().then(response => info.info(response));
+	info.info('Запущен процесс обучения')
 }
 
 function calcNeyro() {
@@ -260,9 +271,10 @@ function calcNeyro() {
 		.then(calcHandler);
 }
 
-function train() {
-	window.api.train().then(response => info.info(response));
-	info.info('Начат процесс обучения')
+function calcFem() {
+	syncProject()
+		.then(() => window.api.calc('fem'))
+		.then(calcHandler);
 }
 
 // ADDITIONAL FOR BACKAND ACTIONS
@@ -299,7 +311,8 @@ export default {
 	createProject,
 	loadProject,
 	saveProject,
-	calcFem,
-	calcNeyro,
+	dataset,
 	train,
+	calcNeyro,
+	calcFem,
 }

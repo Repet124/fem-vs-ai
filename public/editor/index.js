@@ -69,7 +69,6 @@ controls.forEach(btn => {
 })
 
 window.addEventListener('resize', actions.resize);
-// setInterval(actions.resize, 1000)
 
 canvas.addEventListener('mousedown', e => {
 	if (e.button !== 1) {return;} // только нажатие колёсика
