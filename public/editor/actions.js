@@ -281,6 +281,7 @@ function calcFem() {
 
 function uploadHandler(project) {
 	schema.load(project.schema);
+	settings.load(project.settings);
 	info.info('Загружен проект ' + project.filePath)
 	select();
 }

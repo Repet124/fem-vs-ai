@@ -76,7 +76,7 @@ function buildDataset() {
 			logger.success('Датасет записан');
 			saveProject();
 			logger.success('Проект сохранён');
-			resolve();
+			resolve(true);
 		});
 	})
 }

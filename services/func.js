@@ -44,15 +44,15 @@ module.exports.stringifySchema = function(schemaObj) {
 	return JSON.stringify(preparedSchema);
 }
 
-// Если изменились что либо, КРОМЕ сил, то возвращает false, иначе true
+// Если изменились что либо, КРОМЕ сил, то возвращает true, иначе false
 module.exports.isChangedCalcSchema = function(sh1, sh2) {
 	// one from schemes is null
 	if (!sh1 !== !sh2) {
-		return false;
+		return true;
 	}
 	// different count of nodes or bars
 	if (sh1.nodes.length !== sh2.nodes.length || sh1.bars.length !== sh2.nodes.length) {
-		return false;
+		return true;
 	}
 
 	var nodesAreEqual = sh2.nodes.every((item,i) => 
@@ -65,7 +65,7 @@ module.exports.isChangedCalcSchema = function(sh1, sh2) {
 
 	var barsAreEqual = sh2.bars.every((item,i) => item[0] === sh1.bars[i][0] && item[1] === sh1.bars[i][1]);
 
-	return nodesAreEqual && barsAreEqual;
+	return !(nodesAreEqual && barsAreEqual);
 }
 
 function deepFreeze(object) {

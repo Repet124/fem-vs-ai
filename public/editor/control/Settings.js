@@ -1,12 +1,12 @@
 export default class Settings {
 
 	#params = [
-		{ident: 'maxForce', name: 'Максимальное усилие', value: 40, elem: null,},
-		{ident: 'scaleCoff', name: 'Коэффициент масштабности', value: 1.8, elem: null,},
-		{ident: 'batch', name: 'Размер пакета', value: 100, elem: null,},
-		{ident: 'ages', name: 'Количество эпох', value: 3, elem: null,},
-		{ident: 'limit', name: 'Ограничение длины датасета при обучении', value: 0, elem: null,},
-		{ident: 'datasetLength', name: 'Длина датастета для генерации', value: 1000, elem: null,},
+		{ident: 'maxForce', name: 'Максимальное усилие', _value: 40, elem: null,},
+		{ident: 'scaleCoff', name: 'Коэффициент масштабности', _value: 1.8, elem: null,},
+		{ident: 'batch', name: 'Размер пакета', _value: 100, elem: null,},
+		{ident: 'ages', name: 'Количество эпох', _value: 3, elem: null,},
+		{ident: 'limit', name: 'Ограничение длины датасета при обучении', _value: 0, elem: null,},
+		{ident: 'datasetLength', name: 'Длина датастета для генерации', _value: 1000, elem: null,},
 	];
 
 	constructor(container, defaultParams=null) {
@@ -20,8 +20,16 @@ export default class Settings {
 			var label = document.createElement('label');
 			var input = document.createElement('input');
 
+			Object.defineProperty(param, 'value', {
+				get() {return +this._value;},
+				set(val) {
+					this._value = +val;
+					input.value = val;
+				}
+			})
+
 			input.addEventListener('change', () => {
-				param.value = input.value;
+				param._value = input.value;
 			})
 
 			label.classList.add('settings-label');
@@ -38,7 +46,7 @@ export default class Settings {
 
 	load(loadingParams) {
 		this.#params.forEach(param => {
-			if (!loadingParams[param.ident]) {
+			if (loadingParams[param.ident] === undefined) {
 				throw new Error('Отсутствует параметр ' + param.name);
 			}
 			param.value = loadingParams[param.ident];
