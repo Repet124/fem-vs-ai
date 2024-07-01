@@ -85,6 +85,16 @@ body {
 	gap: 15px;
 }
 
+#pallete-calc {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: repeat(5, 1fr);
+	grid-auto-flow: column;
+	h2 {
+		grid-column-end: span 2;
+	}
+}
+
 #pallete-cords, #pallete-force {
 	display: none;
 }
