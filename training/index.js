@@ -1,11 +1,12 @@
+var { parentPort, workerData } = require('worker_threads');
 var path = require('path');
 var train = require('./trainer');
 var Logger = require('../services/logger');
 var { parseSchema } = require('../services/func');
 
-var schema = parseSchema(process.argv[2]);
-var settings = JSON.parse(process.argv[3]);
-var dataset = JSON.parse(process.argv[4]);
+var schema = parseSchema(workerData.schema);
+var settings = JSON.parse(workerData.settings);
+var dataset = JSON.parse(workerData.dataset);
 var logger = new Logger();
 
 try {
@@ -17,7 +18,7 @@ try {
 	}
 
 	logger.success('Запуск команды обучения.');
-	process.send(train(
+	parentPort.postMessage(train(
 		schema,
 		dataset,
 		'Модель расчёт ферм',

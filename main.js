@@ -1,7 +1,7 @@
 const path = require('node:path');
 const fs = require('fs');
 const dotenv = require('dotenv');
-const { fork } = require('node:child_process');
+const { Worker } = require('worker_threads');
 const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const { stringifySchema } = require('./services/func');
 const Project = require('./services/project');
@@ -65,13 +65,18 @@ function saveProject() {
 }
 
 function buildDataset() {
-	const child = fork(
-		path.join(__dirname, 'dataset/index.js'),
-		[stringifySchema(project.schema), JSON.stringify(project.settings)]
+	const datasetWorker = new Worker(
+		path.join(app.getAppPath(), 'dataset/index.js'),
+		{
+			workerData: {
+				schema: stringifySchema(project.schema),
+				settings: JSON.stringify(project.settings)
+			}
+		}
 	);
 
 	return new Promise((resolve) => {
-		child.on('message', dataset => {
+		datasetWorker.on('message', dataset => {
 			project.dataset = dataset;
 			logger.success('Датасет записан');
 			saveProject();
@@ -85,13 +90,19 @@ function train() {
 	if (!project.dataset) {
 		return 'Dataset is not exisit';
 	}
-	const child = fork(
-		path.join(__dirname, 'training/index.js'),
-		[stringifySchema(project.schema), JSON.stringify(project.settings), project.dataset]
+	const trainWorker = new Worker(
+		path.join(app.getAppPath(), 'training/index.js'),
+		{
+			workerData: {
+				schema: stringifySchema(project.schema),
+				settings: JSON.stringify(project.settings),
+				dataset: project.dataset,
+			}
+		}
 	);
 
 	return new Promise(resolve => {
-		child.on('message', trainedModel => {
+		trainWorker.on('message', trainedModel => {
 			project.trained = trainedModel;
 			logger.success('Модель записана');
 			saveProject();
@@ -105,13 +116,18 @@ function calc(e, type) {
 	if (type === 'neyro' && !project.trained) {
 		return false;
 	}
-	const child = fork(
-		path.join(__dirname, 'resolvers/index.js'),
-		[type, stringifySchema(project.schema), project.trained]
+	const neyroWorker = new Worker(
+		path.join(app.getAppPath(), 'resolvers/index.js'),{
+			workerData: {
+				type,
+				schema: stringifySchema(project.schema),
+				trained: project.trained,
+			}
+		}
 	);
 
 	return new Promise(resolve => {
-		child.on('message', schema => {
+		neyroWorker.on('message', schema => {
 			resolve(schema);
 		});
 	});

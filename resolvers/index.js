@@ -1,14 +1,15 @@
+var { parentPort, workerData } = require('worker_threads');
 var { parseSchema } = require('../services/func');
 var fem = require('./fem');
 var neyro = require('./neyro');
 
-var type = process.argv[2];
-var schema = parseSchema(process.argv[3]);
+var type = workerData.type;
+var schema = parseSchema(workerData.schema);
 
 if (type === 'fem') {
-	process.send(fem(schema));
+	parentPort.postMessage(fem(schema));
 } else {
-	process.send(neyro(schema, JSON.parse(process.argv[4])));
+	parentPort.postMessage(neyro(schema, JSON.parse(workerData.trained)));
 }
 
 

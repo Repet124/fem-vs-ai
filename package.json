@@ -37,6 +37,11 @@
     "mathjs": "^12.3.0"
   },
   "build": {
-    "productName": "Fem Vs Ai"
+    "productName": "Fem Vs Ai",
+    "files": [
+      "./dataset/index.js",
+      "./training/index.js",
+      "./resolvers/index.js"
+    ]
   }
 }
