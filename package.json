@@ -15,7 +15,7 @@
   "imports": {
     "#": "./public/*"
   },
-  "author": "",
+  "author": "Oleg Bondarenko",
   "license": "ISC",
   "devDependencies": {
     "@electron-forge/cli": "^7.4.0",
