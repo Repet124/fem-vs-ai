@@ -25,14 +25,14 @@ const createWindow = () => {
 	return win;
 }
 
-function createProject() {
+function createProject(e, isEmpty=true) {
 	var filePath = dialog.showSaveDialogSync({
 		title: 'Создание проекта',
 	});
 
 	(/.*\.json/.test(filePath)) || (filePath += '.json')
 
-	project.buildEmpty();
+	isEmpty && project.buildEmpty();
 	project.save(filePath);
 
 	return project.toFrontend();
@@ -61,6 +61,9 @@ function uploadProject() {
 }
 
 function saveProject() {
+	if (!project.filePath) {
+		return createProject(null, false);
+	}
 	return project.save();
 }
 
