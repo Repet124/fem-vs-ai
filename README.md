@@ -16,19 +16,17 @@
 
 ### Windows
 
-Скачать [Файл] и запустить от имени администратора
+Скачать [exe-файл](https://github.com/Repet124/fem-vs-ai/releases/download/v1.0.0/fem-vs-ai-1.0.0.Setup.exe) и запустить от имени администратора
 
 ### Linux
 
-Скачать [deb-пакет] и запустить команду:
+Скачать [deb-пакет](https://github.com/Repet124/fem-vs-ai/releases/download/v1.0.0/fem-vs-ai_1.0.0_amd64.deb) и запустить команду:
 
 ```
 sudo apt install <путь к файлу>
 ```
 
 ## Требования и ограничения
-
-
 
 Схема должна:
 - Быть геометрически неизменяемой
@@ -40,6 +38,9 @@ sudo apt install <путь к файлу>
 Следует учитывать, что все узлы в схеме являются идеальными шарнирами. 
 
 Примеры корректных расчётных схем:
+
+![image](https://github.com/Repet124/fem-vs-ai/assets/36656195/6afc37bc-a89e-4553-8b99-82cd35081be9)
+![image](https://github.com/Repet124/fem-vs-ai/assets/36656195/8ffe565a-c170-43fc-86cf-ff698c8102ac)
 
 ## Интерфейс
 
